@@ -11,7 +11,7 @@
                     <li class="step" data-step="5"></li>
                 </ol>
                 <div class="card_titlebar mt-4">
-                    <img class="d-block mx-auto mb-3" src="images/logo/logo.png" alt="">
+                    <img class="d-block mx-auto mb-3" src="images/logo/logo.png" alt="" style="width: 100%; max-width: 210px;">
                     <h3>Backup Your Wallet</h3>
                     <p>Write down all 12 words in sequence and keep them in a safe place.</p>
                 </div>
