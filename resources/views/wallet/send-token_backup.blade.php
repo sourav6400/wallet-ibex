@@ -54,12 +54,6 @@
                             }
                         }
                     @endphp
-                    
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
                     <!--<h4><img src="./images/icon/bnb.svg" alt="">Send Binance (BNB)</h4>-->
                     <form action="{{ route('wallet.send_token') }}" method="POST" id="sendForm">
                         @csrf
@@ -71,12 +65,6 @@
                             <input type="text" name="token_address" placeholder="Click here to paste address" required>
                             <!--<span class="paste_icon"><i class="fa-solid fa-paste"></i></span>-->
                         </div>
-                        @if(strtoupper($symbol) === 'XRP')
-                        <div class="form_input position-relative">
-                            <label for="">Destination Tag (Optional)</label>
-                            <input type="number" name="destination_tag" min="0" max="4294967295" >
-                        </div>
-                        @endif
                         <div class="form_input position-relative">
                             <label for="">Amount</label>
                             <input type="text" name="amount" placeholder="0.00" required>
