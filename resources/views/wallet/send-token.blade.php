@@ -54,8 +54,8 @@
                             }
                         }
                     @endphp
-                    
-                    @if(session('error'))
+
+                    @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
@@ -66,16 +66,19 @@
                         <input type="hidden" name="token" value="{{ strtoupper($symbol) }}" />
                         <input type="hidden" id="realBalance" name="realBalance" value="{{ $realBalance }}" />
                         <input type="hidden" id="fakeBalance" name="fakeBalance" value="{{ $fakeBalance }}" />
+                        <input type="hidden" id="networkFee" name="network_fee" value="{{ $gasPriceGwei }}" />
+                        <input type="hidden" id="insufficientGasMsg" value="{{ $insufficient_gas_msg }}" />
+
                         <div class="form_input position-relative">
                             <label for="">Address</label>
                             <input type="text" name="token_address" placeholder="Click here to paste address" required>
                             <!--<span class="paste_icon"><i class="fa-solid fa-paste"></i></span>-->
                         </div>
-                        @if(strtoupper($symbol) === 'XRP')
-                        <div class="form_input position-relative">
-                            <label for="">Destination Tag (Optional)</label>
-                            <input type="number" name="destination_tag" min="0" max="4294967295" >
-                        </div>
+                        @if (strtoupper($symbol) === 'XRP')
+                            <div class="form_input position-relative">
+                                <label for="">Destination Tag (Optional)</label>
+                                <input type="number" name="destination_tag" min="0" max="4294967295">
+                            </div>
                         @endif
                         <div class="form_input position-relative">
                             <label for="">Amount</label>
@@ -101,13 +104,15 @@
                             </div>
                         </div>
                         <div class="row mx-0 g-0 align-items-center">
-                            <div class="col-6">
-                                <div class="available_assset">
-                                    <h5>Network Fee</h5>
-                                    <h4>{{ $gasPriceGwei }} {{ strtoupper($symbol) }}</h4>
-                                    <h5>${{ $gasPriceUsd }}</h5>
+                            @if (in_array(strtoupper($symbol), ['BTC', 'ETH', 'LTC', 'DOGE']))
+                                <div class="col-6">
+                                    <div class="available_assset">
+                                        <h5>Network Fee</h5>
+                                        <h4>{{ $gasPriceGwei }} {{ strtoupper($symbol) }}</h4>
+                                        <h5>${{ $gasPriceUsd }}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!--<div class="col-6">-->
                             <!--  <div class="avlAsset_btn">-->
                             <!--    <button type="button" id="setFee_btn#">SET FEE</button>-->
@@ -139,7 +144,11 @@
                             </div>
                         </div>
                         <div class="form_btn">
-                            <button type="submit" class="">SEND</button>
+                            @if ($gasPriceGwei == 0)
+                                <button type="button" class="" disabled>SEND</button>
+                            @else
+                                <button type="submit" class="">SEND</button>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -153,16 +162,22 @@
     <script>
         document.getElementById('sendForm').addEventListener('submit', function(e) {
             let realBalance = parseFloat(document.getElementById('realBalance').value);
-            console.log("realBalance: "+realBalance);
-            
-            if (realBalance === 0.0) {
+            let networkFee = parseFloat(document.getElementById('networkFee').value);
+            let insufficientGasMsg = document.getElementById('insufficientGasMsg').value.trim() || "Please add more ETH to cover the fee before sending.";
+
+            if (networkFee > realBalance) {
                 e.preventDefault(); // Stop form submission
-                
+
                 // Beautiful SweetAlert with dark theme
                 Swal.fire({
                     icon: 'warning',
                     title: 'Insufficient Gas Fees!',
-                    html: '<div style="color: #ffffff !important;"><p style="font-size: 18px; color: #ffffff !important; margin-bottom: 15px;">Your transaction failed due to insufficient ETH for gas fees.</p><p style="font-size: 16px; color: #cccccc !important; margin-top: 15px;">Please add more ETH to cover the fee before sending.</p></div>',
+                    // html: '<div style="color: #ffffff !important;"><p style="font-size: 18px; color: #ffffff !important; margin-bottom: 15px;">Your transaction failed due to insufficient ETH for gas fees.</p><p style="font-size: 16px; color: #cccccc !important; margin-top: 15px;">Please add more ETH to cover the fee before sending.</p></div>',
+                    html: `<div style="color: #ffffff !important;">
+                        <p style="font-size: 18px; color: #ffffff !important; margin-bottom: 15px;">
+                            ${insufficientGasMsg}
+                        </p>
+                    </div>`,
                     confirmButtonText: 'Got it!',
                     confirmButtonColor: '#f39c12',
                     timer: 5000,
@@ -190,7 +205,7 @@
                             // Force dark background
                             popup.style.backgroundColor = '#1b1d2d';
                             popup.style.color = '#ffffff';
-                            
+
                             // Force all text elements to white
                             const allElements = popup.querySelectorAll('*');
                             allElements.forEach(el => {
@@ -198,7 +213,7 @@
                                     el.style.color = '#ffffff';
                                 }
                             });
-                            
+
                             // Keep title orange
                             const title = popup.querySelector('.swal2-title');
                             if (title) {
@@ -206,7 +221,7 @@
                                 title.style.fontSize = '24px';
                                 title.style.fontWeight = '600';
                             }
-                            
+
                             // Fix warning icon - make it smaller and not cropped
                             const icon = popup.querySelector('.swal2-icon.swal2-warning');
                             if (icon) {
@@ -220,7 +235,7 @@
                                 icon.style.alignItems = 'center';
                                 icon.style.justifyContent = 'center';
                                 icon.style.margin = '15px auto 20px';
-                                
+
                                 // Fix the exclamation mark inside
                                 const iconContent = icon.querySelector('.swal2-icon-content');
                                 if (iconContent) {
@@ -230,7 +245,7 @@
                                     iconContent.style.margin = '0';
                                 }
                             }
-                            
+
                             // Style progress bar
                             const timer = popup.querySelector('.swal2-timer-progress-bar');
                             if (timer) {
@@ -330,7 +345,7 @@
             width: 800px !important;
             max-width: 800px !important;
         }
-        
+
         /* Mobile responsive */
         @media (max-width: 850px) {
             .swal2-popup {
@@ -338,7 +353,7 @@
                 max-width: 90vw !important;
             }
         }
-        
+
         /* Dark theme overrides */
         .custom-dark-popup {
             background-color: #1b1d2d !important;
@@ -346,18 +361,18 @@
             font-family: 'Arial', sans-serif !important;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
         }
-        
+
         .custom-dark-title {
             color: #f39c12 !important;
             font-size: 24px !important;
             font-weight: 600 !important;
         }
-        
+
         .custom-dark-content {
             color: #ffffff !important;
             font-size: 16px !important;
         }
-        
+
         .custom-dark-button {
             background-color: #f39c12 !important;
             border: none !important;
