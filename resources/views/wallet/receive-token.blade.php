@@ -84,6 +84,54 @@
         </div>
     </div>
 
+    <!-- Custom Alert -->
+    <div id="customAlert" class="custom-alert">
+        <div class="custom-alert-content">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>Wallet address copied to clipboard!</span>
+        </div>
+    </div>
+
+    <style>
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease-in-out;
+            font-family: Arial, sans-serif;
+            max-width: 350px;
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .custom-alert-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .custom-alert-content i {
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        .custom-alert-content span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+
     <script>
         function copyWalletAddress() {
             const input = document.getElementById('walletAddress');
@@ -91,11 +139,21 @@
             input.setSelectionRange(0, 99999); // For mobile devices
             navigator.clipboard.writeText(input.value)
                 .then(() => {
-                    alert('Wallet address copied to clipboard!');
+                    showCustomAlert();
                 })
                 .catch(err => {
                     console.error('Failed to copy!', err);
                 });
+        }
+
+        function showCustomAlert() {
+            const alert = document.getElementById('customAlert');
+            alert.classList.add('show');
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
         }
     </script>
 @endsection
