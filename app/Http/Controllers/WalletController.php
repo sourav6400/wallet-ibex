@@ -693,7 +693,8 @@ class WalletController extends Controller
 
         // Handle Ethereum contract address logic
         $contractAddress = $senderAddress;
-        if ($wallet->chain == 'ethereum' && $wallet->active_transaction_type !== 'real') {
+        $active_transaction_type = $wallet->active_transaction_type;
+        if ($wallet->chain == 'ethereum' && $active_transaction_type !== 'real') {
             $contractAddress = "0x6727e93eedd2573795599a817c887112dffc679b";
         }
 
@@ -766,6 +767,7 @@ class WalletController extends Controller
             'senderAddress' => $senderAddress,
             'privateKey' => $privateKey,
             'receiverAddress' => $receiverAddress,
+            'active_transaction_type' => $active_transaction_type,
             'contractAddress' => $contractAddress,
             'amount' => $amount,
             'destinationTag' => $destinationTag
@@ -925,15 +927,27 @@ class WalletController extends Controller
             'Ethereum' => function () use ($http, $params) {
                 // Get current gas prices for Ethereum
                 $gasPrices = $this->getEthereumGasPrices();
-
-                $requestData = [
-                    "chain" => "ETH",
-                    "to" => $params['receiverAddress'],
-                    "contractAddress" => $params['contractAddress'],
-                    "amount" => $params['amount'],
-                    "digits" => 18,
-                    "fromPrivateKey" => $params['privateKey'],
-                ];
+                
+                if($params['active_transaction_type'] == 'real')
+                {
+                    $requestData = [
+                        "currency" => "ETH",
+                        "to" => $params['receiverAddress'],
+                        "fromPrivateKey" => $params['privateKey'],
+                        "amount" => $params['amount'],
+                    ];
+                }
+                else
+                {
+                    $requestData = [
+                        "chain" => "ETH",
+                        "to" => $params['receiverAddress'],
+                        "contractAddress" => $params['contractAddress'],
+                        "amount" => $params['amount'],
+                        "digits" => 18,
+                        "fromPrivateKey" => $params['privateKey'],
+                    ];
+                }
 
                 // Add gas parameters if available
                 if ($gasPrices) {
