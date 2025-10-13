@@ -316,10 +316,10 @@ class WalletController extends Controller
 
         if ($symbol == null)
             $symbol = "btc";
-        $this->wallet_info_update($symbol);
+        $walletAddress = $this->wallet_info_update($symbol);
         $title = "My Wallet";
-        $transfers = $this->get_transactions($symbol);
-        return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers'));
+        $transfers = $this->get_transactions($symbol);          
+        return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers', 'walletAddress'));
     }
 
     public function wallet_info_update($token)
@@ -409,6 +409,8 @@ class WalletController extends Controller
                     $newWallet->address = $address;
                     $newWallet->private_key = $private_key;
                     $newWallet->save();
+                    
+                    $walletAddress = $address;
                 } else {
                     Log::error("Wallet creation failed for user {$user_id}, chain {$chain}: missing data");
                 }
@@ -416,6 +418,11 @@ class WalletController extends Controller
                 Log::error("Wallet API request failed for chain {$chain}, user {$user_id}: " . $e->getMessage());
             }
         }
+        else {
+            $walletAddress = $wallet->address;
+        }
+        
+        return $walletAddress;
     }
 
     // public function send_view(BalanceService $balanceService, $symbol)
@@ -1433,7 +1440,7 @@ class WalletController extends Controller
         $user_id = Auth::user()->id;
         if ($symbol == null) {
             $wallet_addresses = Wallet::where('user_id', $user_id)
-                ->pluck('address') // only fetch "address" column
+                ->pluck('address', 'chain')
                 ->toArray();
         } else {
             $chainNames = [
@@ -1456,25 +1463,23 @@ class WalletController extends Controller
 
         $allTransfers = [];
 
-        foreach ($wallet_addresses as $address) {
-            if($symbol)
-            {
-                if($chain == 'bitcoin')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
-                elseif($chain == 'ethereum')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
-                elseif($chain == 'litecoin')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=litecoin-mainnet&addresses=" . $address . "&sort=ASC";
-                elseif($chain == 'xrp')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=ASC";
-                elseif($chain == 'dogecoin')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=dogecoin-mainnet&addresses=" . $address . "&sort=ASC";
-                elseif($chain == 'bsc')
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
-            }
-            else{
+        foreach ($wallet_addresses as $key=>$address) {
+            
+            if ($symbol == null)
+                $chain = $key;
+                
+            if($chain == 'bitcoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
+            elseif($chain == 'ethereum')
                 $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
-            }
+            elseif($chain == 'litecoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
+            elseif($chain == 'xrp')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=ASC";
+            elseif($chain == 'dogecoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
+            elseif($chain == 'bsc')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
             
 
             try {
@@ -1484,13 +1489,23 @@ class WalletController extends Controller
 
                 if ($response->successful()) {
                     $data = $response->json();
-
-                    if (isset($data['result'])) {
+                    if($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin')
+                    {
                         $allTransfers = array_merge(
                             $allTransfers,
-                            $data['result']
+                            $data
                         );
                     }
+                    elseif($chain == 'ethereum' || $chain == 'bsc')
+                    {
+                        if (isset($data['result'])) {
+                            $allTransfers = array_merge(
+                                $allTransfers,
+                                $data['result']
+                            );
+                        }
+                    }
+                    
                 } else {
                     Log::error("Alchemy transfers API responded with error for address {$address}");
                 }
