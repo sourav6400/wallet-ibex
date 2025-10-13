@@ -23,7 +23,16 @@
                     @endif
                 </li>
                 <li>
-                    <h5>{{ $token['name'] }}</h5>
+                    @php
+                        $tokenName = $token['name'];
+                        $displayName = $tokenName;
+                        
+                        if($tokenName == 'Tether')
+                        {
+                            $displayName = "Tether <sub>(ETH)</sub>";
+                        }
+                    @endphp
+                    <h5>{!! $displayName !!}</h5>
                     @php
                         $rawBalance = $token['tokenBalance'] ?? 0;
                         $numericBalance = is_numeric($rawBalance) ? (float) $rawBalance : 0;

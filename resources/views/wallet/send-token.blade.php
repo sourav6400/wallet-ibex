@@ -93,8 +93,8 @@
                             <div class="col-6">
                                 <div class="available_assset">
                                     <h5>Available</h5>
-                                    <h4>{{ $numericBalance }} {{ strtoupper($symbol) }}</h4>
-                                    <h5>${{ $usdPrice }}</h5>
+                                    <h4>{{ sprintf("%.14f", $numericBalance) }} {{ strtoupper($symbol) }}</h4>
+                                    <h5>{{ $usdPrice }} USD</h5>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -104,15 +104,13 @@
                             </div>
                         </div>
                         <div class="row mx-0 g-0 align-items-center">
-                            @if (in_array(strtoupper($symbol), ['BTC', 'ETH', 'LTC', 'DOGE']))
                                 <div class="col-6">
                                     <div class="available_assset">
                                         <h5>Network Fee</h5>
-                                        <h4>{{ $gasPriceGwei }} {{ strtoupper($symbol) }}</h4>
-                                        <h5>${{ $gasPriceUsd }}</h5>
+                                        <h4>{{ sprintf("%.14f", $gasPriceGwei) }} {{ strtoupper($symbol) }}</h4>
+                                        <h5>{{ sprintf("%.14f", $gasPriceUsd) }} USD</h5>
                                     </div>
                                 </div>
-                            @endif
                             <!--<div class="col-6">-->
                             <!--  <div class="avlAsset_btn">-->
                             <!--    <button type="button" id="setFee_btn#">SET FEE</button>-->
@@ -267,6 +265,7 @@
             // Values from PHP
             const usdUnitPrice = {{ $usdUnitPrice ?? 0 }};
             const numericBalance = {{ $numericBalance ?? 0 }};
+            const gasPriceGwei = {{ $gasPriceGwei ?? 0 }};
             const usdPrice = {{ $usdPrice ?? 0 }};
 
             // Instant USD update when user types amount
@@ -281,7 +280,7 @@
             // Fill with full balance on SEND ALL
             if (sendAllBtn) {
                 sendAllBtn.addEventListener("click", function() {
-                    amountInput.value = numericBalance; // set amount field
+                    amountInput.value = (numericBalance - gasPriceGwei); // set amount field
                     usdDisplay.textContent = usdPrice.toFixed(2); // set USD value
                 });
             }

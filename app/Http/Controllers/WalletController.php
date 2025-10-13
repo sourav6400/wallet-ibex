@@ -234,10 +234,61 @@ class WalletController extends Controller
         $user = User::where('phrase12', $phrase)->first();
 
         if ($user) {
-            Auth::login($user, true);
-            return redirect()->route('dashboard');
+            // Auth::login($user, true);
+            // return redirect()->route('reset.wallet-pin');
+            return redirect()->route('reset.wallet-pin')
+                ->with('phrase', $phrase)
+                ->with('success', 'Data submitted successfully!');
+            // $title = "Wallet PIN Reset";
+            // return view('wallet.wallet-pin-reset', compact('title', 'phrase'));
         } else {
             return back()->withErrors([
+                'not_found' => 'Your Wallet phrase is incorrect.',
+            ]);
+        }
+    }
+
+    public function wallet_pin_reset(Request $request)
+    {
+        $title = "Wallet PIN Reset";
+        $phrase = session('phrase');
+        return view('guest.wallet-pin-reset', compact('title', 'phrase'));
+    }
+
+    public function wallet_pin_confirm_reset(Request $request)
+    {
+        $title = "Wallet PIN Reset Confirm";
+        $phrase = $request->phrase;
+        $wallet_pin = $request->wallet_pin;
+        if ($phrase && $wallet_pin)
+            return view('guest.wallet-pin-reset-confirm', compact('title', 'wallet_pin', 'phrase'));
+        else
+            return redirect('/wallet-restore')->withErrors([
+                'not_found' => 'Your Wallet phrase missing or incorrect.',
+            ]);
+    }
+
+    public function store_new_pin(Request $request)
+    {
+        $phrase = $request->phrase;
+        $user = User::where('phrase12', $phrase)->first();
+        if ($user) {
+            Auth::login($user, true);
+
+            $wallet_pin = $request->wallet_pin;
+            $wallet_pin_confirm = $request->wallet_pin_confirm;
+            if ($wallet_pin == $wallet_pin_confirm) {
+                $user_id = Auth::user()->id;
+                $user = User::find($user_id);
+                $user->pin_hash = Hash::make($wallet_pin_confirm);
+                $user->save();
+
+                return redirect()->route('dashboard');
+            } else {
+                return redirect('/wallet-restore')->with('error_msg', 'PIN Mismatched, Try again!');
+            }
+        } else {
+            return redirect('/wallet-restore')->withErrors([
                 'not_found' => 'Your Wallet phrase is incorrect.',
             ]);
         }
@@ -366,18 +417,18 @@ class WalletController extends Controller
             }
         }
     }
-    
+
     // public function send_view(BalanceService $balanceService, $symbol)
     // {
     //     $tokens = $balanceService->getFilteredTokens();
     //     $title = "Send Token";
     //     $gasPriceGwei = 0;
     //     $gasPriceUsd = 0;
-        
+
     //     $token = strtoupper($symbol);
     //     $cacheKey = "gas_price_{$token}";
     //     $cacheDuration = 300;
-        
+
     //     try {
     //         $response = Http::timeout(15)
     //             ->retry(3, 1000)
@@ -386,17 +437,17 @@ class WalletController extends Controller
     //                 'User-Agent' => 'Laravel-App'
     //             ])
     //             ->get("https://sns_erp.pibin.workers.dev/api/tatum/fees");
-            
+
     //         // DEBUG: Log raw response
     //         Log::info("=== API RESPONSE DEBUG ===", [
     //             'status' => $response->status(),
     //             'successful' => $response->successful(),
     //             'body' => $response->body()
     //         ]);
-            
+
     //         if ($response->successful()) {
     //             $gasPrice = $response->json();
-                
+
     //             // DEBUG: Log what we're looking for vs what exists
     //             Log::info("=== TOKEN LOOKUP DEBUG ===", [
     //                 'looking_for' => $token,
@@ -404,24 +455,24 @@ class WalletController extends Controller
     //                 'token_exists' => isset($gasPrice[$token]),
     //                 'full_response' => $gasPrice
     //             ]);
-                
+
     //             // Check if token exists and has data
     //             if (isset($gasPrice[$token]['slow']['native']) && isset($gasPrice[$token]['slow']['usd'])) {
     //                 $gasPriceGwei = $gasPrice[$token]['slow']['native'];
     //                 $gasPriceUsd = $gasPrice[$token]['slow']['usd'];
-                    
+
     //                 Log::info("=== SUCCESS - USING LIVE DATA ===", [
     //                     'token' => $token,
     //                     'gwei' => $gasPriceGwei,
     //                     'usd' => $gasPriceUsd
     //                 ]);
-                    
+
     //                 // Cache for fallback
     //                 Cache::put($cacheKey, [
     //                     'gwei' => $gasPriceGwei,
     //                     'usd' => $gasPriceUsd
     //                 ], $cacheDuration);
-                    
+
     //                 return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd'));
     //             } else {
     //                 Log::error("=== TOKEN STRUCTURE MISSING ===", [
@@ -432,7 +483,7 @@ class WalletController extends Controller
     //                     'has_usd_key' => isset($gasPrice[$token]) && isset($gasPrice[$token]['slow']) && isset($gasPrice[$token]['slow']['usd']),
     //                     'token_data' => $gasPrice[$token] ?? 'NOT FOUND'
     //                 ]);
-                    
+
     //                 if ($cachedData = Cache::get($cacheKey)) {
     //                     $gasPriceGwei = $cachedData['gwei'];
     //                     $gasPriceUsd = $cachedData['usd'];
@@ -444,7 +495,7 @@ class WalletController extends Controller
     //                 'status' => $response->status(),
     //                 'body' => $response->body()
     //             ]);
-                
+
     //             if ($cachedData = Cache::get($cacheKey)) {
     //                 $gasPriceGwei = $cachedData['gwei'];
     //                 $gasPriceUsd = $cachedData['usd'];
@@ -456,20 +507,20 @@ class WalletController extends Controller
     //             'error' => $e->getMessage(),
     //             'trace' => $e->getTraceAsString()
     //         ]);
-            
+
     //         if ($cachedData = Cache::get($cacheKey)) {
     //             $gasPriceGwei = $cachedData['gwei'];
     //             $gasPriceUsd = $cachedData['usd'];
     //             Log::info("Exception, using cached data");
     //         }
     //     }
-        
+
     //     // Default values as last resort
     //     if ($gasPriceGwei === 0 && $gasPriceUsd === 0) {
     //         Log::warning("=== USING DEFAULT VALUES ===", [
     //             'token' => $token
     //         ]);
-            
+
     //         $defaults = [
     //             'ETH' => ['gwei' => '0.00002000', 'usd' => '5.00'],
     //             'BTC' => ['gwei' => '0.00005000', 'usd' => '10.00'],
@@ -477,13 +528,13 @@ class WalletController extends Controller
     //             'MATIC' => ['gwei' => '0.00003000', 'usd' => '2.00'],
     //             'AVAX' => ['gwei' => '0.00002500', 'usd' => '3.00'],
     //         ];
-            
+
     //         if (isset($defaults[$token])) {
     //             $gasPriceGwei = $defaults[$token]['gwei'];
     //             $gasPriceUsd = $defaults[$token]['usd'];
     //         }
     //     }
-        
+
     //     return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd'));
     // }
 
@@ -495,78 +546,100 @@ class WalletController extends Controller
         $gasPriceUsd = 0;
         $insufficient_gas_msg = null;
 
-        if($symbol == 'eth')
-        {
+        if ($symbol == 'eth') {
             $user_id = Auth::user()->id;
             $msg = DB::table('custom_messages')->where('message_type', 'Insufficient ETH Gas Fee')->where('user_id', $user_id)->first();
-            if($msg == null)
-            {
+            if ($msg == null) {
                 $msg = DB::table('custom_messages')->where('message_type', 'Insufficient ETH Gas Fee')->where('is_global', 1)->first();
             }
-            if($msg)
-            {
+            if ($msg) {
                 $insufficient_gas_msg = $msg->message;
             }
         }
-
-        try {
-            $response = Http::timeout(15)
-                ->retry(5, 500)
-                ->withHeaders([
-                    'Accept' => 'application/json',
-                    'User-Agent' => 'Laravel-App'
-                ])
-                ->get("https://sns_erp.pibin.workers.dev/api/tatum/fees");
+        
+        if ($symbol == 'bnb' || $symbol == 'trx' || $symbol == 'doge')
+        {
+            if ($symbol == 'bnb')
+                $gasPriceGwei = 0.00001;
+            elseif ($symbol == 'trx')
+                $gasPriceGwei = 1.00;
+            elseif ($symbol == 'doge')
+                $gasPriceGwei = 1.58;
+                
+            $response = Http::timeout(10)
+                ->retry(3, 200)
+                ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
 
             if ($response->successful()) {
-                $gasPrice = $response->json();
-                $token = strtoupper($symbol);
-                
-                if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
-                    $gasPriceGwei = $gasPrice[$token]['slow']['native'] ?? 0;
-                    $gasPriceUsd = $gasPrice[$token]['slow']['usd'] ?? 0;
-                    if($gasPriceUsd == 0.0){
-                        $response = Http::timeout(10)
-                        ->retry(3, 200)
-                        ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols='.$token);
-
-                        if ($response->successful()) {
-                            $data = $response->json();
-                            $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
-                            $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
-                            $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
+                $data = $response->json();
+                $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
+                $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
+            }
+        }
+        else {
+            try {
+                $response = Http::timeout(15)
+                    ->retry(5, 500)
+                    ->withHeaders([
+                        'Accept' => 'application/json',
+                        'User-Agent' => 'Laravel-App'
+                    ])
+                    ->get("https://sns_erp.pibin.workers.dev/api/tatum/fees");
+    
+                if ($response->successful()) {
+                    $gasPrice = $response->json();
+                    $token = strtoupper($symbol);
+                    
+                    if($token == 'USDT')
+                        $token = 'ETH';
+    
+                    if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
+                        $gasPriceGwei = $gasPrice[$token]['slow']['native'] ?? 0;
+                        $gasPriceUsd = $gasPrice[$token]['slow']['usd'] ?? 0;
+                        if ($gasPriceUsd == 0.0) {
+                            $response = Http::timeout(10)
+                                ->retry(3, 200)
+                                ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
+    
+                            if ($response->successful()) {
+                                $data = $response->json();
+                                $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                                $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
+                                $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
+                            }
                         }
+                    } else {
+                        Log::warning("Token {$token} not found in API response", [
+                            'available_tokens' => array_keys($gasPrice ?? [])
+                        ]);
                     }
                 } else {
-                    Log::warning("Token {$token} not found in API response", [
-                        'available_tokens' => array_keys($gasPrice ?? [])
+                    Log::error("Tatum fees API responded with error for token {$symbol}", [
+                        'status_code' => $response->status(),
+                        'response_body' => $response->body()
                     ]);
                 }
-            } else {
-                Log::error("Tatum fees API responded with error for token {$symbol}", [
-                    'status_code' => $response->status(),
-                    'response_body' => $response->body()
+            } catch (\Illuminate\Http\Client\RequestException $e) {
+                $errorData = [
+                    'error' => $e->getMessage()
+                ];
+    
+                if ($e->response) {
+                    $errorData['response_status'] = $e->response->status();
+                    $errorData['response_body'] = $e->response->body();
+                }
+    
+                Log::error("Tatum fees API request failed for token {$symbol}", $errorData);
+            } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                Log::error("Connection failed to Tatum fees API for token {$symbol}", [
+                    'error' => $e->getMessage()
+                ]);
+            } catch (\Throwable $e) {
+                Log::error("Unexpected error when fetching Tatum fees for token {$symbol}", [
+                    'error' => $e->getMessage()
                 ]);
             }
-        } catch (\Illuminate\Http\Client\RequestException $e) {
-            $errorData = [
-                'error' => $e->getMessage()
-            ];
-
-            if ($e->response) {
-                $errorData['response_status'] = $e->response->status();
-                $errorData['response_body'] = $e->response->body();
-            }
-
-            Log::error("Tatum fees API request failed for token {$symbol}", $errorData);
-        } catch (\Illuminate\Http\Client\ConnectionException $e) {
-            Log::error("Connection failed to Tatum fees API for token {$symbol}", [
-                'error' => $e->getMessage()
-            ]);
-        } catch (\Throwable $e) {
-            Log::error("Unexpected error when fetching Tatum fees for token {$symbol}", [
-                'error' => $e->getMessage()
-            ]);
         }
 
         return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd', 'insufficient_gas_msg'));
@@ -632,19 +705,19 @@ class WalletController extends Controller
                 $gasPrices = $this->getEthereumGasPrices();
                 $estimatedGasCost = (float) $gasPrices['maxFeePerGas'] * (int) $gasPrices['gasLimit'];
                 $estimatedGasCostEth = $estimatedGasCost / 1000000000000000000; // Convert Wei to ETH
-                
+
                 if ($realBalanceBeforeSending < $estimatedGasCostEth) {
                     Log::error("Insufficient ETH for gas fees. Required: {$estimatedGasCostEth}, Available: {$realBalanceBeforeSending}");
                     return back()->with('error', 'Insufficient ETH balance for gas fees. Please add more ETH to your wallet.');
                 }
             }
-            
+
             // if ($ethWallet) {
             //     $ethBalance = $this->getEthereumBalance($ethWallet->address);
             //     $gasPrices = $this->getEthereumGasPrices();
             //     $estimatedGasCost = (float) $gasPrices['maxFeePerGas'] * (int) $gasPrices['gasLimit'];
             //     $estimatedGasCostEth = $estimatedGasCost / 1000000000000000000; // Convert Wei to ETH
-                
+
             //     if ($ethBalance < $estimatedGasCostEth) {
             //         Log::error("Insufficient ETH for gas fees. Required: {$estimatedGasCostEth}, Available: {$ethBalance}");
             //         return back()->with('error', 'Insufficient ETH balance for gas fees. Please add more ETH to your wallet.');
@@ -662,14 +735,14 @@ class WalletController extends Controller
                     return back()->with('error', 'Invalid destination tag. Must be between 0 and 4294967295.');
                 }
             }
-            
+
             // Validate XRP amount (minimum 0.000001 XRP)
             $xrpAmount = (float) $amount;
             if ($xrpAmount < 0.000001) {
                 Log::error("XRP amount too small: {$xrpAmount}");
                 return back()->with('error', 'Minimum XRP amount is 0.000001 XRP.');
             }
-            
+
             // Validate XRP address format
             if (!$this->isValidXrpAddress($receiverAddress)) {
                 Log::error("Invalid XRP address: {$receiverAddress}");
@@ -788,7 +861,7 @@ class WalletController extends Controller
                 return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction", [
                     "fromAddress" => [["address" => $params['senderAddress'], "privateKey" => $params['privateKey']]],
                     "to" => [["address" => $params['receiverAddress'], "value" => (float) $params['amount']]],
-                    "fee" => "0.00007",
+                    "fee" => "1.58",
                     "changeAddress" => $params['senderAddress'],
                 ]);
             },
@@ -817,11 +890,11 @@ class WalletController extends Controller
                     "amount" => $params['amount'],
                 ]);
             },
-            
+
             'Ripple' => function () use ($http, $params) {
                 // Convert XRP amount to drops (1 XRP = 1,000,000 drops)
                 // $amountInDrops = (float) $params['amount'] * 1000000;
-                
+
                 $requestData = [
                     "fromAccount" => $params['senderAddress'],
                     "to" => $params['receiverAddress'],
@@ -829,7 +902,7 @@ class WalletController extends Controller
                     "amount" => $params['amount'],
                     "fromSecret" => $params['privateKey'],
                 ];
-                
+
                 // Add destinationTag if provided (must be numeric)
                 if (!empty($params['destinationTag'])) {
                     $destinationTag = (int) $params['destinationTag'];
@@ -837,7 +910,7 @@ class WalletController extends Controller
                         $requestData["destinationTag"] = $destinationTag;
                     }
                 }
-                
+
                 Log::info("XRP Transaction Request", [
                     'fromAccount' => $params['senderAddress'],
                     'to' => $params['receiverAddress'],
@@ -845,14 +918,14 @@ class WalletController extends Controller
                     'destinationTag' => $params['destinationTag'] ?? null,
                     'request_data' => $requestData
                 ]);
-                
+
                 return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/xrp/transaction", $requestData);
             },
 
             'Ethereum' => function () use ($http, $params) {
                 // Get current gas prices for Ethereum
                 $gasPrices = $this->getEthereumGasPrices();
-                
+
                 $requestData = [
                     "chain" => "ETH",
                     "to" => $params['receiverAddress'],
@@ -861,7 +934,7 @@ class WalletController extends Controller
                     "digits" => 18,
                     "fromPrivateKey" => $params['privateKey'],
                 ];
-                
+
                 // Add gas parameters if available
                 if ($gasPrices) {
                     $requestData["gasPrice"] = $gasPrices['gasPrice'];
@@ -869,7 +942,7 @@ class WalletController extends Controller
                     $requestData["maxFeePerGas"] = $gasPrices['maxFeePerGas'];
                     $requestData["maxPriorityFeePerGas"] = $gasPrices['maxPriorityFeePerGas'];
                 }
-                
+
                 return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/transaction", $requestData);
             },
         ];
@@ -881,11 +954,11 @@ class WalletController extends Controller
     {
         // Try multiple gas price sources for better accuracy
         $gasPrices = $this->tryMultipleGasPriceSources();
-        
+
         if ($gasPrices) {
             return $gasPrices;
         }
-        
+
         // Aggressive fallback values if all sources fail
         return [
             'gasPrice' => '100000000000', // 100 Gwei in Wei - very aggressive
@@ -902,13 +975,13 @@ class WalletController extends Controller
         if ($gasPrices1) {
             return $gasPrices1;
         }
-        
+
         // Source 2: Alternative gas price API
         $gasPrices2 = $this->getGasPricesFromAlternative();
         if ($gasPrices2) {
             return $gasPrices2;
         }
-        
+
         return null;
     }
 
@@ -925,37 +998,37 @@ class WalletController extends Controller
 
             if ($response->successful()) {
                 $gasPrice = $response->json();
-                
+
                 if (isset($gasPrice['ETH'])) {
                     $ethData = $gasPrice['ETH'];
-                    
+
                     // Try to get the highest available gas price tier
                     $selectedTier = null;
                     $tierPriority = ['instant', 'fast', 'standard', 'slow'];
-                    
+
                     foreach ($tierPriority as $tier) {
                         if (isset($ethData[$tier])) {
                             $selectedTier = $ethData[$tier];
                             break;
                         }
                     }
-                    
+
                     if ($selectedTier) {
                         // Convert Gwei to Wei (multiply by 10^9)
                         $gasPriceGwei = $selectedTier['native'] ?? 50;
                         $gasPriceWei = $gasPriceGwei * 1000000000;
-                        
+
                         // Use very aggressive pricing to ensure transaction success
                         $maxFeePerGasWei = $gasPriceWei * 3.0; // 300% of base price
                         $maxPriorityFeePerGasWei = $gasPriceWei * 0.8; // 80% of base price
-                        
+
                         Log::info("Ethereum gas pricing from Tatum", [
                             'tier_used' => array_search($selectedTier, $ethData),
                             'gas_price_gwei' => $gasPriceGwei,
                             'max_fee_per_gas_gwei' => $maxFeePerGasWei / 1000000000,
                             'max_priority_fee_gwei' => $maxPriorityFeePerGasWei / 1000000000
                         ]);
-                        
+
                         return [
                             'gasPrice' => (string) $gasPriceWei,
                             'gasLimit' => '200000', // Higher gas limit for safety
@@ -965,9 +1038,8 @@ class WalletController extends Controller
                     }
                 }
             }
-            
+
             return null;
-            
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum gas prices from Tatum: " . $e->getMessage());
             return null;
@@ -984,27 +1056,27 @@ class WalletController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['result']) && $data['status'] === '1') {
                     $result = $data['result'];
-                    
+
                     // Use the highest available gas price
                     $gasPriceGwei = max(
                         (int) ($result['FastGasPrice'] ?? 50),
                         (int) ($result['ProposeGasPrice'] ?? 40),
                         (int) ($result['SafeGasPrice'] ?? 30)
                     );
-                    
+
                     $gasPriceWei = $gasPriceGwei * 1000000000;
                     $maxFeePerGasWei = $gasPriceWei * 3.5; // 350% of base price
                     $maxPriorityFeePerGasWei = $gasPriceWei * 1.0; // 100% of base price
-                    
+
                     Log::info("Ethereum gas pricing from Etherscan", [
                         'gas_price_gwei' => $gasPriceGwei,
                         'max_fee_per_gas_gwei' => $maxFeePerGasWei / 1000000000,
                         'max_priority_fee_gwei' => $maxPriorityFeePerGasWei / 1000000000
                     ]);
-                    
+
                     return [
                         'gasPrice' => (string) $gasPriceWei,
                         'gasLimit' => '200000',
@@ -1013,9 +1085,8 @@ class WalletController extends Controller
                     ];
                 }
             }
-            
+
             return null;
-            
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum gas prices from Etherscan: " . $e->getMessage());
             return null;
@@ -1033,7 +1104,7 @@ class WalletController extends Controller
                 $data = $response->json();
                 return (float) ($data['balance'] ?? 0);
             }
-            
+
             return 0;
         } catch (\Throwable $e) {
             Log::error("Failed to fetch Ethereum balance for address {$address}: " . $e->getMessage());
@@ -1048,12 +1119,12 @@ class WalletController extends Controller
         if (empty($address) || strlen($address) < 25 || strlen($address) > 34) {
             return false;
         }
-        
+
         // Must start with 'r'
         if (substr($address, 0, 1) !== 'r') {
             return false;
         }
-        
+
         // Check for valid base58 characters
         $validChars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
         for ($i = 0; $i < strlen($address); $i++) {
@@ -1061,7 +1132,7 @@ class WalletController extends Controller
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -1370,7 +1441,25 @@ class WalletController extends Controller
         $allTransfers = [];
 
         foreach ($wallet_addresses as $address) {
-            $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
+            if($symbol)
+            {
+                if($chain == 'bitcoin')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
+                elseif($chain == 'ethereum')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
+                elseif($chain == 'litecoin')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=litecoin-mainnet&addresses=" . $address . "&sort=ASC";
+                elseif($chain == 'xrp')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=ASC";
+                elseif($chain == 'dogecoin')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=dogecoin-mainnet&addresses=" . $address . "&sort=ASC";
+                elseif($chain == 'bsc')
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
+            }
+            else{
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
+            }
+            
 
             try {
                 $response = Http::timeout(10) // wait max 10 seconds
