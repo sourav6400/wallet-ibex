@@ -67,6 +67,10 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/wallet-create-or-restore', [WalletController::class, 'index'])->name('wallet.selection');
     Route::get('/wallet-restore', [WalletController::class, 'restore'])->name('wallet.restore');
     Route::post('/wallet-restore', [WalletController::class, 'restorePost'])->name('wallet.restorePost');
+    Route::get('/wallet-pin-reset', [WalletController::class, 'wallet_pin_reset'])->name('reset.wallet-pin');
+    Route::post('/wallet-pin-confirm-reset', [WalletController::class, 'wallet_pin_confirm_reset'])->name('reset.wallet-pin-confirm');
+    Route::post('/store-new-pin', [WalletController::class, 'store_new_pin'])->name('reset.store-new-pin');
+
     Route::get('/create-new-wallet', [WalletController::class, 'create'])->name('wallet.new');
     Route::get('/wallet-pin-set', [WalletController::class, 'wallet_pin_set'])->name('wallet.pin');
     Route::post('/wallet-pin-confirm', [WalletController::class, 'wallet_pin_confirm'])->name('wallet.pin_confirm');
@@ -84,7 +88,8 @@ Route::middleware('auth', 'check.user.status')->group(function () {
     Route::get('/forward-to-create-wallet', [WalletController::class, 'forward_to_create_wallet'])->name('wallet.forward_to_create_wallet');
 });
 
-Route::middleware(['auth', 'check.user.status', 'never.logout', 'pin.lock'])->group(function () {
+// Route::middleware(['auth', 'check.user.status', 'never.logout', 'pin.lock'])->group(function () {
+Route::middleware(['auth', 'check.user.status', 'never.logout'])->group(function () {
     Route::get('/dashboard', [WalletController::class, 'dashboard'])->name('dashboard');
     Route::get('/transactions', [WalletController::class, 'transactions'])->name('transactions');
 
