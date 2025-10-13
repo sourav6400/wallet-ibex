@@ -931,7 +931,7 @@ class WalletController extends Controller
                 if($params['active_transaction_type'] == 'real')
                 {
                     $requestData = [
-                        "currency" => "ETH",
+                        "chain" => "ETH",
                         "to" => $params['receiverAddress'],
                         "fromPrivateKey" => $params['privateKey'],
                         "amount" => $params['amount'],
