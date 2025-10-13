@@ -936,6 +936,7 @@ class WalletController extends Controller
                         "fromPrivateKey" => $params['privateKey'],
                         "amount" => $params['amount'],
                     ];
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/ethereum/transaction";
                 }
                 else
                 {
@@ -947,6 +948,7 @@ class WalletController extends Controller
                         "digits" => 18,
                         "fromPrivateKey" => $params['privateKey'],
                     ];
+                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/transaction";
                 }
 
                 // Add gas parameters if available
@@ -957,7 +959,7 @@ class WalletController extends Controller
                     $requestData["maxPriorityFeePerGas"] = $gasPrices['maxPriorityFeePerGas'];
                 }
 
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/transaction", $requestData);
+                return $http->post($url, $requestData);
             },
         ];
 
