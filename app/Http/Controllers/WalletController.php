@@ -1471,11 +1471,11 @@ class WalletController extends Controller
             if($chain == 'bitcoin')
                 $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
             elseif($chain == 'ethereum')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=ASC";
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
             elseif($chain == 'litecoin')
                 $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
             elseif($chain == 'xrp')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=ASC";
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
             elseif($chain == 'dogecoin')
                 $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
             elseif($chain == 'bsc')
