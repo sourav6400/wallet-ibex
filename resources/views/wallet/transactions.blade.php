@@ -1,39 +1,37 @@
-@php
-    $upperSymbol = strtoupper($symbol);
-    $currentToken = collect($tokens)->firstWhere('symbol', $upperSymbol);
-    
-    // Helper functions
-    function formatAddress($address) {
-        return substr($address, 0, 10) . '...' . substr($address, -8);
-    }
-    
-    function formatTimestamp($timestamp) {
-        // Check if timestamp is in milliseconds (13 digits) or seconds (10 digits)
-        $timestampSec = strlen((string)$timestamp) > 10 ? $timestamp / 1000 : $timestamp;
-        return date('M d, Y h:i A', $timestampSec);
-    }
-@endphp
-
 @extends('layouts.app')
 @section('content')
+    @php
+        $upperSymbol = strtoupper($symbol);
+        
+        // Helper functions
+        function formatAddress($address) {
+            return substr($address, 0, 10) . '...' . substr($address, -8);
+        }
+        
+        function formatTimestamp($timestamp) {
+            // Check if timestamp is in milliseconds (13 digits) or seconds (10 digits)
+            $timestampSec = strlen((string)$timestamp) > 10 ? $timestamp / 1000 : $timestamp;
+            return date('M d, Y h:i A', $timestampSec);
+        }
+    @endphp
     <div class="dashboardRightMain_body">
+        
         <div class="transaction_body_wrapper">
-            <div class="transaction_title">
-                <h3>Transactions</h3>
-                <div class="transaction_filter">
-                    <select id="transactionFilter" class="form-select" onchange="handleFilterChange(this)">
-                        <option value="btc">Bitcoin</option>
-                        <option value="eth">Ethereum</option>
-                        <option value="ltc">Litecoin</option>
-                        <option value="usdt">Tron</option>
-                        <option value="xrp">XRP</option>
-                        <option value="doge">Dogecoin</option>
-                        <option value="trx">Tron</option>
-                        <option value="bnb">BNB</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+			<div class="transaction_title v3">
+				<h3>{{ $upperSymbol }} Transactions</h3>
+				<select class="transaction_dropdown_v3" id="transactionFilter" onchange="handleFilterChange(this)">
+				    <option value="" disabled selected>Filter By</option>
+					<option value="btc">Bitcoin</option>
+					<option value="eth">Ethereum</option>
+					<option value="ltc">Litecoin</option>
+					<option value="usdt">Tron</option>
+					<option value="xrp">XRP</option>
+					<option value="doge">Dogecoin</option>
+					<option value="trx">Tron</option>
+					<option value="bnb">BNB</option>
+				</select>
+			</div>
+		</div>
 
         <div class="coinAssetTable_wrapper">
             <div class="coinAsset_table">
@@ -150,38 +148,21 @@
     </div>
 
     <style>
-        .transaction_title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .transaction_filter {
-            margin-left: auto;
-        }
-
-        .transaction_filter .form-select {
-            padding: 6px 10px;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-size: 13px;
+        .transaction_dropdown_v3 {
+            background: #1B1D2D;
+            border: 0;
+            color: #fff;
+            font-size: 16px;
+            padding: 14px 10px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 140px;
             cursor: pointer;
-            background-color: white;
-            transition: border-color 0.2s;
-            min-width: 140px;
-            height: auto;
         }
-
-        .transaction_filter .form-select:hover {
-            border-color: #adb5bd;
-        }
-
-        .transaction_filter .form-select:focus {
-            outline: none;
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        .transaction_title.v3 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         #dataTable {
@@ -260,15 +241,15 @@
         }
 
         // Set the selected filter on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const filterParam = urlParams.get('filter') || 'all';
-            const selectElement = document.getElementById('transactionFilter');
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const urlParams = new URLSearchParams(window.location.search);
+        //     const filterParam = urlParams.get('filter') || 'all';
+        //     const selectElement = document.getElementById('transactionFilter');
             
-            if (selectElement) {
-                selectElement.value = filterParam;
-            }
-        });
+        //     if (selectElement) {
+        //         selectElement.value = filterParam;
+        //     }
+        // });
 
         function copyToClipboard(text, btn) {
             navigator.clipboard.writeText(text).then(() => {
