@@ -41,7 +41,9 @@
             </div>
         </div>
     </td>
+    @if(!request()->routeIs('transactions'))
     <td><div class="value_data"><h5>{{ $type }}</h5></div></td>
+    @endif
     <td><div class="value_data"><h5>{{ number_format($amount, 6, '.', '') }} {{ $symbol }}</h5></div></td>
     <td><div class="value_data"><h5>{{ $dateTime }}</h5></div></td>
 </tr>

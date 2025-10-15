@@ -219,10 +219,13 @@
                                         <i class="fa-solid fa-wallet"></i> My wallet</a>
                                 </li>
                                 <li><a href="#"><i class="fa-regular fa-shuffle"></i> Swap</a></li>
-                                <li><a href="{{ route('transactions') }}"
-                                        class="{{ request()->routeIs('transactions') ? 'active' : '' }}"><i
-                                            class="fa-solid fa-file-invoice"></i>
-                                        Transactions</a></li>
+                                <li>
+                                    <a href="{{ route('transactions', ['symbol' => 'btc']) }}"
+                                       class="{{ request()->routeIs('transactions') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice"></i>
+                                        Transactions
+                                    </a>
+                                </li>
                                 <li><a href="{{ route('settings.backup_seed') }}"
                                         class="{{ request()->routeIs('settings.*') ? 'active' : '' }}"><i
                                             class="fa-solid fa-gear"></i> Settings</a></li>
@@ -350,7 +353,7 @@
                             Dashboard</a></li>
                     <li><a href="{{ route('wallet.landing') }}"><i class="fa-solid fa-wallet"></i> My wallet</a></li>
                     <li><a href="#"><i class="fa-regular fa-shuffle"></i> Swap</a></li>
-                    <li><a href="{{ route('transactions') }}"><i class="fa-solid fa-file-invoice"></i>
+                    <li><a href="{{ route('transactions', ['symbol' => 'btc']) }}"><i class="fa-solid fa-file-invoice"></i>
                             Transactions</a></li>
                     <li><a href="{{ route('settings.backup_seed') }}"><i class="fa-solid fa-gear"></i> Settings</a>
                     </li>

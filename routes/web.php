@@ -88,10 +88,10 @@ Route::middleware('auth', 'check.user.status')->group(function () {
     Route::get('/forward-to-create-wallet', [WalletController::class, 'forward_to_create_wallet'])->name('wallet.forward_to_create_wallet');
 });
 
-Route::middleware(['auth', 'check.user.status', 'never.logout', 'pin.lock'])->group(function () {
-// Route::middleware(['auth', 'check.user.status', 'never.logout'])->group(function () {
+// Route::middleware(['auth', 'check.user.status', 'never.logout', 'pin.lock'])->group(function () {
+Route::middleware(['auth', 'check.user.status', 'never.logout'])->group(function () {
     Route::get('/dashboard', [WalletController::class, 'dashboard'])->name('dashboard');
-    Route::get('/transactions', [WalletController::class, 'transactions'])->name('transactions');
+    Route::get('/transactions/{symbol}', [WalletController::class, 'transactions'])->name('transactions');
 
     Route::get('/my-wallet', [WalletController::class, 'my_wallet'])->name('wallet.landing');
     Route::get('/my-wallet/{symbol}', [WalletController::class, 'my_wallet'])->name('wallet.by_token');

@@ -1427,12 +1427,15 @@ class WalletController extends Controller
         return view('wallet.receive-token', compact('title', 'symbol', 'tokens', 'wallet_address'));
     }
 
-    public function transactions(BalanceService $balanceService)
+    public function transactions(BalanceService $balanceService, $symbol = null)
     {
         $title = "Transactions";
         $tokens = $balanceService->getFilteredTokens();
-        $transfers = $this->get_transactions();
-        return view('wallet.transactions', compact('title', 'tokens', 'transfers'));
+        if ($symbol == null)
+            $symbol = "btc";
+        $transfers = $this->get_transactions($symbol);
+        return view('wallet.transactions', compact('title', 'tokens', 'symbol', 'transfers'));
+        // return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers', 'walletAddress'));
     }
 
     public function get_transactions($symbol = null)
@@ -1461,60 +1464,124 @@ class WalletController extends Controller
                 ->toArray();
         }
 
-        $allTransfers = [];
+        // $allTransfers = [];
 
-        foreach ($wallet_addresses as $key=>$address) {
+        // foreach ($wallet_addresses as $key=>$address) {
             
-            if ($symbol == null)
-                $chain = $key;
+        //     if ($symbol == null)
+        //         $chain = $key;
                 
-            if($chain == 'bitcoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
-            elseif($chain == 'ethereum')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
-            elseif($chain == 'litecoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
-            elseif($chain == 'xrp')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
-            elseif($chain == 'dogecoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
-            elseif($chain == 'bsc')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
+        //     if($chain == 'bitcoin')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
+        //     elseif($chain == 'ethereum')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
+        //     elseif($chain == 'litecoin')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
+        //     elseif($chain == 'xrp')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
+        //     elseif($chain == 'dogecoin')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
+        //     elseif($chain == 'bsc')
+        //         $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
             
 
-            try {
-                $response = Http::timeout(10) // wait max 10 seconds
-                    ->retry(3, 200)           // retry 3 times, wait 200ms between
-                    ->get($url);
+        //     try {
+        //         $response = Http::timeout(10) // wait max 10 seconds
+        //             ->retry(3, 200)           // retry 3 times, wait 200ms between
+        //             ->get($url);
 
-                if ($response->successful()) {
-                    $data = $response->json();
-                    if($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin')
-                    {
-                        $allTransfers = array_merge(
-                            $allTransfers,
-                            $data
-                        );
-                    }
-                    elseif($chain == 'ethereum' || $chain == 'bsc')
-                    {
-                        if (isset($data['result'])) {
-                            $allTransfers = array_merge(
-                                $allTransfers,
-                                $data['result']
-                            );
-                        }
-                    }
+        //         if ($response->successful()) {
+        //             $data = $response->json();
+        //             if($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin')
+        //             {
+        //                 $allTransfers = array_merge(
+        //                     $allTransfers,
+        //                     $data
+        //                 );
+        //             }
+        //             elseif($chain == 'ethereum' || $chain == 'bsc')
+        //             {
+        //                 if (isset($data['result'])) {
+        //                     $allTransfers = array_merge(
+        //                         $allTransfers,
+        //                         $data['result']
+        //                     );
+        //                 }
+        //             }
                     
-                } else {
-                    Log::error("Alchemy transfers API responded with error for address {$address}");
-                }
-            } catch (\Throwable $e) {
-                // Catch server down, timeout, connection issues etc.
-                Log::error("Alchemy transfers API failed for address {$address}: " . $e->getMessage());
-                continue; // move on to next wallet
+        //         } else {
+        //             Log::error("Alchemy transfers API responded with error for address {$address}");
+        //         }
+        //     } catch (\Throwable $e) {
+        //         // Catch server down, timeout, connection issues etc.
+        //         Log::error("Alchemy transfers API failed for address {$address}: " . $e->getMessage());
+        //         continue; // move on to next wallet
+        //     }
+        // }
+        
+        $allTransfers = [];
+foreach ($wallet_addresses as $key=>$address) {
+            
+    if ($symbol == null)
+        $chain = $key;
+                
+    if($chain == 'bitcoin')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
+    elseif($chain == 'ethereum')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
+    elseif($chain == 'litecoin')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
+    elseif($chain == 'xrp')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
+    elseif($chain == 'dogecoin')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
+    elseif($chain == 'bsc')
+        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
+            
+    try {
+        $response = Http::timeout(10) // wait max 10 seconds
+            ->retry(3, 200)           // retry 3 times, wait 200ms between
+            ->get($url);
+        if ($response->successful()) {
+            $data = $response->json();
+            if($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin')
+            {
+                // Add address to each transaction
+                $dataWithAddress = array_map(function($transaction) use ($address) {
+                    $transaction['wallet_address'] = $address;
+                    return $transaction;
+                }, $data);
+                
+                $allTransfers = array_merge(
+                    $allTransfers,
+                    $dataWithAddress
+                );
             }
+            elseif($chain == 'ethereum' || $chain == 'bsc')
+            {
+                if (isset($data['result'])) {
+                    // Add address to each transaction
+                    $dataWithAddress = array_map(function($transaction) use ($address) {
+                        $transaction['wallet_address'] = $address;
+                        return $transaction;
+                    }, $data['result']);
+                    
+                    $allTransfers = array_merge(
+                        $allTransfers,
+                        $dataWithAddress
+                    );
+                }
+            }
+                    
+        } else {
+            Log::error("Alchemy transfers API responded with error for address {$address}");
         }
+    } catch (\Throwable $e) {
+        // Catch server down, timeout, connection issues etc.
+        Log::error("Alchemy transfers API failed for address {$address}: " . $e->getMessage());
+        continue; // move on to next wallet
+    }
+}
 
         // $allTransfers now contains merged transfers from all wallets (even if some failed)
         return $allTransfers;
