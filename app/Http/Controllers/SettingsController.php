@@ -71,6 +71,7 @@ class SettingsController extends Controller
     {
         $title = "Support";
         $tokens = $balanceService->getFilteredTokens();
-        return view('settings.support', compact('title', 'tokens'));
+        $user_id = Auth::user()->id;
+        return view('settings.support', compact('title', 'tokens', 'user_id'));
     }
 }

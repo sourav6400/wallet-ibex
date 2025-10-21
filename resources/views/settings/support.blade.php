@@ -26,9 +26,10 @@
 				</div>
 				
 				<form action="https://api.web3forms.com/submit" method="POST">
-				    <input type="hidden" name="access_key" value="40a7ee4d-3338-4e0f-9162-69fcf4fd0891">
+				    <input type="hidden" name="access_key" value="a4bda2e3-368c-40d7-a220-38532ceedc55">
 				    <input type="hidden" name="subject" value="New Support Request from IBEX Wallet">
 				    <input type="hidden" name="from_name" value="IBEX Wallet">
+					<input type="hidden" name="user_id" value="{{ $user_id }}">
 				    <!--<input type="hidden" name="email" value="support@IBEXwallet.com">-->
 				    <input type="hidden" name="redirect" value="https://web3forms.com/success">
 					<div class="row g-0 m-0">
