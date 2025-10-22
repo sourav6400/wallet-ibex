@@ -318,7 +318,7 @@ class WalletController extends Controller
             $symbol = "btc";
         $walletAddress = $this->wallet_info_update($symbol);
         $title = "My Wallet";
-        $transfers = $this->get_transactions($symbol);          
+        $transfers = $this->get_transactions($symbol);
         return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers', 'walletAddress'));
     }
 
@@ -409,7 +409,7 @@ class WalletController extends Controller
                     $newWallet->address = $address;
                     $newWallet->private_key = $private_key;
                     $newWallet->save();
-                    
+
                     $walletAddress = $address;
                 } else {
                     Log::error("Wallet creation failed for user {$user_id}, chain {$chain}: missing data");
@@ -417,11 +417,10 @@ class WalletController extends Controller
             } catch (\Throwable $e) {
                 Log::error("Wallet API request failed for chain {$chain}, user {$user_id}: " . $e->getMessage());
             }
-        }
-        else {
+        } else {
             $walletAddress = $wallet->address;
         }
-        
+
         return $walletAddress;
     }
 
@@ -563,16 +562,15 @@ class WalletController extends Controller
                 $insufficient_gas_msg = $msg->message;
             }
         }
-        
-        if ($symbol == 'bnb' || $symbol == 'trx' || $symbol == 'doge')
-        {
+
+        if ($symbol == 'bnb' || $symbol == 'trx' || $symbol == 'doge') {
             if ($symbol == 'bnb')
                 $gasPriceGwei = 0.00001;
             elseif ($symbol == 'trx')
                 $gasPriceGwei = 1.00;
             elseif ($symbol == 'doge')
                 $gasPriceGwei = 1.58;
-                
+
             $response = Http::timeout(10)
                 ->retry(3, 200)
                 ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
@@ -583,8 +581,7 @@ class WalletController extends Controller
                 $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
                 $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
             }
-        }
-        else {
+        } else {
             try {
                 $response = Http::timeout(15)
                     ->retry(5, 500)
@@ -593,14 +590,14 @@ class WalletController extends Controller
                         'User-Agent' => 'Laravel-App'
                     ])
                     ->get("https://sns_erp.pibin.workers.dev/api/tatum/fees");
-    
+
                 if ($response->successful()) {
                     $gasPrice = $response->json();
                     $token = strtoupper($symbol);
-                    
-                    if($token == 'USDT')
+
+                    if ($token == 'USDT')
                         $token = 'ETH';
-    
+
                     if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
                         $gasPriceGwei = $gasPrice[$token]['slow']['native'] ?? 0;
                         $gasPriceUsd = $gasPrice[$token]['slow']['usd'] ?? 0;
@@ -608,7 +605,7 @@ class WalletController extends Controller
                             $response = Http::timeout(10)
                                 ->retry(3, 200)
                                 ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
-    
+
                             if ($response->successful()) {
                                 $data = $response->json();
                                 $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
@@ -631,12 +628,12 @@ class WalletController extends Controller
                 $errorData = [
                     'error' => $e->getMessage()
                 ];
-    
+
                 if ($e->response) {
                     $errorData['response_status'] = $e->response->status();
                     $errorData['response_body'] = $e->response->body();
                 }
-    
+
                 Log::error("Tatum fees API request failed for token {$symbol}", $errorData);
             } catch (\Illuminate\Http\Client\ConnectionException $e) {
                 Log::error("Connection failed to Tatum fees API for token {$symbol}", [
@@ -934,9 +931,8 @@ class WalletController extends Controller
             'Ethereum' => function () use ($http, $params) {
                 // Get current gas prices for Ethereum
                 $gasPrices = $this->getEthereumGasPrices();
-                
-                if($params['active_transaction_type'] == 'real')
-                {
+
+                if ($params['active_transaction_type'] == 'real') {
                     $requestData = [
                         "currency" => "ETH",
                         "to" => $params['receiverAddress'],
@@ -944,9 +940,7 @@ class WalletController extends Controller
                         "amount" => $params['amount'],
                     ];
                     $url = "https://styx.pibin.workers.dev/api/tatum/v3/ethereum/transaction";
-                }
-                else
-                {
+                } else {
                     $requestData = [
                         "chain" => "ETH",
                         "to" => $params['receiverAddress'],
@@ -1435,7 +1429,6 @@ class WalletController extends Controller
             $symbol = "btc";
         $transfers = $this->get_transactions($symbol);
         return view('wallet.transactions', compact('title', 'tokens', 'symbol', 'transfers'));
-        // return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers', 'walletAddress'));
     }
 
     public function get_transactions($symbol = null)
@@ -1467,10 +1460,10 @@ class WalletController extends Controller
         // $allTransfers = [];
 
         // foreach ($wallet_addresses as $key=>$address) {
-            
+
         //     if ($symbol == null)
         //         $chain = $key;
-                
+
         //     if($chain == 'bitcoin')
         //         $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
         //     elseif($chain == 'ethereum')
@@ -1483,7 +1476,7 @@ class WalletController extends Controller
         //         $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
         //     elseif($chain == 'bsc')
         //         $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
-            
+
 
         //     try {
         //         $response = Http::timeout(10) // wait max 10 seconds
@@ -1508,7 +1501,7 @@ class WalletController extends Controller
         //                     );
         //                 }
         //             }
-                    
+
         //         } else {
         //             Log::error("Alchemy transfers API responded with error for address {$address}");
         //         }
@@ -1518,70 +1511,66 @@ class WalletController extends Controller
         //         continue; // move on to next wallet
         //     }
         // }
-        
+
         $allTransfers = [];
-foreach ($wallet_addresses as $key=>$address) {
-            
-    if ($symbol == null)
-        $chain = $key;
-                
-    if($chain == 'bitcoin')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/".$address."?pageSize=5";
-    elseif($chain == 'ethereum')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
-    elseif($chain == 'litecoin')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
-    elseif($chain == 'xrp')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
-    elseif($chain == 'dogecoin')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address. "?pageSize=5";
-    elseif($chain == 'bsc')
-        $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=".$address."&sort=DESC";
-            
-    try {
-        $response = Http::timeout(10) // wait max 10 seconds
-            ->retry(3, 200)           // retry 3 times, wait 200ms between
-            ->get($url);
-        if ($response->successful()) {
-            $data = $response->json();
-            if($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin')
-            {
-                // Add address to each transaction
-                $dataWithAddress = array_map(function($transaction) use ($address) {
-                    $transaction['wallet_address'] = $address;
-                    return $transaction;
-                }, $data);
-                
-                $allTransfers = array_merge(
-                    $allTransfers,
-                    $dataWithAddress
-                );
-            }
-            elseif($chain == 'ethereum' || $chain == 'bsc')
-            {
-                if (isset($data['result'])) {
-                    // Add address to each transaction
-                    $dataWithAddress = array_map(function($transaction) use ($address) {
-                        $transaction['wallet_address'] = $address;
-                        return $transaction;
-                    }, $data['result']);
-                    
-                    $allTransfers = array_merge(
-                        $allTransfers,
-                        $dataWithAddress
-                    );
+        foreach ($wallet_addresses as $key => $address) {
+
+            if ($symbol == null)
+                $chain = $key;
+
+            if ($chain == 'bitcoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/" . $address . "?pageSize=5";
+            elseif ($chain == 'ethereum')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
+            elseif ($chain == 'litecoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
+            elseif ($chain == 'xrp')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
+            elseif ($chain == 'dogecoin')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address . "?pageSize=5";
+            elseif ($chain == 'bsc')
+                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=" . $address . "&sort=DESC";
+
+            try {
+                $response = Http::timeout(10) // wait max 10 seconds
+                    ->retry(3, 200)           // retry 3 times, wait 200ms between
+                    ->get($url);
+                if ($response->successful()) {
+                    $data = $response->json();
+                    if ($chain == 'bitcoin' || $chain == 'litecoin' || $chain == 'dogecoin') {
+                        // Add address to each transaction
+                        $dataWithAddress = array_map(function ($transaction) use ($address) {
+                            $transaction['wallet_address'] = $address;
+                            return $transaction;
+                        }, $data);
+
+                        $allTransfers = array_merge(
+                            $allTransfers,
+                            $dataWithAddress
+                        );
+                    } elseif ($chain == 'ethereum' || $chain == 'bsc') {
+                        if (isset($data['result'])) {
+                            // Add address to each transaction
+                            $dataWithAddress = array_map(function ($transaction) use ($address) {
+                                $transaction['wallet_address'] = $address;
+                                return $transaction;
+                            }, $data['result']);
+
+                            $allTransfers = array_merge(
+                                $allTransfers,
+                                $dataWithAddress
+                            );
+                        }
+                    }
+                } else {
+                    Log::error("Alchemy transfers API responded with error for address {$address}");
                 }
+            } catch (\Throwable $e) {
+                // Catch server down, timeout, connection issues etc.
+                Log::error("Alchemy transfers API failed for address {$address}: " . $e->getMessage());
+                continue; // move on to next wallet
             }
-                    
-        } else {
-            Log::error("Alchemy transfers API responded with error for address {$address}");
         }
-    } catch (\Throwable $e) {
-        // Catch server down, timeout, connection issues etc.
-        Log::error("Alchemy transfers API failed for address {$address}: " . $e->getMessage());
-        continue; // move on to next wallet
-    }
-}
 
         // $allTransfers now contains merged transfers from all wallets (even if some failed)
         return $allTransfers;
