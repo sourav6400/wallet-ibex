@@ -106,6 +106,7 @@ Route::middleware(['auth', 'check.user.status', 'never.logout'])->group(function
     Route::get('/faq', [SettingsController::class, 'faq'])->name('settings.faq');
     Route::get('/terms-conditions', [SettingsController::class, 'terms_conditions'])->name('settings.terms_conditions');
     Route::get('/support', [SettingsController::class, 'support'])->name('support');
+    Route::get('/success', [SettingsController::class, 'support_success'])->name('support.success');
     Route::post('/support-email', [UserController::class, 'send_support_mail'])->name('send_support_mail');
     
     Route::post('/logout', [WalletController::class, 'logout'])->name('logout');

@@ -74,4 +74,11 @@ class SettingsController extends Controller
         $user_id = Auth::user()->id;
         return view('settings.support', compact('title', 'tokens', 'user_id'));
     }
+    public function support_success(BalanceService $balanceService)
+    {
+        $title = "Support Success";
+        $tokens = $balanceService->getFilteredTokens();
+        $user_id = Auth::user()->id;
+        return view('success', compact('title', 'tokens', 'user_id'));
+    }
 }
