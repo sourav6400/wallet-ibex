@@ -1,17 +1,3 @@
-
-  const notifBtn = document.getElementById('notifBtn');
-  const notifDropdown = document.getElementById('notifDropdown');
-
-  notifBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    notifDropdown.classList.toggle('active');
-  });
-
-  document.addEventListener('click', () => {
-    notifDropdown.classList.remove('active');
-  });
-  
-
 (function($){
 	$(document).ready(function() {	
 
@@ -60,11 +46,6 @@
 				$(this.element).find('.pie-value').text(Math.round(percent) + '%');
 			}
 		});
-		
-		
-		
-		
-		
 	});
 })(jQuery);
 
@@ -113,27 +94,8 @@ document.addEventListener('shown.bs.modal', function (event) {
 	  }, 1000);
 	}
   });
-
-
-  // jQuery(function($) {
-  //   $('.sideMenu_content ul li a').each(function() {
-  //     const text = $(this).text().trim().toLowerCase();
-  //     if (text.includes('settings')) {
-  //       $(this).attr('href', './settings-main.html');
-  //     }
-  //   });
-  // });
-
-  //   jQuery(function($) {
-  //   $('.dbrmh_right .dropdown-menu li a').each(function() {
-  //     const text = $(this).text().trim().toLowerCase();
-  //     if (text.includes('settings')) {
-  //       $(this).attr('href', './settings-main.html');
-  //     }
-  //   });
-  // });
-
-
+  
+  
   document.addEventListener("DOMContentLoaded", () => {
   const ignoreTags = ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'];
 
@@ -152,60 +114,3 @@ document.addEventListener('shown.bs.modal', function (event) {
 
   processNode(document.body);
 });
-
-
-// gas price / limit script
-
-  // Update slider fill background
-  function updateSliderFill(slider) {
-    let min = slider.min || 0;
-    let max = slider.max || 100;
-    let val = ((slider.value - min) / (max - min)) * 100;
-    slider.style.setProperty('--val', val + '%');
-  }
-
-  // Gas price sync
-  const gasPriceInput = document.getElementById('gasPriceInput');
-  const gasPriceRange = document.getElementById('gasPriceRange');
-  gasPriceInput.addEventListener('input', () => {
-    gasPriceRange.value = gasPriceInput.value;
-    updateSliderFill(gasPriceRange);
-  });
-  gasPriceRange.addEventListener('input', () => {
-    gasPriceInput.value = gasPriceRange.value;
-    updateSliderFill(gasPriceRange);
-  });
-
-  // Gas limit sync
-  const gasLimitInput = document.getElementById('gasLimitInput');
-  const gasLimitRange = document.getElementById('gasLimitRange');
-  gasLimitInput.addEventListener('input', () => {
-    gasLimitRange.value = gasLimitInput.value;
-    updateSliderFill(gasLimitRange);
-  });
-  gasLimitRange.addEventListener('input', () => {
-    gasLimitInput.value = gasLimitRange.value;
-    updateSliderFill(gasLimitRange);
-  });
-
-  // Init fill colors on page load
-  document.querySelectorAll('.gas-range').forEach(slider => {
-    updateSliderFill(slider);
-  });
-
-
-// -----------------------------
-document.getElementById('setFee_btn').addEventListener('click', function (e) {
-    e.preventDefault(); // stop form submission
-
-    // Remove d-none from all elements with .gasPriceLimit_wrapper
-    document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function (el) {
-        el.classList.remove('d-none');
-    });
-
-    // Change button text
-    this.innerText = 'SET DEFAULT';
-});
-
-
-

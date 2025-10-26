@@ -219,16 +219,19 @@
                                         <i class="fa-solid fa-wallet"></i> My wallet</a>
                                 </li>
                                 <li><a href="#"><i class="fa-regular fa-shuffle"></i> Swap</a></li>
-                                <li>
-                                    <a href="{{ route('transactions', ['symbol' => 'btc']) }}"
-                                       class="{{ request()->routeIs('transactions') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-file-invoice"></i>
-                                        Transactions
-                                    </a>
-                                </li>
+                                <li><a href="{{ route('transactions', ['symbol' => 'btc']) }}"
+                                        class="{{ request()->routeIs('transactions') ? 'active' : '' }}"><i
+                                            class="fa-solid fa-file-invoice"></i>
+                                        Transactions</a></li>
                                 <li><a href="{{ route('settings.backup_seed') }}"
                                         class="{{ request()->routeIs('settings.*') ? 'active' : '' }}"><i
                                             class="fa-solid fa-gear"></i> Settings</a></li>
+                                <li><a href="{{ route('message.alerts') }}"
+                                        class="{{ request()->routeIs('message.alerts') ? 'active' : '' }}"><i
+                                            class="fa-solid fa-triangle-exclamation"></i> Alerts</a></li>
+                                <li><a href="{{ route('message.announcements') }}"
+                                        class="{{ request()->routeIs('message.announcements') ? 'active' : '' }}"><i
+                                            class="fa-solid fa-bullhorn"></i> Announcements</a></li>
                                 <li><a href="{{ route('support') }}"
                                         class="{{ request()->routeIs('support') ? 'active' : '' }}">
                                         <i class="fa-solid fa-comment-question"></i> Support</a></li>
@@ -273,35 +276,67 @@
                                 <div class="col-md-5 col-2">
                                     <div class="dbrmh_right">
                                         <ul>
-                                            <!--<li><i class="fa-regular fa-bell"></i></li>-->
-                                            <li class="d-none d-lg-flex">
-                                                <div class="dropdown">
-                                                    <button class="dbrmhr_user" type="button" id="dropdownMenuButton1"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <img class="icon" src="{{ asset('images/icon/icon2.svg') }}"
-                                                            alt="">
-                                                        {{-- <span class="name" id="username">{{ auth()->id() }}</span> --}}
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                        <li><a class="dropdown-item" href="#"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#staticBackdrop">Change Name</a></li>
-                                                        <li><a class="dropdown-item"
-                                                                href="{{ route('settings.backup_seed') }}">Settings</a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item logout" href="#"
-                                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                                Logout <i class="fa-regular fa-right-from-bracket"></i>
-                                                            </a>
+                                            <li>
+                                                <div class="notification-container">
+                                                    <div class="notification-icon" id="notifBtn">
+                                                        <i class="fa-solid fa-bell"></i>
+                                                        @php
+                                                            $notificationCount = \App\Models\CustomMessage::where('message_type', 'notification')
+                                                                ->active()
+                                                                ->where(function ($query) {
+                                                                    $query->where('is_global', true)
+                                                                          ->orWhere('user_id', Auth::user()->id);
+                                                                })
+                                                                ->count();
+                                                        @endphp
+                                                        @if($notificationCount > 0)
+                                                            <span class="notification-badge">{{ $notificationCount }}</span>
+                                                        @endif
+                                                    </div>
 
-                                                            <form id="logout-form" action="{{ route('logout') }}"
-                                                                method="POST" style="display: none;">
-                                                                @csrf
-                                                            </form>
-                                                        </li>
-                                                    </ul>
+                                                    <div class="dropdown" id="notifDropdown">
+                                                        <div class="dropdown-header">Notifications</div>
+                                                        <div class="dropdown-content">
+                                                            @php
+                                                                $notifications = \App\Models\CustomMessage::where('message_type', 'notification')
+                                                                    ->active()
+                                                                    ->where(function ($query) {
+                                                                        $query->where('is_global', true)
+                                                                              ->orWhere('user_id', Auth::user()->id);
+                                                                    })
+                                                                    ->orderBy('created_at', 'desc')
+                                                                    ->take(4)
+                                                                    ->get();
+                                                            @endphp
+
+                                                            @forelse($notifications as $notification)
+                                                                <div class="notification-item">
+                                                                    <div class="icon"><i class="fa-solid fa-bell"></i></div>
+                                                                    <div class="text">
+                                                                        <div class="title">{{ $notification->message }}</div>
+                                                                        <div class="time">{{ $notification->created_at->diffForHumans() }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            @empty
+                                                                <div class="notification-item">
+                                                                    <div class="text">
+                                                                        <div class="title">No new notifications</div>
+                                                                        <div class="time">All caught up!</div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforelse
+                                                        </div>
+                                                        <div class="dropdown-footer" onclick="window.location.href='{{ route('message.alerts') }}'">View all</div>
+                                                    </div>
                                                 </div>
+                                            </li>
+                                            <li>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="logout-btn-header" title="Logout" onclick="return confirmLogout(event)">
+                                                        <i class="fa-regular fa-right-from-bracket"></i>
+                                                    </button>
+                                                </form>
                                             </li>
                                         </ul>
                                     </div>
@@ -364,30 +399,12 @@
                     <ul>
                         <li class="d-none"><i class="fa-regular fa-bell"></i></li>
                         <li>
-                            <div class="dropdown">
-                                <button class="dbrmhr_user" type="button" id="dropdownMenuButton1"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="icon" src="images/icon/icon2.svg" alt="">
-                                    {{-- <span class="name" id="username">{{ auth()->id() }}</span> --}}
+                            <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="logout-btn-header" title="Logout" onclick="return confirmLogout(event)">
+                                    <i class="fa-regular fa-right-from-bracket"></i>
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdrop">Change Name</a></li>
-                                    <li><a class="dropdown-item"
-                                            href="{{ route('settings.backup_seed') }}">Settings</a></li>
-                                    <li>
-                                        <a class="dropdown-item logout" href="#"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            Logout <i class="fa-regular fa-right-from-bracket"></i>
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -423,7 +440,7 @@
     <script>
         window.addEventListener("load", function() {
             document.getElementById("loader").style.display = "none";
-            document.getElementById("content").style.display = "block";
+            // document.getElementById("content").style.display = "block";
         });
 
         $(document).ready(function() {
@@ -457,6 +474,15 @@
                 }));
             }
         });
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                event.target.closest('form').submit();
+            }
+            return false;
+        }
+
 
 
         // Sleep Mode Controll

@@ -9,51 +9,28 @@ GLOBAL CSS START HERE
 
 /* consolas font */
 @font-face {
-  font-family: 'consolas';
-  src: url('./fonts/consolas/CONSOLA.TTF') format('truetype');
-  /* font-weight: 400; */
+    font-family: 'consolas';
+    src: url('./fonts/consolas/CONSOLA.TTF') format('truetype');
+    /* font-weight: 400; */
 }
 
-#dataTable_length {
-    display: none;
-}
-#dataTable_filter {
-    display: none;
-}
-#dataTable_info {
-    display: none;
-}
-
-/* Chrome, Edge, Safari */
-::-webkit-scrollbar-thumb {
-  background: #444; /* dark thumb */
-}
-
-::-webkit-scrollbar-track {
-  background: #111; /* dark track */
-}
-
-/* Firefox */
-* {
-  scrollbar-color: #444 #111; /* thumb track */
-}
 
 :root {
     --primarybtnbgColor: #007FFF;
     --primarybtnbgHoverColor: #2692ff;
 }
 
-body {	
-    font-family: 'consolas';  
+body {
+    font-family: 'consolas';
     font-family: "Roboto", sans-serif;
     font-size: 16px;
-    font-weight: 400;    
-	background: #fff;
-	color: #000;	
+    font-weight: 400;
+    background: #fff;
+    color: #000;
 }
 
 .font-secondary {
-    font-family: 'consolas';  
+    font-family: 'consolas';
 }
 
 html,
@@ -158,7 +135,7 @@ onboarding CSS START HERE
     width: 100%;
     max-width: 500px;
     color: #fff;
-} 
+}
 
 .onboarding_card .skip_btn {
     color: #BA75FF;
@@ -178,32 +155,39 @@ onboarding CSS START HERE
     top: 16px;
     right: 16px;
 }
+
 .onboarding_card .skip_btn:hover {
     background: rgba(115, 103, 182, 0.50);
 }
+
 .onboarding_card .obCard_header {
     min-height: 270px;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
+
 .onboarding_card .obCard_header img {
     width: 100%;
     display: block;
     margin: 0 auto;
 }
+
 .onboarding_card.one .obCard_header img {
     max-width: 260px;
 }
+
 .onboarding_card.two .obCard_header img {
     max-width: 170px;
     margin-top: 50px;
     position: relative;
 }
+
 .onboarding_card.three .obCard_header img {
     max-width: 185px;
 }
+
 .onboarding_card.three .obCard_header img {
     width: 100%;
     max-width: 170px;
@@ -211,6 +195,7 @@ onboarding CSS START HERE
     margin: 0 auto;
     margin-top: 50px;
 }
+
 .onboarding_card .obCard_body h3 {
     color: #FFF;
     text-align: center;
@@ -220,6 +205,7 @@ onboarding CSS START HERE
     margin-top: 20px;
     margin-bottom: 15px;
 }
+
 .onboarding_card .obCard_body p {
     color: #7367B6;
     text-align: center;
@@ -228,6 +214,7 @@ onboarding CSS START HERE
     line-height: 112%;
     margin-bottom: 15px;
 }
+
 .onboarding_card .obCard_body button {
     width: 100%;
     max-width: 269px;
@@ -245,15 +232,18 @@ onboarding CSS START HERE
     margin-bottom: 30px;
     transition: 0.3s;
 }
+
 .onboarding_card .obCard_body button:hover {
     background: #2692ff;
 }
+
 .onboarding_card .obCard_body ul.ob_dots {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
 }
+
 .onboarding_card .obCard_body ul.ob_dots li {
     width: 13px;
     height: 13px;
@@ -261,6 +251,7 @@ onboarding CSS START HERE
     border: 1px solid #1B182E;
     box-shadow: 0 0 0 1px #5B5193;
 }
+
 .onboarding_card .obCard_body ul.ob_dots li.active {
     background-color: var(--primarybtnbgColor);
 }
@@ -274,7 +265,8 @@ CREATE ACCOUNT CSS START HERE
 .onboarding_wrapper.createAnAccount {
     background-image: url(images/thumb/thumb5.png);
 }
-.onboarding_wrapper.createAnAccount > a.caaBackBtn {
+
+.onboarding_wrapper.createAnAccount>a.caaBackBtn {
     width: 100px;
     height: 40px;
     color: #FFF;
@@ -293,9 +285,11 @@ CREATE ACCOUNT CSS START HERE
     padding: 4px 8px;
     border-radius: 5px;
 }
-.onboarding_wrapper.createAnAccount > a.caaBackBtn:hover {
-    background: rgba(69, 70, 114,0.3);
+
+.onboarding_wrapper.createAnAccount>a.caaBackBtn:hover {
+    background: rgba(69, 70, 114, 0.3);
 }
+
 .createAnAccount_card {
     border-radius: 20px;
     background: #1B182E;
@@ -306,7 +300,7 @@ CREATE ACCOUNT CSS START HERE
     color: #fff;
 }
 
-.createAnAccount_body > h3 {
+.createAnAccount_body>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -314,7 +308,8 @@ CREATE ACCOUNT CSS START HERE
     line-height: 112%;
     margin-bottom: 15px;
 }
-.createAnAccount_body > p {
+
+.createAnAccount_body>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -322,6 +317,7 @@ CREATE ACCOUNT CSS START HERE
     line-height: 112%;
     margin-bottom: 30px;
 }
+
 .createAnAccount_body .form_input span {
     color: #4202CC;
     font-size: 18px;
@@ -345,12 +341,15 @@ CREATE ACCOUNT CSS START HERE
     transition: 0.3s;
     margin-bottom: 20px;
 }
+
 .createAnAccount_body .form_input input::placeholder {
     color: #737084;
 }
+
 .createAnAccount_body .form_input input:focus {
-    box-shadow: 0 0 5px 5px rgba(66, 2, 204,0.3);
+    box-shadow: 0 0 5px 5px rgba(66, 2, 204, 0.3);
 }
+
 .createAnAccount_body .form_input i.toggle-password {
     position: absolute;
     top: 63%;
@@ -359,6 +358,7 @@ CREATE ACCOUNT CSS START HERE
     cursor: pointer;
     color: #8572FF;
 }
+
 .createAnAccount_body .form_btn button {
     width: 100%;
     min-height: 45px;
@@ -372,16 +372,20 @@ CREATE ACCOUNT CSS START HERE
     border: 0;
     transition: 0.3s;
 }
+
 .createAnAccount_body .form_btn button:hover {
     background: #2692ff;
 
 }
+
 .createAnAccount_body .form_btn button.back {
     background: #454672;
 }
+
 .createAnAccount_body .form_btn button.back:hover {
     background: #50516e;
 }
+
 .createAnAccount_header {
     min-height: 160px;
     display: flex;
@@ -389,24 +393,29 @@ CREATE ACCOUNT CSS START HERE
     justify-content: center;
     margin-top: 30px;
 }
+
 .createAnAccount_header img {
     width: 100%;
     max-width: 100px;
 }
+
 .createAnAccount_card .progress-bar {
     border-radius: 100px;
     height: 8px;
     font-size: 8px;
     margin-top: 10px;
 }
+
 .caaBtnRow {
     margin-top: 20px !important;
 }
+
 .help-block {
     position: relative;
     display: block;
     z-index: 22;
 }
+
 .help-block::before {
     content: "";
     display: block;
@@ -427,16 +436,18 @@ CREATE ACCOUNT CSS START HERE
 walletSelection CSS START 
 ==========================
 */
-.walletSelection_logo > a {
+.walletSelection_logo>a {
     display: block;
     width: fit-content;
     margin: 0 auto;
     margin-bottom: 45px;
 }
-.walletSelection_logo > a img {
+
+.walletSelection_logo>a img {
     width: 100%;
     max-width: 210px;
 }
+
 .walletSelection_Card {
     padding: 38px 23px;
     padding-top: 75px;
@@ -453,6 +464,7 @@ walletSelection CSS START
     position: relative;
     z-index: 2;
 }
+
 .walletSelection_Card::after {
     content: "";
     width: 100%;
@@ -466,9 +478,11 @@ walletSelection CSS START
     opacity: 0;
     transition: 0.3s;
 }
+
 .walletSelection_Card:hover:after {
     opacity: 1;
 }
+
 .walletSelection_Card::before {
     content: "";
     width: calc(100% - 3px);
@@ -481,13 +495,15 @@ walletSelection CSS START
     border-radius: 20px;
     z-index: -1;
 }
-.walletSelection_Card > img {
+
+.walletSelection_Card>img {
     width: 100%;
     max-width: 124px;
     display: block;
     margin: 0 auto;
 }
-.walletSelectionCard_content > h3 {
+
+.walletSelectionCard_content>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -495,18 +511,21 @@ walletSelection CSS START
     line-height: 112%;
     margin-bottom: 15px;
 }
-.walletSelectionCard_content > p {
+
+.walletSelectionCard_content>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .walletSelectionCard_wrapper {
     display: flex;
     gap: 50px;
 }
-.createAnAccount_header.createNewWallet > img {
+
+.createAnAccount_header.createNewWallet>img {
     width: 100%;
     max-width: 124px;
 }
@@ -526,6 +545,7 @@ wallet Pin Set CSS START
     padding-top: 30px;
     margin-bottom: 35px;
 }
+
 .walletPinSetCard_header h3 {
     color: #FFF;
     text-align: center;
@@ -534,6 +554,7 @@ wallet Pin Set CSS START
     line-height: 112%;
     margin-bottom: 8px;
 }
+
 .walletPinSetCard_header p {
     color: #7367B6;
     text-align: center;
@@ -542,6 +563,7 @@ wallet Pin Set CSS START
     line-height: 112%;
     margin-bottom: 24px;
 }
+
 .walletPinKey_wrapper {
     width: 100%;
     max-width: 175px;
@@ -563,6 +585,7 @@ wallet Pin Set CSS START
     border: 0;
     transition: 0.3s;
 }
+
 .walletPinBackconti_btn button:hover {
     background: var(--primarybtnbgHoverColor);
 }
@@ -570,14 +593,17 @@ wallet Pin Set CSS START
 .walletPinBackconti_btn button.continueBtn:hover:not(.disable) {
     background-color: var(--primarybtnbgHoverColor);
 }
+
 .walletPinBackconti_btn button:disabled {
     background: #454672;
     color: #717290;
     cursor: no-drop;
 }
+
 .walletPinBackconti_btn button.back {
     background: #454672;
 }
+
 .walletPinBackconti_btn button.back:hover {
     background: #50516e;
 }
@@ -589,59 +615,97 @@ wallet Pin Set CSS START
     gap: 20px;
     cursor: pointer;
 }
+
 .pin-dot {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #3B3B5C;
-  background-color: #3B3B5C;
-  border-radius: 50%;
-  transition: 0.3s;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #3B3B5C;
+    background-color: #3B3B5C;
+    border-radius: 50%;
+    transition: 0.3s;
 }
+
 .pin-dot.filled {
-  background-color: #007FFF;
-  border-color: #007FFF;
-  animation: pin-pop 0.2s ease;
+    background-color: #007FFF;
+    border-color: #007FFF;
+    animation: pin-pop 0.2s ease;
 }
+
 @keyframes pin-pop {
-  0% { transform: scale(0.6); opacity: 0; }
-  80% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); }
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+
+    80% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
+
 @keyframes pin-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-5px); }
-  40% { transform: translateX(5px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-5px);
+    }
+
+    40% {
+        transform: translateX(5px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
 }
+
 .pin-shake {
-  animation: pin-shake 0.4s ease;
+    animation: pin-shake 0.4s ease;
 }
+
 #pinInput {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
+
 .walletPinKey_wrapper .walletPinBtn.iconXmark button {
     color: #777777;
 }
+
 .walletPinKey_wrapper .walletPinBtn.iconXmark button:hover {
     color: #fff;
 }
+
 .walletPinKey_wrapper .walletPinBtn.icon:not(.disable) button {
     background-color: var(--primarybtnbgColor);
 }
+
 .walletPinKey_wrapper .walletPinBtn.icon:not(.disable):hover button {
     background-color: var(--primarybtnbgHoverColor);
 }
+
 .walletPinKey_wrapper .walletPinBtn.disable button:hover {
     cursor: no-drop;
 }
+
 .walletPinKey_wrapper .walletPinBtn.disable button {
     color: #777777;
 }
 
-.walletPinBackconti_wrapper > a.skipStep {
+.walletPinBackconti_wrapper>a.skipStep {
     color: #007FFF;
     text-align: center;
     font-size: 16px;
@@ -652,7 +716,8 @@ wallet Pin Set CSS START
     margin-top: 20px;
     transition: 0.3s;
 }
-.walletPinBackconti_wrapper > a.skipStep:hover {
+
+.walletPinBackconti_wrapper>a.skipStep:hover {
     letter-spacing: 1px;
 }
 
@@ -669,6 +734,7 @@ word Seed phrase CSS START
     align-items: center;
     justify-content: center;
 }
+
 .wordSeed_item h4 {
     color: #007FFF;
     text-align: center;
@@ -676,10 +742,11 @@ word Seed phrase CSS START
     font-weight: 700;
     line-height: 112%;
 }
+
 .walletSelection_Card.wordSeed {
     justify-content: center;
     padding: 0 30px;
-    padding-top:30px;
+    padding-top: 30px;
     max-width: 700px !important;
     min-height: 278px;
 }
@@ -694,9 +761,11 @@ word seed phrase let go CSS START
     width: 100%;
     max-width: 515px;
 }
+
 .walletSelection_wrapper.wordseedPhrase {
     width: 700px;
 }
+
 .walletSelection_Card.backupWallet {
     width: 100%;
     max-width: 100%;
@@ -709,20 +778,23 @@ word seed phrase let go CSS START
     background: #1B182E;
     cursor: default;
 }
+
 .walletSelection_Card.backupWallet::after,
 .walletSelection_Card.backupWallet::before,
 .walletSelection_Card.noAfterBefore::after,
 .walletSelection_Card.noAfterBefore::before {
     display: none;
 }
-.backupWallet_body > img {
+
+.backupWallet_body>img {
     width: 100%;
     max-width: 64px;
     margin: 0 auto;
     display: block;
     margin-bottom: 11px;
 }
-.backupWallet_body > h3 {
+
+.backupWallet_body>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -730,24 +802,28 @@ word seed phrase let go CSS START
     line-height: 112%;
     margin-bottom: 15px;
 }
-.backupWallet_body > p {
+
+.backupWallet_body>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .backupWallet_body {
     padding-bottom: 35px;
     border-bottom: 1px solid #34304F;
 }
-.backupWallet_footer  {
+
+.backupWallet_footer {
     padding-top: 35px;
     width: 100%;
     max-width: 355px;
     margin: 0 auto;
 }
-.backupWallet_footer > label {
+
+.backupWallet_footer>label {
     width: 100%;
     color: #5A576F;
     font-size: 16px;
@@ -758,10 +834,12 @@ word seed phrase let go CSS START
     gap: 10px;
     cursor: pointer;
 }
-.backupWallet_footer > label h6 {
+
+.backupWallet_footer>label h6 {
     width: calc(100% - 15px);
 }
-.backupWallet_footer > label input {
+
+.backupWallet_footer>label input {
     appearance: none;
     width: 14px;
     height: 14px;
@@ -769,12 +847,14 @@ word seed phrase let go CSS START
     border-radius: 50%;
     margin-top: 3px;
 }
-.backupWallet_footer > label input:checked {
+
+.backupWallet_footer>label input:checked {
     border-color: #007FFF;
     background-color: #007FFF;
 
 }
-.backupWallet_footer > button {
+
+.backupWallet_footer>button {
     width: 100%;
     min-height: 45px;
     border-radius: 5px;
@@ -788,14 +868,17 @@ word seed phrase let go CSS START
     margin-top: 27px;
     transition: 0.3s;
 }
-.backupWallet_footer > button:hover {
+
+.backupWallet_footer>button:hover {
     background: var(--primarybtnbgHoverColor);
 }
-.backupWallet_footer > button:disabled {
+
+.backupWallet_footer>button:disabled {
     background-color: #454672;
     color: #717290;
     cursor: no-drop;
 }
+
 .wrong_phrase_msg {
     border-radius: 10px;
     background: #BD093D;
@@ -821,6 +904,7 @@ seedPhraseProcess CSS START
     width: 100%;
     max-width: 1010px;
 }
+
 .seedPhraseProcess_content {
     max-width: 100%;
     border-radius: 20px;
@@ -828,7 +912,8 @@ seedPhraseProcess CSS START
     background: rgba(27, 24, 46, 0.40);
     backdrop-filter: blur(30px);
 }
-.seedPhraseProcess_title > h3 {
+
+.seedPhraseProcess_title>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -836,7 +921,8 @@ seedPhraseProcess CSS START
     line-height: 112%;
     margin-bottom: 15px;
 }
-.seedPhraseProcess_title > p {
+
+.seedPhraseProcess_title>p {
     color: #FFF;
     text-align: center;
     font-size: 20px;
@@ -848,6 +934,7 @@ seedPhraseProcess CSS START
     margin: 0 auto;
     margin-bottom: 20px;
 }
+
 .seedPhraseProcess_item {
     border-radius: 5px;
     background: #221E37;
@@ -858,6 +945,7 @@ seedPhraseProcess CSS START
     height: 40px;
     cursor: pointer;
 }
+
 .seedPhraseProcess_item h6.number {
     color: #FFF;
     font-size: 20px;
@@ -877,6 +965,7 @@ seedPhraseProcess CSS START
 .seedPhraseProcess_item.active h6.number {
     background-color: #007FFF;
 }
+
 .seedPhraseProcess_item h5 {
     color: #FFF;
     font-size: 20px;
@@ -884,22 +973,25 @@ seedPhraseProcess CSS START
     line-height: 112%;
     width: calc(100% - 45px);
 }
+
 .seedPhraseProcess_item_wrapper {
-	counter-reset: item;
+    counter-reset: item;
 }
 
 .seedPhraseProcess_item h6.number::before {
-	counter-increment: item;
-	content: counter(item);
-	display: block;
-	font-weight: bold;
+    counter-increment: item;
+    content: counter(item);
+    display: block;
+    font-weight: bold;
 }
+
 .seedPhraseProcess_item_wrapper {
     width: 100%;
     max-width: 670px;
     margin: 0 auto;
 }
-.seedPhraseProcess_btn > h6 {
+
+.seedPhraseProcess_btn>h6 {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
@@ -912,7 +1004,8 @@ seedPhraseProcess CSS START
     cursor: pointer;
     margin-top: 25px;
 }
-.seedPhraseProcess_btn > button {
+
+.seedPhraseProcess_btn>button {
     width: 100%;
     max-width: 238px;
     min-height: 45px;
@@ -929,7 +1022,8 @@ seedPhraseProcess CSS START
     background: #007FFF;
     transition: 0.3s;
 }
-.seedPhraseProcess_btn > button:hover {
+
+.seedPhraseProcess_btn>button:hover {
     background: var(--primarybtnbgHoverColor);
 }
 
@@ -943,11 +1037,13 @@ seed Phrase Confirm CSS START
     max-width: 620px;
     margin: 0 auto;
 }
+
 .seedPhraseConfirm_item_wrapper .form_input {
     border-bottom: 2px solid #39335B;
     display: flex;
     align-items: center;
 }
+
 .seedPhraseConfirm_item_wrapper .form_input span {
     color: #39335B;
     font-size: 16px;
@@ -957,6 +1053,7 @@ seed Phrase Confirm CSS START
     display: block;
     text-align: center;
 }
+
 .seedPhraseConfirm_item_wrapper .form_input input {
     width: calc(100% - 25px);
     background-color: transparent;
@@ -966,6 +1063,7 @@ seed Phrase Confirm CSS START
     font-weight: 400;
     line-height: 112%;
 }
+
 .seedPhraseConfirm_item_wrapper .formInput_data button {
     border: 0;
     padding: 9px 15px;
@@ -979,6 +1077,7 @@ seed Phrase Confirm CSS START
     margin-top: 30px;
     display: block;
 }
+
 .seedPhraseProcess_btn.seedPhraseConfirm {
     max-width: 245px;
     min-height: 45px;
@@ -997,12 +1096,14 @@ Wallet create done CSS START
     padding-top: 84px;
     padding-bottom: 94px;
 }
-.WalletCreated_card > img {
+
+.WalletCreated_card>img {
     width: 112px;
     display: block;
     margin: 0 auto;
 }
-.WalletCreated_card > h3 {
+
+.WalletCreated_card>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -1011,7 +1112,8 @@ Wallet create done CSS START
     margin-top: 30px;
     margin-bottom: 18px;
 }
-.WalletCreated_card > p {
+
+.WalletCreated_card>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -1019,7 +1121,8 @@ Wallet create done CSS START
     line-height: 112%;
     margin-bottom: 18px;
 }
-.WalletCreated_card > button {
+
+.WalletCreated_card>button {
     width: 100%;
     max-width: 344px;
     min-height: 45px;
@@ -1035,7 +1138,8 @@ Wallet create done CSS START
     margin: 0 auto;
     transition: 0.3s;
 }
-.WalletCreated_card > button:hover {
+
+.WalletCreated_card>button:hover {
     background: var(--primarybtnbgHoverColor);
 }
 
@@ -1051,29 +1155,34 @@ DASHBOARD CSS START HERE
     height: 100vh;
     color: #fff;
 }
+
 .dashboard_main .aside_col {
     width: 230px;
     height: 100%;
 }
+
 .dashboard_main aside {
     width: 100%;
     height: 100vh;
     background-color: #1B1D2D;
     padding: 55px 0;
 }
+
 .dashboard_main .dashboardRight_col {
     width: calc(100% - 230px);
 }
 
 .sideMenu_content {
-    padding-top: 40px;
+    /* padding-top: 40px; */
 }
+
 aside .sideLogo a img {
     width: 100%;
     max-width: 82px;
     margin: 0 auto;
     display: block;
 }
+
 .sideMenu_content ul li a {
     color: #6A7785;
     font-size: 16px;
@@ -1085,14 +1194,16 @@ aside .sideLogo a img {
     gap: 11px;
     text-transform: capitalize;
 }
+
 .sideMenu_content ul li a.active {
     background: linear-gradient(90deg, #1B1D2D 0%, #3A326B 100%);
     color: #fff;
 }
 
 .sideMenu_content ul li a:not(.active):hover {
-    background-color: rgba(255,255,255,0.02);
+    background-color: rgba(255, 255, 255, 0.02);
 }
+
 .sideMenu_content ul li a i {
     font-size: 24px;
     color: #6A7785;
@@ -1100,6 +1211,7 @@ aside .sideLogo a img {
     display: flex;
     justify-content: center;
 }
+
 .sideMenu_content ul li a.active i {
     color: #007FFF;
 }
@@ -1108,23 +1220,26 @@ aside .sideLogo a img {
     width: 40px;
     display: block;
 }
+
 .dashboardRightMain_header .dbrmh_left ul li h6.name {
     color: #007FFF;
     font-size: 16px;
     font-weight: 600;
     line-height: 112%;
     margin-bottom: 2px;
-    white-space: nowrap; 
-    width: 90px; 
+    white-space: nowrap;
+    width: 90px;
     overflow: hidden;
-    text-overflow: ".."; 
+    text-overflow: "..";
 }
+
 .dashboardRightMain_header .dbrmh_left ul li h5.balance {
     color: #FFF;
     font-size: 16px;
     font-weight: 600;
     line-height: 112%;
 }
+
 .dashboardRightMain_header .dbrmh_left ul {
     display: flex;
     align-items: center;
@@ -1136,21 +1251,26 @@ aside .sideLogo a img {
     height: 100%;
     width: 200px;
 }
+
 .dashboardRightMain_header .dbrmh_left {
     display: flex;
 }
+
 .dashboardRightMain_header {
     background-color: #1B1D2D;
 }
+
 .dbrmh_left button.drmh_addBtn {
     border: 0;
     background-color: transparent;
     padding: 0 23px;
     transition: 0.3s;
 }
+
 .dbrmh_left button.drmh_addBtn:hover {
     background-color: rgba(115, 103, 182, 0.1);
 }
+
 .dbrmh_left button.drmh_addBtn i {
     width: 35px;
     height: 35px;
@@ -1162,16 +1282,19 @@ aside .sideLogo a img {
     align-items: center;
     justify-content: center;
 }
-.dbrmh_right > ul > li > i {
+
+.dbrmh_right>ul>li>i {
     font-size: 20px;
     color: #6A7785;
     padding: 5px;
     cursor: pointer;
     transition: 0.3s;
 }
-.dbrmh_right > ul > li > i:hover {
+
+.dbrmh_right>ul>li>i:hover {
     color: #fff;
 }
+
 .dbrmh_right .dbrmhr_user {
     border: 0;
     background-color: transparent;
@@ -1186,29 +1309,40 @@ aside .sideLogo a img {
     transition: 0.3s;
     height: 100%;
 }
+
 .dbrmh_right .dbrmhr_user:hover {
     color: #007FFF;
 }
+
 .dbrmh_right .dbrmhr_user.show {
     color: #007FFF;
 }
-.dbrmh_right > ul {
+
+.dbrmh_right>ul {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    /*padding-right: 50px;*/
+    padding-right: 50px;
     gap: 60px;
     height: 100%;
 }
+
 .dbrmh_right,
-.dbrmh_right > ul > li,
-.dbrmh_right > ul > li > div {
+.dbrmh_right>ul>li,
+.dbrmh_right>ul>li>div {
     height: 100%;
 }
-.dbrmh_right > ul > li {
+
+.dbrmh_right {
+    position: relative;
+}
+
+.dbrmh_right>ul>li {
     display: flex;
     align-items: center;
+    position: relative;
 }
+
 .dbrmh_right .dropdown-menu {
     padding-top: 10px;
     padding-bottom: 13px;
@@ -1218,10 +1352,12 @@ aside .sideLogo a img {
     color: #fff;
     border: 0;
 }
+
 .dbrmh_right .dropdown-menu:not(.offcanvas .dropdown-menu) {
     inset: 0px auto auto -20px !important;
 
 }
+
 .dbrmh_right .dropdown-menu li a {
     color: #FFF;
     font-size: 16px;
@@ -1229,10 +1365,12 @@ aside .sideLogo a img {
     line-height: 112%;
     padding: 8px 22px;
 }
+
 .dbrmh_right .dropdown-menu li a:not(.logout):hover {
     color: #7367B6;
     background-color: transparent;
 }
+
 .dbrmh_right .dropdown-menu li a.logout {
     padding-top: 10px;
     border-top: 1px solid #2D324D;
@@ -1243,12 +1381,38 @@ aside .sideLogo a img {
     gap: 8px;
     padding-top: 14px;
 }
+
 .dbrmh_right .dropdown-menu li a.logout:hover {
     background-color: transparent;
 }
+
+.logout-btn-header {
+    background: transparent;
+    border: 1px solid #2e3347;
+    color: #c9d1e0;
+    font-size: 16px;
+    border-radius: 8px;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout-btn-header:hover {
+    background: #242a3d;
+    border-color: #007FFF;
+    color: #007FFF;
+}
+
 .dbrmh_right .dropdown-menu {
     margin-top: -10px !important;
+    z-index: 1050 !important;
+    position: absolute;
 }
+
 .dashboardRightMain_body {
     width: 100%;
     height: calc(100vh - 73px);
@@ -1260,7 +1424,7 @@ aside .sideLogo a img {
 
 /* hamburger css */
 
-.hamburger .line{
+.hamburger .line {
     width: 50px;
     height: 5px;
     background-color: #ecf0f1;
@@ -1269,12 +1433,13 @@ aside .sideLogo a img {
     -webkit-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
-  }
-  
-  .hamburger:hover{
+}
+
+.hamburger:hover {
     cursor: pointer;
-  }
-#hamburger-6.is-active{
+}
+
+#hamburger-6.is-active {
     -webkit-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
@@ -1285,56 +1450,59 @@ aside .sideLogo a img {
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
-  }
-  
-  #hamburger-6.is-active .line:nth-child(2){
+}
+
+#hamburger-6.is-active .line:nth-child(2) {
     width: 0px;
-  }
-  
-  #hamburger-6.is-active .line:nth-child(1),
-  #hamburger-6.is-active .line:nth-child(3){
+}
+
+#hamburger-6.is-active .line:nth-child(1),
+#hamburger-6.is-active .line:nth-child(3) {
     -webkit-transition-delay: 0.3s;
     -o-transition-delay: 0.3s;
     transition-delay: 0.3s;
-  }
-  
-  #hamburger-6.is-active .line:nth-child(1){
+}
+
+#hamburger-6.is-active .line:nth-child(1) {
     -webkit-transform: translateY(13px);
     -ms-transform: translateY(13px);
     -o-transform: translateY(13px);
     transform: translateY(13px);
-  }
-  
-  #hamburger-6.is-active .line:nth-child(3){
+}
+
+#hamburger-6.is-active .line:nth-child(3) {
     -webkit-transform: translateY(-13px) rotate(90deg);
     -ms-transform: translateY(-13px) rotate(90deg);
     -o-transform: translateY(-13px) rotate(90deg);
     transform: translateY(-13px) rotate(90deg);
-  }
-  
+}
+
 
 .walletBalanceChart_wrapper {
     padding: 0 40px;
     padding-left: 30px;
-    padding-top: 15px;
+    padding-top: 35px;
     padding-bottom: 20px;
     border-radius: 10px;
     background: #1C1F30;
     height: 100%;
 }
-.walletBalanceChart_title > h4 {
+
+.walletBalanceChart_title>h4 {
     color: #7367B6;
     font-size: 24px;
     font-weight: 400;
     line-height: 112%;
     margin-bottom: 10px;
 }
-.walletBalanceChart_title > h3 {
+
+.walletBalanceChart_title>h3 {
     color: #FFF;
     font-size: 32px;
     font-weight: 600;
     line-height: 112%;
 }
+
 .walletBalanceChart_dateFilter ul li {
     color: #767386;
     font-size: 12px;
@@ -1346,14 +1514,17 @@ aside .sideLogo a img {
     margin-bottom: -2px;
     border-bottom: 3px solid transparent;
 }
+
 .walletBalanceChart_dateFilter ul li:hover {
     color: #007FFF;
 }
+
 .walletBalanceChart_dateFilter ul li.active {
     color: #007FFF;
     border-bottom: 3px solid #007FFF;
 }
-.walletBalanceChart_dateFilter > p {
+
+.walletBalanceChart_dateFilter>p {
     color: #7367B6;
     font-size: 12px;
     font-weight: 400;
@@ -1361,6 +1532,7 @@ aside .sideLogo a img {
     margin-top: 12px;
     text-align: right;
 }
+
 .walletBalanceChart_dateFilter ul {
     width: 192px;
     margin-left: auto;
@@ -1370,7 +1542,8 @@ aside .sideLogo a img {
     justify-content: space-between;
     margin-top: 10px;
 }
-.walletBalance_Chart img{
+
+.walletBalance_Chart img {
     width: 100%;
     margin-top: 30px;
     display: block;
@@ -1382,12 +1555,14 @@ aside .sideLogo a img {
     background: #1C1F30;
     padding: 25px;
 }
+
 .walletSummary_wrapper canvas {
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
     display: block;
 }
+
 .walletSummarypie_content h5.name {
     color: #007FFF;
     font-size: 16px;
@@ -1395,7 +1570,8 @@ aside .sideLogo a img {
     line-height: 112%;
     margin-bottom: 5px;
     text-align: center;
-} 
+}
+
 .walletSummarypie_content h4.balance {
     color: #FFF;
     font-size: 20px;
@@ -1404,6 +1580,7 @@ aside .sideLogo a img {
     margin-bottom: 5px;
     text-align: center;
 }
+
 .walletSummarypie_content h6 {
     color: #767386;
     font-size: 12px;
@@ -1411,23 +1588,27 @@ aside .sideLogo a img {
     line-height: 112%;
     text-align: center;
 }
+
 .walletSummarypie_content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 .walletSp_bar {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
 }
+
 .walletSp_bar .progress {
     width: calc(100% - 25px);
     background-color: #282B42;
     height: 4px;
-} 
+}
+
 .walletSp_bar span.percent {
     display: block;
     color: #767386;
@@ -1435,48 +1616,60 @@ aside .sideLogo a img {
     font-weight: 400;
     line-height: 112%;
 }
+
 .walletSp_bar .progress-bar {
     background-color: #767386;
 }
+
 .walletSummary_progress .wsp_coin {
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .walletSummary_progress .wsp_coin.btc {
     color: #FF8A00;
 }
+
 .walletSummary_progress .wsp_coin.usdt {
     color: #03EAA2;
 }
+
 .walletSummary_progress .wsp_coin.bnb {
     color: #FCC934;
 }
+
 .walletSummary_progress .wsp_coin.btc {
     color: #5D4AC5;
 }
+
 .walletSummary_progress .wsp_coin.usd {
     color: #767386;
 }
-.walletSummary_progress > .row {
+
+.walletSummary_progress>.row {
     margin: 10px 0 !important;
 }
+
 .walletSummary_progress {
     margin-top: 13px;
 }
+
 .coinAssetTable_header {
     display: flex;
     align-items: center;
     gap: 5px;
 }
-.coinAssetTable_header > h3.title {
+
+.coinAssetTable_header>h3.title {
     color: #FFF;
     font-size: 20px;
     font-weight: 400;
     line-height: 112%;
     width: 145px;
 }
-.coinAssetTable_header > input[type="search"] {
+
+.coinAssetTable_header>input[type="search"] {
     width: calc(100% - 225px);
     min-height: 37px;
     border: 0;
@@ -1495,19 +1688,23 @@ aside .sideLogo a img {
     border: 1px solid transparent;
     transition: 0.3s;
 }
-.coinAssetTable_header > input[type="search"]:focus {
+
+.coinAssetTable_header>input[type="search"]:focus {
     border: 1px solid #767386;
 
 }
-.coinAssetTable_header > input[type="search"]::placeholder {
+
+.coinAssetTable_header>input[type="search"]::placeholder {
     color: #3E3859;
 }
+
 .coinAssetTableHeader_btn {
     width: 80px;
     display: flex;
     justify-content: space-between;
     gap: 5px;
 }
+
 .coinAssetTableHeader_btn button {
     border: 0;
     width: 37px;
@@ -1518,15 +1715,19 @@ aside .sideLogo a img {
     color: #2F2A45;
     transition: 0.3s;
 }
+
 .coinAssetTableHeader_btn button:hover {
     color: #767386;
 }
+
 .coinAssetTableHeader_btn button:first-child {
     font-size: 20px;
 }
+
 .coinAssetTable_wrapper {
     margin-top: 20px;
 }
+
 .coinAsset_table {
     background-color: #1B202F;
     border-radius: 10px;
@@ -1535,18 +1736,21 @@ aside .sideLogo a img {
     overflow: auto;
     scrollbar-width: thin;
 }
+
 .coinAsset_table table {
     min-width: 900px;
     width: 100%;
 }
+
 .coinAsset_table table tr:not(.coinAsset_table table tr:first-child) {
     border-bottom: 2px solid #1C1F30;
     transition: 0.3s;
     cursor: pointer;
     background: linear-gradient(90deg, rgba(20, 28, 35, 0.00) 0%, #252940 50%, rgba(20, 28, 35, 0.00) 100%);
 }
+
 .coinAsset_table table tr:not(.coinAsset_table table tr:first-child):hover {
-    background: rgba(255,255,255,0.01);
+    background: rgba(255, 255, 255, 0.01);
 }
 
 .coinAsset_table table tr th {
@@ -1556,15 +1760,19 @@ aside .sideLogo a img {
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table table tr th:not(.coinAsset_table table tr th:first-child) {
     text-align: center;
 }
+
 .coinAsset_table table tr td:not(.coinAsset_table table tr td:first-child) {
     text-align: center;
 }
+
 .coinAsset_table table tr td {
     padding: 11px 0;
 }
+
 .coinAsset_table table tr th select {
     color: #637080;
     font-size: 16px;
@@ -1584,10 +1792,12 @@ aside .sideLogo a img {
     background-repeat: no-repeat;
     background-position: calc(100% - 15px) 50%;
 }
+
 .coinAsset_table .assetName_data ul li img {
     width: 41px;
     display: block;
 }
+
 .coinAsset_table .assetName_data ul li h4 {
     color: #FFF;
     font-size: 16px;
@@ -1595,35 +1805,41 @@ aside .sideLogo a img {
     line-height: 112%;
     margin-bottom: 5px;
 }
+
 .coinAsset_table .assetName_data ul li h5 {
     color: #637080;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table .assetName_data ul {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .coinAsset_table .balance_data h5 {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table .value_data h5 {
     color: #8292A1;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table .price_data h5 {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table .chg24h_data h5 {
     color: #BD093D;
     font-size: 16px;
@@ -1631,17 +1847,20 @@ aside .sideLogo a img {
     line-height: 112%;
 
 }
+
 .coinAsset_table .marketCap_data h5 {
     color: #8292A1;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .coinAsset_table .marketCap_data h5 span {
     color: #FCAD4E;
     font-weight: 600;
 }
-.chartOverview_data > img {
+
+.chartOverview_data>img {
     width: 100px;
 }
 
@@ -1650,24 +1869,24 @@ aside .sideLogo a img {
     max-width: 100%;
     margin: auto;
     margin-top: 30px;
- }
+}
 
-  .apexcharts-tooltip {
+.apexcharts-tooltip {
     background-color: #1e293b !important;
     color: #fff !important;
     border: none !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
     font-size: 14px !important;
-  }
+}
 
-  .apexcharts-tooltip-title {
+.apexcharts-tooltip-title {
     background-color: #1e293b !important;
     border-bottom: 1px solid #334155 !important;
-  }
+}
 
-  .apexcharts-tooltip-text {
+.apexcharts-tooltip-text {
     color: #ffffff !important;
-  }
+}
 
 
 /*
@@ -1679,6 +1898,7 @@ MY WALLET CSS START HERE
     height: 100%;
     display: flex;
 }
+
 .myWallet_sidebar {
     width: 200px;
     background: #11101B;
@@ -1688,6 +1908,7 @@ MY WALLET CSS START HERE
     position: relative;
     padding-bottom: 20px;
 }
+
 .myWallet_body {
     width: calc(100% - 200px);
     height: 100%;
@@ -1696,7 +1917,7 @@ MY WALLET CSS START HERE
     justify-content: center;
 }
 
-.myWallet_sidebar > input[type='search'] {
+.myWallet_sidebar>input[type='search'] {
     color: #fff;
     font-size: 14px;
     font-weight: 400;
@@ -1714,13 +1935,16 @@ MY WALLET CSS START HERE
     position: sticky;
     top: 0;
 }
-.myWallet_sidebar > input[type='search']::placeholder {
+
+.myWallet_sidebar>input[type='search']::placeholder {
     color: #3E3859;
 }
+
 .myWallet_sidebar_item ul li img {
     width: 100%;
     display: block;
 }
+
 .myWallet_sidebar_item ul li h5 {
     color: #FFF;
     font-size: 16px;
@@ -1728,18 +1952,22 @@ MY WALLET CSS START HERE
     line-height: 112%;
     margin-bottom: 3px;
 }
+
 .myWallet_sidebar_item ul li h6 {
     color: #637080;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .myWallet_sidebar_item ul li:first-child {
     width: 41px;
 }
+
 .myWallet_sidebar_item ul li:last-child {
     width: calc(100% - 45px);
 }
+
 .myWallet_sidebar_item ul {
     display: flex;
     align-items: center;
@@ -1749,8 +1977,9 @@ MY WALLET CSS START HERE
     cursor: pointer;
     transition: 0.3s;
 }
+
 .myWallet_sidebar_item ul:hover {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .myWallet_sidebar_item ul li h6 span {
@@ -1763,7 +1992,7 @@ MY WALLET CSS START HERE
 }
 
 
-.myWallet_sidebar_item > button.addAssets {
+.myWallet_sidebar_item>button.addAssets {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
@@ -1782,16 +2011,18 @@ MY WALLET CSS START HERE
     transition: 0.3s;
     display: none;
 }
-.myWallet_sidebar_item > button.addAssets:hover {
+
+.myWallet_sidebar_item>button.addAssets:hover {
     background-color: #292832;
 }
 
-.myWallet_balance > img {
+.myWallet_balance>img {
     width: 129px;
     display: block;
     margin: 0 auto;
 }
-.myWallet_balance > h2 {
+
+.myWallet_balance>h2 {
     font-size: 40px;
     font-weight: 500;
     line-height: 112%;
@@ -1799,7 +2030,8 @@ MY WALLET CSS START HERE
     margin-bottom: 16px;
     text-align: center;
 }
-.myWallet_balance.bitcoin > ul li {
+
+.myWallet_balance.bitcoin>ul li {
     color: #504974;
     font-size: 14px;
     font-weight: 400;
@@ -1817,20 +2049,24 @@ MY WALLET CSS START HERE
     cursor: pointer;
     transition: 0.3s;
 }
-.myWallet_balance.bitcoin > ul li:hover {
-    background-color: rgba(255,255,255,0.1);
+
+.myWallet_balance.bitcoin>ul li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
-.myWallet_balance.bitcoin > ul li img {
+
+.myWallet_balance.bitcoin>ul li img {
     width: 36px;
 }
-.myWallet_balance.bitcoin > ul {
+
+.myWallet_balance.bitcoin>ul {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
-.myWallet_balance.bitcoin > p {
+
+.myWallet_balance.bitcoin>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -1842,15 +2078,17 @@ MY WALLET CSS START HERE
 .myWallet_balance.litecoin h2 {
     color: #927DFF;
 }
+
 .myWallet_balance.ethereum h2 {
     color: #0038FF;
 }
+
 .myWallet_balance.xrp h2 {
     color: #83A0BE;
 }
 
 
-.coinAssetTable_wrapper > button.tableAddAsstes {
+.coinAssetTable_wrapper>button.tableAddAsstes {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
@@ -1868,13 +2106,16 @@ MY WALLET CSS START HERE
     margin-top: 10px;
     transition: 0.3s;
 }
-.coinAssetTable_wrapper > button.tableAddAsstes:hover {
-    background-color: rgba(255,255,255,0.1);
+
+.coinAssetTable_wrapper>button.tableAddAsstes:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
+
 .modal {
     background: rgba(0, 0, 0, 0.01);
     backdrop-filter: blur(5px);
 }
+
 .newAccount_popup_wrapper {
     border-radius: 20px;
     background: #1C1F30;
@@ -1882,15 +2123,18 @@ MY WALLET CSS START HERE
     color: #fff;
     padding: 85px 60px;
 }
+
 .modal.newAccount .modal-content {
     background-color: transparent;
 }
-.newAccountPopup_header > img.vector {
+
+.newAccountPopup_header>img.vector {
     width: 100px;
     display: block;
     margin: 0 auto;
-} 
-.newAccountPopup_header > h3 {
+}
+
+.newAccountPopup_header>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -1899,25 +2143,29 @@ MY WALLET CSS START HERE
     margin-top: 30px;
     margin-bottom: 15px;
 }
-.newAccountPopup_header > h6 {
+
+.newAccountPopup_header>h6 {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
     font-weight: 400;
     line-height: 112%;
 }
-body.myWallet_page .newAccountPopup_header > h6 {
+
+body.myWallet_page .newAccountPopup_header>h6 {
     color: #5F6692;
 }
-.newAccount_popup_wrapper .form_input > span {
+
+.newAccount_popup_wrapper .form_input>span {
     color: #4202CC;
     font-size: 18px;
     font-weight: 400;
-    line-height: 112%; 
+    line-height: 112%;
     margin-bottom: 12px;
     display: block;
 }
-.newAccount_popup_wrapper .form_input > input {
+
+.newAccount_popup_wrapper .form_input>input {
     width: 100%;
     min-height: 44px;
     border-radius: 5px;
@@ -1930,12 +2178,15 @@ body.myWallet_page .newAccountPopup_header > h6 {
     padding: 0 20px;
     border: 0;
 }
-.newAccount_popup_wrapper .form_input > input:focus {
+
+.newAccount_popup_wrapper .form_input>input:focus {
     box-shadow: 0 0 10px 4px rgba(66, 2, 204, 0.8);
 }
-.newAccount_popup_wrapper .form_input > input::placeholder {
+
+.newAccount_popup_wrapper .form_input>input::placeholder {
     color: gray;
 }
+
 .newAccount_popup_wrapper .form_btn button {
     width: 100%;
     min-height: 45px;
@@ -1949,18 +2200,22 @@ body.myWallet_page .newAccountPopup_header > h6 {
     background: #007FFF;
     transition: 0.3s;
 }
+
 .newAccount_popup_wrapper .form_btn button.changeName:hover {
     background-color: var(--primarybtnbgHoverColor);
 }
+
 .newAccount_popup_wrapper .form_btn button.back {
     background: #454672;
 }
+
 .newAccount_popup_wrapper .form_btn button.back:hover {
     background-color: #4f4f70;
 }
-.newAccount_popup_wrapper > button.close {
+
+.newAccount_popup_wrapper>button.close {
     border: 0;
-    background:transparent;
+    background: transparent;
     transition: 0.3s;
     width: 35px;
     height: 35px;
@@ -1969,64 +2224,75 @@ body.myWallet_page .newAccountPopup_header > h6 {
     top: 24px;
     right: 24px;
 }
-.newAccount_popup_wrapper > button.close:hover {
-    background: rgba(255,255,255,0.1);
+
+.newAccount_popup_wrapper>button.close:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .sendPopup1 .modal-dialog {
     max-width: 555px;
 }
+
 .sendPopup1 .newAccount_popup_wrapper {
-	border-radius: 20px;
-	background: #1C1F30;
-	box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.45);
-	color: #fff;
-	padding: 40px 30px;
+    border-radius: 20px;
+    background: #1C1F30;
+    box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    padding: 40px 30px;
     padding-top: 22px;
     width: calc(100% - 24px);
     max-width: 480px;
     margin: 0 auto;
 }
-.sendPopup1 .newAccountPopup_header > img.vector {
-	width: 70px;
+
+.sendPopup1 .newAccountPopup_header>img.vector {
+    width: 70px;
 }
-.sendPopup1 .newAccountPopup_header > h3 {
-	color: #FFF;
-	text-align: center;
-	font-size: 24px;
-	font-weight: 500;
-	line-height: 112%;
-	margin-top: 20px;
-	margin-bottom: 10px;
+
+.sendPopup1 .newAccountPopup_header>h3 {
+    color: #FFF;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 112%;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
-.sendPopup1 .newAccountPopup_header > h3 span {
+
+.sendPopup1 .newAccountPopup_header>h3 span {
     color: #6A7785;
     font-size: 16px;
     text-transform: uppercase;
 }
-.sendPopup1 .newAccountPopup_header > h6 {
+
+.sendPopup1 .newAccountPopup_header>h6 {
     margin-bottom: 30px;
 }
-.sendPopup1 .newAccount_popup_wrapper .form_input > span {
-	color: #007FFF;
+
+.sendPopup1 .newAccount_popup_wrapper .form_input>span {
+    color: #007FFF;
     font-size: 14px;
     font-weight: 400;
     line-height: 156%;
     margin-bottom: 5px;
 }
-.sendPopup1 .newAccount_popup_wrapper .form_input > input {
+
+.sendPopup1 .newAccount_popup_wrapper .form_input>input {
     border-radius: 5px;
     border: 1px solid #4D5476;
     background: #202438;
     box-shadow: none;
     padding: 0 15px;
 }
-.sendPopup1 .newAccount_popup_wrapper .form_input > input:focus {
+
+.sendPopup1 .newAccount_popup_wrapper .form_input>input:focus {
     border-color: #007FFF;
 }
+
 .sendPopup1 .newAccount_popup_wrapper {
     border-radius: 10px;
 }
+
 .sendPopup1 button.copy_btn {
     background-color: transparent;
     border: 0;
@@ -2041,6 +2307,7 @@ body.myWallet_page .newAccountPopup_header > h6 {
     height: 35px;
     transition: 0.3s;
 }
+
 .sendPopup1 button.copy_btn:hover {
     color: #4F4F70;
 }
@@ -2048,35 +2315,42 @@ body.myWallet_page .newAccountPopup_header > h6 {
 .sendPopup2 .form_input input::placeholder {
     color: rgba(255, 255, 255, 0.40);
 }
+
 .newAccount .form_btn button {
     margin-top: 5px;
 }
-.sendPopup2 .newAccount_popup_wrapper .form_input > input {
+
+.sendPopup2 .newAccount_popup_wrapper .form_input>input {
     color: #fff;
 }
-.sucessfully_sent > h3 {
+
+.sucessfully_sent>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
     font-weight: 600;
     line-height: 112%;
 }
-.sucessfully_sent > h3 span {
+
+.sucessfully_sent>h3 span {
     color: #6A7785;
     font-size: 18px;
     text-transform: uppercase;
 }
-.sucessfully_sent > h3 img {
+
+.sucessfully_sent>h3 img {
     width: 27px;
 }
-.sucessfully_sent > img.vector {
+
+.sucessfully_sent>img.vector {
     width: 168px;
     display: block;
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 5px;
 }
-.sucessfully_sent > span {
+
+.sucessfully_sent>span {
     color: #5F6692;
     text-align: center;
     font-size: 14px;
@@ -2084,6 +2358,7 @@ body.myWallet_page .newAccountPopup_header > h6 {
     line-height: 156%;
     display: block;
 }
+
 .sucessfully_sent {
     padding-top: 50px;
     padding-bottom: 40px;
@@ -2097,63 +2372,73 @@ body.myWallet_page .newAccountPopup_header > h6 {
     margin: 0 auto;
 
 }
+
 #receivePopup1 .form_input input {
     color: #fff;
 }
+
 #receivePopup1 .form_btn button i {
     font-size: 18px;
     margin-left: 5px;
 }
+
 #receivePopup1 .newAccountPopup_header {
     margin-top: -60px;
 }
 
 
-.transaction_title > h3 {
+.transaction_title>h3 {
     color: #FFF;
     font-size: 24px;
     font-weight: 500;
     line-height: 112%;
 }
+
 .transaction_title {
     padding-top: 70px;
     padding-bottom: 24px;
     border-bottom: 2px solid #2A273F;
 }
-.noTransaction_content > img {
+
+.noTransaction_content>img {
     width: 100%;
     max-width: 170px;
     display: block;
     margin: 0 auto;
     margin-bottom: 19px;
 }
-.noTransaction_content > p {
+
+.noTransaction_content>p {
     color: #3A326B;
     font-size: 20px;
     font-weight: 500;
     line-height: 250%;
     text-align: center;
 }
+
 .noTransaction_content {
     padding-top: 95px;
 }
 
-.transaction_title.newsAndBalance > h3 {
+.transaction_title.newsAndBalance>h3 {
     color: #767386;
     font-size: 24px;
     font-weight: 500;
     line-height: 112%;
     cursor: pointer;
 }
-.transaction_title.newsAndBalance > h3.active {
+
+.transaction_title.newsAndBalance>h3.active {
     color: #FFF;
 }
+
 .transaction_title.newsAndBalance {
     display: flex;
     align-items: center;
     gap: 125px;
 }
-.newsContent_wrapper > select.allCategory {
+
+.newsContent_wrapper>select.allCategory {
     color: #FFF;
     font-size: 16px;
     font-weight: 400;
@@ -2174,36 +2459,42 @@ body.myWallet_page .newAccountPopup_header > h6 {
     background-repeat: no-repeat;
     background-position: calc(100% - 10px) 50%;
 }
+
 .newsContent_card {
     padding: 10px 15px;
     border-radius: 4.273px;
     background: #1C1A2B;
     height: 100%;
 }
-.newsContent_card > img {
+
+.newsContent_card>img {
     width: 100%;
     max-width: 235px;
     display: block;
     margin: 0 auto;
     margin-bottom: 25px;
 }
-.newsContent_card > h4 {
+
+.newsContent_card>h4 {
     color: #FFF;
     font-size: 16px;
     font-weight: 500;
     line-height: 112%;
     margin-bottom: 9px;
 }
-.newsContent_card > p {
+
+.newsContent_card>p {
     color: #544E76;
     font-size: 15px;
     font-weight: 400;
     line-height: 112%;
 }
+
 .newsContent_wrapper {
     padding-bottom: 10px;
 }
-.newsContent_wrapper.balance > input.search {
+
+.newsContent_wrapper.balance>input.search {
     width: 100%;
     max-width: 380px;
     min-height: 65px;
@@ -2226,14 +2517,17 @@ body.myWallet_page .newAccountPopup_header > h6 {
     margin-bottom: 20px;
     transition: 0.3s;
 }
-.newsContent_wrapper.balance > input.search::placeholder {
+
+.newsContent_wrapper.balance>input.search::placeholder {
     color: #3E3859;
 }
-.newsContent_wrapper.balance > input.search:focus {
+
+.newsContent_wrapper.balance>input.search:focus {
     border-color: #7e7e7e;
 }
+
 .newsContent_wrapper.balance .noTransaction_content {
-	padding-top: 30px;
+    padding-top: 30px;
 }
 
 
@@ -2251,10 +2545,12 @@ SWAP CSS START HERE
     line-height: 112%;
     transition: 0.3s;
 }
+
 .swapHeader_link li a.active,
 .swapHeader_link li a:hover {
     color: #FFF;
 }
+
 .swapHeader_link {
     padding-top: 45px;
     padding-bottom: 35px;
@@ -2262,12 +2558,14 @@ SWAP CSS START HERE
     align-items: center;
     gap: 50px;
 }
+
 .swapbodyCard_wrapper {
     border-radius: 10px;
     background: #191C29;
     padding: 25px;
 }
-.swapbodyCard_content > h6 {
+
+.swapbodyCard_content>h6 {
     color: #767386;
     font-size: 16px;
     font-weight: 500;
@@ -2277,10 +2575,11 @@ SWAP CSS START HERE
 
 /* custom select css */
 .custom-select-wrapper {
-   position: relative;
-   width: 100%;
- }
- .custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select {
     border-radius: 10px;
     background: #221F30;
     padding: 15px;
@@ -2289,14 +2588,17 @@ SWAP CSS START HERE
     align-items: center;
     gap: 9px;
     position: relative;
- }
+}
+
 .swapbodyCard_content.from .custom-select {
     border: 1px solid #83A0BE;
 }
+
 .swapbodyCard_content.to .custom-select {
     border: 1px solid #83A0BE;
 }
- .custom-select::after {
+
+.custom-select::after {
     content: '';
     width: 0;
     height: 0;
@@ -2307,14 +2609,17 @@ SWAP CSS START HERE
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
- }
-.swapbodyCard_content.from .custom-select::after {
-border-top: 6px solid #83A0BE;
 }
+
+.swapbodyCard_content.from .custom-select::after {
+    border-top: 6px solid #83A0BE;
+}
+
 .swapbodyCard_content.to .custom-select::after {
     border-top: 6px solid #83A0BE;
 }
- .custom-options {
+
+.custom-options {
     position: absolute;
     top: calc(100% - 1px);
     left: 0;
@@ -2329,14 +2634,17 @@ border-top: 6px solid #83A0BE;
     display: none;
     border-radius: 10px;
     background: #221F30;
- }
- .swapbodyCard_content.from .custom-options {
+}
+
+.swapbodyCard_content.from .custom-options {
     border: 1px solid #83A0BE;
- }
- .swapbodyCard_content.to .custom-options {
+}
+
+.swapbodyCard_content.to .custom-options {
     border: 1px solid #83A0BE;
- }
- .custom-option {
+}
+
+.custom-option {
     padding: 15px;
     display: flex;
     align-items: center;
@@ -2346,11 +2654,12 @@ border-top: 6px solid #83A0BE;
     align-items: center;
     position: relative;
     gap: 10px;
- }
- .custom-option:hover,
- .swapbodyCard_content .custom-select:hover {
+}
+
+.custom-option:hover,
+.swapbodyCard_content .custom-select:hover {
     background-color: rgba(255, 255, 255, 0.05);
- }
+}
 
 .swapbodyCard_content .custom-option p,
 .swapbodyCard_content .custom-select p {
@@ -2365,6 +2674,7 @@ border-top: 6px solid #83A0BE;
     color: #83A0BE;
     font-size: 14px;
 }
+
 .swapbodyCard_content .custom-option img,
 .swapbodyCard_content .custom-select img {
     width: 33px;
@@ -2375,6 +2685,7 @@ border-top: 6px solid #83A0BE;
 .swap_input_wrapper .swap_input {
     margin-top: 20px;
 }
+
 .swap_input_wrapper .swap_input input {
     display: block;
     border: 0;
@@ -2387,6 +2698,7 @@ border-top: 6px solid #83A0BE;
     padding: 6px 0;
     transition: 0.3s;
 }
+
 .swapbodyCard_content .swap_input input {
     color: #fff;
 }
@@ -2394,7 +2706,8 @@ border-top: 6px solid #83A0BE;
 .swap_input_wrapper .swap_input input::placeholder {
     opacity: 0.40;
 }
-.swap_input_wrapper .swap_input > span {
+
+.swap_input_wrapper .swap_input>span {
     display: block;
     width: fit-content;
     position: absolute;
@@ -2405,31 +2718,37 @@ border-top: 6px solid #83A0BE;
     font-weight: 500;
     line-height: 112%;
 }
-.swapbodyCard_content .swap_input > span {
+
+.swapbodyCard_content .swap_input>span {
     color: #83A0BE;
 }
-.swapbodyCard_content .swap_input > span {
+
+.swapbodyCard_content .swap_input>span {
     background-color: #191C29;
 }
 
-.swap_input_wrapper > ul li {
+.swap_input_wrapper>ul li {
     color: #FFF;
     font-size: 20px;
     font-weight: 500;
     line-height: 112%;
 }
-.swap_input_wrapper > ul {
+
+.swap_input_wrapper>ul {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 6px;
 }
+
 .swapbodyCard_wrapper .col-lg-5 {
     width: calc(50% - 55px);
 }
+
 .swapbodyCard_wrapper .col-lg-2 {
     width: 108px;
 }
+
 .swapbodyCard_wrapper .swap_btn button {
     border: 0;
     display: block;
@@ -2443,47 +2762,55 @@ border-top: 6px solid #83A0BE;
     position: relative;
     z-index: 1;
 }
+
 @keyframes swapBlink {
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 0.8;
     }
+
     100% {
         opacity: 0;
     }
 }
+
 .swapbodyCard_wrapper .swap_btn button::after {
-  content: "";
-  position: absolute;
-  top: 0; /* push it down like a shadow */
-  left: 0;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(90deg, #F7931A 0%, #2602FF 100%);
-  /* filter: blur(10px); */
-  border-radius: 50%;
-  z-index: -2;
-  transition: opacity 0.3s ease;
+    content: "";
+    position: absolute;
+    top: 0;
+    /* push it down like a shadow */
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(90deg, #F7931A 0%, #2602FF 100%);
+    /* filter: blur(10px); */
+    border-radius: 50%;
+    z-index: -2;
+    transition: opacity 0.3s ease;
     animation: swapBlink linear 2s infinite;
     transform: scale(1.1);
 }
+
 .swapbodyCard_wrapper .swap_btn button::before {
-  content: "";
-  position: absolute;
-  top: 0; /* push it down like a shadow */
-  left: 0;
-  width: 60px;
-  height: 60px;
-  background:#191C29;
-  border-radius: 50%;
-  z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    /* push it down like a shadow */
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background: #191C29;
+    border-radius: 50%;
+    z-index: -1;
 }
 
 .swapbodyCard_content .swap_input input:focus {
     border-color: #83A0BE;
 }
+
 .swapfooter_left ul li {
     color: rgba(255, 255, 255, 0.40);
     font-size: 14px;
@@ -2494,11 +2821,13 @@ border-top: 6px solid #83A0BE;
     padding: 10px 18px;
     cursor: pointer;
 }
+
 .swapfooter_left ul {
     display: flex;
     align-items: center;
     gap: 12px;
 }
+
 .swapfooter_middle h5 {
     color: #FFF;
     font-size: 20px;
@@ -2506,9 +2835,11 @@ border-top: 6px solid #83A0BE;
     line-height: 112%;
     text-align: center;
 }
+
 .swapfooter_middle h5 span.one {
     color: #fff;
 }
+
 .swapfooter_middle h5 span.two {
     color: #83A0BE;
 }
@@ -2516,7 +2847,8 @@ border-top: 6px solid #83A0BE;
 .swapbody_footer {
     padding-top: 65px;
 }
-.exchange_btn > button {
+
+.exchange_btn>button {
     width: 100%;
     max-width: 255px;
     min-height: 63px;
@@ -2532,18 +2864,22 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     margin-top: 100px;
 }
-.exchange_btn > button:hover {
+
+.exchange_btn>button:hover {
     background: #0073e6;
 }
+
 .exchange_btn {
     padding-bottom: 30px;
 }
+
 .swap_NoHistory {
     min-height: 50vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .swap_NoHistory h6 {
     color: #767386;
     font-size: 20px;
@@ -2551,6 +2887,7 @@ border-top: 6px solid #83A0BE;
     line-height: 112%;
     width: fit-content;
 }
+
 .swap_NoHistory h6 img {
     width: 85px;
     display: block;
@@ -2575,6 +2912,7 @@ border-top: 6px solid #83A0BE;
     cursor: pointer;
     padding: 5px;
 }
+
 .expectValue_para {
     color: rgba(255, 255, 255, 0.40);
     font-size: 10px;
@@ -2590,7 +2928,7 @@ border-top: 6px solid #83A0BE;
     padding: 4px 5px;
 }
 
-.myWallet_balance > h2 {
+.myWallet_balance>h2 {
     color: #fff !important;
 }
 
@@ -2599,10 +2937,12 @@ border-top: 6px solid #83A0BE;
     /* padding: 0 30px; */
     background: #0D0E17;
 }
-.settingsMain_header > ul li {
+
+.settingsMain_header>ul li {
     width: 50%;
 }
-.settingsMain_header > ul li a {
+
+.settingsMain_header>ul li a {
     color: rgba(255, 255, 255, 0.40);
     font-size: 20px;
     font-weight: 600;
@@ -2613,21 +2953,25 @@ border-top: 6px solid #83A0BE;
     text-align: center;
     width: 100%;
 }
-.settingsMain_header > ul li a:hover {
+
+.settingsMain_header>ul li a:hover {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.05);
 }
-.settingsMain_header > ul li a.active{
+
+.settingsMain_header>ul li a.active {
     color: #fff;
     background-color: rgba(255, 255, 255, 0.05);
     border-bottom: 1px solid var(--primarybtnbgColor);
 }
-.settingsMain_header > ul {
+
+.settingsMain_header>ul {
     display: flex;
     align-items: center;
     width: 100%;
     gap: 0;
 }
+
 .settingsBackupSeed_body .seedPhraseProcess_content {
     background-color: #1B182E;
     width: 100%;
@@ -2635,6 +2979,7 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     margin-top: 50px;
 }
+
 .settingsBackupSeed_body .seedPhraseProcess_title p {
     color: #FFF;
     text-align: center;
@@ -2646,6 +2991,7 @@ border-top: 6px solid #83A0BE;
     max-width: 470px;
     margin: 0 auto;
 }
+
 .settingsBackupSeed_body .copyclickBoard {
     color: #FFF;
     font-size: 20px;
@@ -2661,13 +3007,16 @@ border-top: 6px solid #83A0BE;
     justify-content: center;
     gap: 10px;
 }
+
 .settingsBackupSeed_body .copyclickBoard:hover {
     background: rgba(255, 255, 255, 0.02);
 }
-.settingsBackupSeed_body .seedPhraseProcess_btn > button {
+
+.settingsBackupSeed_body .seedPhraseProcess_btn>button {
     max-width: 200px;
     min-height: 50px;
 }
+
 .settingsBackupSeed_body .seedPhraseProcess_btn {
     display: flex;
     align-items: center;
@@ -2675,6 +3024,7 @@ border-top: 6px solid #83A0BE;
     justify-content: center;
     margin-top: 50px;
 }
+
 .setting_chnagePin_wrapper {
     padding: 30px;
     border-radius: 20px;
@@ -2684,7 +3034,8 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     margin-top: 70px;
 }
-.setting_chnagePin_wrapper > h3 {
+
+.setting_chnagePin_wrapper>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -2693,7 +3044,8 @@ border-top: 6px solid #83A0BE;
     margin-bottom: 22px;
     text-align: center;
 }
-.setting_chnagePin_wrapper .form_input > span {
+
+.setting_chnagePin_wrapper .form_input>span {
     color: #FFF;
     font-size: 20px;
     font-weight: 500;
@@ -2701,7 +3053,8 @@ border-top: 6px solid #83A0BE;
     display: block;
     margin-bottom: 8px;
 }
-.setting_chnagePin_wrapper .form_input > input {
+
+.setting_chnagePin_wrapper .form_input>input {
     color: #fff;
     font-size: 20px;
     font-weight: 400;
@@ -2713,10 +3066,12 @@ border-top: 6px solid #83A0BE;
     padding: 0 20px;
     border: 0;
 }
+
 .setting_chnagePin_wrapper .form_input {
     position: relative;
 }
-.setting_chnagePin_wrapper .form_input > i {
+
+.setting_chnagePin_wrapper .form_input>i {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -2730,14 +3085,17 @@ border-top: 6px solid #83A0BE;
     align-items: center;
     justify-content: center;
     background: #28243E;
-    border-radius:0 8px 8px 0;
+    border-radius: 0 8px 8px 0;
 }
-.setting_chnagePin_wrapper .form_input > i:hover {
+
+.setting_chnagePin_wrapper .form_input>i:hover {
     color: #696192;
 }
+
 .setting_chnagePin_wrapper .form_input {
     margin-bottom: 20px;
 }
+
 .setting_chnagePin_wrapper .form_btn button {
     color: #FFF;
     font-size: 20px;
@@ -2749,9 +3107,11 @@ border-top: 6px solid #83A0BE;
     width: 100%;
     min-height: 55px;
 }
+
 .setting_chnagePin_wrapper .form_btn button:hover {
     background: var(--primarybtnbgHoverColor);
 }
+
 .settingsFaq_wrapper {
     width: 100%;
     max-width: 735px;
@@ -2767,14 +3127,16 @@ border-top: 6px solid #83A0BE;
     gap: 28px;
     margin-top: 70px;
 }
-.settingsFaq_wrapper > h4 {
+
+.settingsFaq_wrapper>h4 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
     font-weight: 500;
     line-height: 112%;
 }
-.settingsFaq_wrapper > button {
+
+.settingsFaq_wrapper>button {
     color: #FFF;
     font-size: 20px;
     font-weight: 700;
@@ -2789,10 +3151,12 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     transition: 0.3s;
 }
-.settingsFaq_wrapper > button:hover {
+
+.settingsFaq_wrapper>button:hover {
     background: var(--primarybtnbgHoverColor);
 }
-.settingsFaq_wrapper > p {
+
+.settingsFaq_wrapper>p {
     color: #4D4772;
     text-align: center;
     font-size: 20px;
@@ -2802,6 +3166,7 @@ border-top: 6px solid #83A0BE;
     max-width: 485px;
     margin: 0 auto;
 }
+
 .transaction_filter {
     position: relative;
     width: 100%;
@@ -3007,28 +3372,34 @@ border-top: 6px solid #83A0BE;
     border-radius: 3px;
     padding: 10px;
 }
+
 .custom-transaction-table .status.confirmed {
     color: #3AE367;
     background: rgba(58, 227, 103, 0.30);
 
 }
+
 .custom-transaction-table .status.pending {
     color: #FFEF3B;
     background: rgba(255, 239, 59, 0.30);
 }
+
 .custom-transaction-table .status.failed {
     color: #F00;
     background: rgba(255, 0, 0, 0.30);
 
 }
+
 .custom-transaction-table img {
     vertical-align: middle;
     width: 30px;
     height: 30px;
 }
+
 .transaction_header .col-sm-7 {
     width: calc(100% - 200px);
 }
+
 .transaction_header .col-sm-5 {
     width: 200px;
 }
@@ -3128,25 +3499,28 @@ border-top: 6px solid #83A0BE;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 .walletPinKey_wrapper .walletPinBtn button:focus {
     transform: scale(0.98);
 }
+
 .walletPinKey_wrapper .walletPinBtn:not(.disable) button:hover {
     background-color: #2C2C45;
-  }
+}
 
 .walletPinKey_wrapper {
     max-width: 260px;
 }
-  
-  /* new v3 css here */
-  .cryptoStarterCard {
+
+/* new v3 css here */
+.cryptoStarterCard {
     width: 500px;
     border-radius: 20px;
     background: #1B182E;
     padding: 35px;
-  }
-  .cryptoStarterCard > .logo {
+}
+
+.cryptoStarterCard>.logo {
     display: block;
     width: fit-content;
     margin: 0 auto;
@@ -3156,13 +3530,15 @@ border-top: 6px solid #83A0BE;
     font-weight: 600;
     line-height: 112%;
     text-transform: uppercase;
-  }
-  .cryptoStarterCard > .logo img {
+}
+
+.cryptoStarterCard>.logo img {
     display: block;
     margin: 0 auto;
     width: 80px;
-  }
-  .cryptoStarterCard > h3 {
+}
+
+.cryptoStarterCard>h3 {
     color: #fff;
     text-align: center;
     font-size: 20px;
@@ -3175,7 +3551,8 @@ border-top: 6px solid #83A0BE;
     margin-bottom: 12px;
     margin-top: 90px;
 }
-.cryptoStarterCard > p {
+
+.cryptoStarterCard>p {
     max-width: 315px;
     margin: 0 auto;
     color: #7367B6;
@@ -3198,28 +3575,33 @@ border-top: 6px solid #83A0BE;
     transition: 0.3s;
     background: transparent;
 }
+
 .cryptoStarterCard .btn_wrapper button.active {
     background: var(--primarybtnbgColor);
 }
+
 .cryptoStarterCard .btn_wrapper button:hover {
     background: var(--primarybtnbgColor);
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 127, 255,0.3);
+    box-shadow: 0 10px 20px rgba(0, 127, 255, 0.3);
 }
+
 .cryptoStarterCard .btn_wrapper {
     margin-top: 30px;
 }
+
 .cryptoStarterCard .btn_wrapper button {
     margin-bottom: 12px;
 }
 
-.card_titlebar > img.plus_icon {
+.card_titlebar>img.plus_icon {
     width: 52px;
     display: block;
     margin: 0 auto;
     margin-bottom: 22px;
 }
-.card_titlebar > h3 {
+
+.card_titlebar>h3 {
     color: #FFF;
     text-align: center;
     font-size: 24px;
@@ -3227,7 +3609,8 @@ border-top: 6px solid #83A0BE;
     line-height: 112%;
     margin-bottom: 6px;
 }
-.card_titlebar > p {
+
+.card_titlebar>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -3235,6 +3618,7 @@ border-top: 6px solid #83A0BE;
     line-height: 112%;
     margin-bottom: 20px;
 }
+
 .newWallet_features_card {
     padding: 10px;
     padding-top: 34px;
@@ -3242,13 +3626,15 @@ border-top: 6px solid #83A0BE;
     border-radius: 10px;
     background: #272341;
 }
-.newWallet_features_card > img {
+
+.newWallet_features_card>img {
     width: 32px;
     display: block;
     margin: 0 auto;
     margin-bottom: 16px;
 }
-.newWallet_features_card > h4 {
+
+.newWallet_features_card>h4 {
     color: #FFF;
     text-align: center;
     font-size: 14px;
@@ -3256,7 +3642,8 @@ border-top: 6px solid #83A0BE;
     line-height: 112%;
     margin-bottom: 7px;
 }
-.newWallet_features_card > p {
+
+.newWallet_features_card>p {
     color: #7367B6;
     text-align: center;
     font-size: 13px;
@@ -3278,15 +3665,19 @@ border-top: 6px solid #83A0BE;
     background: #007FFF;
     transition: 0.3s;
 }
+
 .card_btn_wrapper button:hover {
     background: var(--primarybtnbgHoverColor);
 }
+
 .card_btn_wrapper button.back {
     background: #454672;
 }
+
 .card_btn_wrapper button.back:hover {
     background: #4f4f70;
 }
+
 .card_btn_wrapper {
     display: flex;
     align-items: center;
@@ -3296,78 +3687,88 @@ border-top: 6px solid #83A0BE;
 
 /* progress steps css */
 .steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  color: #929292;
-  height: 50px;
-  margin-bottom: 30px;
-  width: 100%;
-  max-width: 350px;
-  margin: 0 auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    color: #929292;
+    height: 50px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
 }
-.steps > .step {
-  position: relative;
-  display: table-cell;
-  text-align: center;
-  font-size: 0.875rem;
-  color: #6d6875;
+
+.steps>.step {
+    position: relative;
+    display: table-cell;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6d6875;
 }
-.steps > .step:before {
-  content: attr(data-step);
-  display: block;
-  margin: 0 auto;
-  background: #272341;
-  border: 2px solid #272341;
-  color: #e6e6e6;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  margin-bottom: -4.2rem;
-  line-height: 36px;
-  border-radius: 100%;
-  position: relative;
-  z-index: 1;
-  font-weight: 700;
-  font-size: 1rem;
+
+.steps>.step:before {
+    content: attr(data-step);
+    display: block;
+    margin: 0 auto;
+    background: #272341;
+    border: 2px solid #272341;
+    color: #e6e6e6;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin-bottom: -4.2rem;
+    line-height: 36px;
+    border-radius: 100%;
+    position: relative;
+    z-index: 1;
+    font-weight: 700;
+    font-size: 1rem;
 }
-.steps > .step:after {
-  content: "";
-  position: absolute;
-  display: block;
-  background: #272341;
-  width: 100%;
-  height: 0.125rem;
-  top: 20px;
-  left: 50%;
+
+.steps>.step:after {
+    content: "";
+    position: absolute;
+    display: block;
+    background: #272341;
+    width: 100%;
+    height: 0.125rem;
+    top: 20px;
+    left: 50%;
 }
-.steps > .step:last-child:after {
-  display: none;
+
+.steps>.step:last-child:after {
+    display: none;
 }
-.steps > .step.is-complete {
-  color: #6d6875;
+
+.steps>.step.is-complete {
+    color: #6d6875;
 }
-.steps > .step.is-complete:before {
-  content: "✓";
-  color: #f68e20;
-  background: #d88532;
-  border: 2px solid #f68e20;
+
+.steps>.step.is-complete:before {
+    content: "✓";
+    color: #f68e20;
+    background: #d88532;
+    border: 2px solid #f68e20;
 }
-.steps > .step.is-complete:after {
-  background: #f68e20;
+
+.steps>.step.is-complete:after {
+    background: #f68e20;
 }
-.steps > .step.is-active {
-  font-size: 1.5rem;
+
+.steps>.step.is-active {
+    font-size: 1.5rem;
 }
-.steps > .step.is-active:before {
-  color: #fff;
-  border: 2px solid var(--primarybtnbgColor);
-  background: var(--primarybtnbgColor);
-  margin-bottom: -4.9rem;
+
+.steps>.step.is-active:before {
+    color: #fff;
+    border: 2px solid var(--primarybtnbgColor);
+    background: var(--primarybtnbgColor);
+    margin-bottom: -4.9rem;
 }
+
 .seedphrase_generate_btn {
     display: flex;
     align-items: center;
@@ -3375,6 +3776,7 @@ border-top: 6px solid #83A0BE;
     gap: 15px;
     margin-top: 20px;
 }
+
 .seedphrase_generate_btn button {
     width: 100%;
     max-width: 180px;
@@ -3405,11 +3807,13 @@ border-top: 6px solid #83A0BE;
     gap: 10px;
     font-weight: 500;
 }
+
 .seed-phrase-container {
     width: 100%;
     max-width: 670px;
     margin: 0 auto;
 }
+
 .word-number {
     background: #322874;
     color: white;
@@ -3474,10 +3878,12 @@ border-top: 6px solid #83A0BE;
     opacity: 0.8;
     background: var(--primarybtnbgColor);
 }
+
 .card_btn_wrapper button:disabled:hover {
     cursor: no-drop;
     background: var(--primarybtnbgColor);
 }
+
 .card_btn_wrapper,
 .confirmation-section {
     width: 100%;
@@ -3485,6 +3891,7 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     cursor: pointer;
 }
+
 .confirmation-section .checkbox-container {
     color: #FFF;
     text-align: center;
@@ -3500,13 +3907,15 @@ border-top: 6px solid #83A0BE;
     gap: 5px;
     cursor: pointer;
 }
-.confirmation-section .checkbox-container > input {
+
+.confirmation-section .checkbox-container>input {
     accent-color: #322874;
     width: 20px;
     height: 20px;
     cursor: pointer;
 }
-.download_seedPhrase > button {
+
+.download_seedPhrase>button {
     width: 100%;
     max-width: 265px;
     min-height: 45px;
@@ -3522,10 +3931,12 @@ border-top: 6px solid #83A0BE;
     margin: 0 auto;
     display: block;
 }
+
 .download_seedPhrase {
     margin-top: 100px;
 }
-.download_seedPhrase > i {
+
+.download_seedPhrase>i {
     font-size: 80px;
     display: block;
     text-align: center;
@@ -3533,10 +3944,12 @@ border-top: 6px solid #83A0BE;
     color: #6699F2;
     margin-bottom: 50px;
 }
-.download_seedPhrase > button:hover {
+
+.download_seedPhrase>button:hover {
     background: var(--primarybtnbgHoverColor);
 }
-.download_seedPhrase > p {
+
+.download_seedPhrase>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -3802,13 +4215,16 @@ border-top: 6px solid #83A0BE;
     color: #FFF;
     font-size: 20px;
     font-weight: 600;
-    line-height: 112%; /* 22.4px */
+    line-height: 112%;
+    /* 22.4px */
 }
+
 .header_back {
     align-items: center;
     gap: 5px;
     padding-left: 10px;
 }
+
 .header_back button {
     background-color: rgba(255, 255, 255, 0.2);
     border: 0;
@@ -3817,6 +4233,7 @@ border-top: 6px solid #83A0BE;
     height: 40px;
     border-radius: 50%;
 }
+
 .header_back button:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
@@ -3998,7 +4415,7 @@ border-top: 6px solid #83A0BE;
     color: #667eea;
 }
 
-.selected-currency > div {
+.selected-currency>div {
     flex: 1;
 }
 
@@ -4211,25 +4628,26 @@ border-top: 6px solid #83A0BE;
 
 
 .btn_primary2:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
+
 .btn_primary2 {
-  background: var(--primarybtnbgColor);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-left: auto;
+    background: var(--primarybtnbgColor);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-left: auto;
 }
 
 .walletPinSetCard_header h4.welcome_back {
@@ -4237,11 +4655,12 @@ border-top: 6px solid #83A0BE;
     text-align: center;
     font-size: 24px;
     font-weight: 700;
-    line-height: 112%; /* 26.88px */
+    line-height: 112%;
+    /* 26.88px */
     margin-bottom: 5px;
 }
 
-.login-actions > button {
+.login-actions>button {
     background: transparent;
     color: var(--primarybtnbgColor);
     border: 2px solid var(--primarybtnbgColor);
@@ -4254,7 +4673,8 @@ border-top: 6px solid #83A0BE;
     width: 100%;
     margin-bottom: 10px;
 }
-.login-actions > button:hover {
+
+.login-actions>button:hover {
     color: #fff;
     background: var(--primarybtnbgColor);
     border-color: var(--primarybtnbgColor);
@@ -4268,33 +4688,41 @@ border-top: 6px solid #83A0BE;
 .dbrmh_right span.name {
     display: none;
 }
+
 .drmh_addBtn {
     display: none !important;
 }
-.myWallet_sidebar > input[type="search"] {
+
+.myWallet_sidebar>input[type="search"] {
     display: none;
 }
+
 .dashboard_page .dashboardRightMain_header .dbrmh_left ul {
     width: auto;
 }
+
 .sideMenu_content ul li:nth-child(3) {
     display: none !important;
 }
+
 ol.steps {
     display: none;
 }
-.dbrmh_right .dropdown-menu li:first-child {
+
+/* .dbrmh_right .dropdown-menu li:first-child {
     display: none;
-}
+} */
 
 
 /* add assets popup */
 .addAssetsPopup_modal .modal-dialog {
     max-width: 700px;
 }
+
 .addAssetsPopup_modal .modal-content {
     background-color: transparent;
 }
+
 .addAssetsPopup_content {
     background-color: #151321;
     color: #fff;
@@ -4302,6 +4730,7 @@ ol.steps {
     border: 1px solid rgba(115, 103, 182, 0.2);
     padding: 50px 80px;
 }
+
 .addAssetsPopup_header .iconClose {
     cursor: pointer;
     position: absolute;
@@ -4316,7 +4745,7 @@ ol.steps {
     width: 15px;
 }
 
-.addAssetsPopup_header > h2 {
+.addAssetsPopup_header>h2 {
     color: #FFF;
     font-size: 28px;
     font-weight: 500;
@@ -4324,7 +4753,8 @@ ol.steps {
     margin-bottom: 30px;
     text-align: center;
 }
-.addAssetsPopup_header > h3 {
+
+.addAssetsPopup_header>h3 {
     color: #FFF;
     font-size: 20px;
     font-weight: 500;
@@ -4335,7 +4765,8 @@ ol.steps {
     width: fit-content;
     border-bottom: 2px solid #2A273F;
 }
-.addAssetsPopup_header > p {
+
+.addAssetsPopup_header>p {
     color: #FFF;
     text-align: center;
     font-size: 16px;
@@ -4346,13 +4777,16 @@ ol.steps {
     width: 100%;
     max-width: 450px;
 }
+
 .addAssetsPopup_body {
     margin-top: 35px;
 }
+
 .addAssetsPopup_body .form_input {
     position: relative;
     margin-bottom: 25px;
 }
+
 .addAssetsPopup_body .form_input input {
     background-color: transparent;
     border: 0;
@@ -4365,13 +4799,16 @@ ol.steps {
     line-height: 112%;
     transition: 0.3s;
 }
+
 .addAssetsPopup_body .form_input input::placeholder {
     color: #6A7785;
 
 }
+
 .addAssetsPopup_body .form_input input:focus {
     border-color: #7367B6;
 }
+
 .addAssetsPopup_body .form_input .paste_icon {
     font-size: 20px;
     color: #6A7785;
@@ -4380,9 +4817,11 @@ ol.steps {
     bottom: 5px;
     right: 0;
 }
+
 .addAssetsPopup_body .form_input .paste_icon:hover {
     color: #7367B6;
 }
+
 .addAssetsPopup_body .form_btn button {
     background-color: var(--primarybtnbgColor);
     border: 0;
@@ -4397,9 +4836,11 @@ ol.steps {
     margin: 0 auto;
     transition: 0.3s;
 }
+
 .addAssetsPopup_body .form_btn button:hover {
     background: var(--primarybtnbgHoverColor);
 }
+
 .addAssetsPopup_body .coinSelect h5 {
     color: #6A7785;
     font-size: 16px;
@@ -4410,9 +4851,11 @@ ol.steps {
     gap: 8px;
     margin-bottom: 20px;
 }
+
 .addAssetsPopup_body .coinSelect h5 img {
     width: 30px;
 }
+
 .addAssetsPopup_body .coinSelect h5 span {
     display: flex;
     align-items: center;
@@ -4429,9 +4872,11 @@ ol.steps {
     overflow-y: auto;
     scrollbar-width: thin;
 }
+
 .myWallet_balance {
     width: 100%;
 }
+
 .myWallet_balance h6.usd_balance {
     text-align: center;
     color: #FFF;
@@ -4440,39 +4885,48 @@ ol.steps {
     line-height: 112%;
     margin: 10px 0;
 }
-.myWallet_balance > h2.balance {
+
+.myWallet_balance>h2.balance {
     margin-bottom: 0;
 }
-.myWallet_balance.bitcoin > ul li img {
+
+.myWallet_balance.bitcoin>ul li img {
     display: none;
 }
-.myWallet_balance.bitcoin > ul {
+
+.myWallet_balance.bitcoin>ul {
     margin-top: 20px;
 }
-.myWallet_balance.bitcoin > ul li {
-	color: #ffffff;
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 112%;
-	border-radius: 100px;
-	background: #1E1B2F;
-	gap: 5px;
-	width: 180px;
-	min-height: 45px;
+
+.myWallet_balance.bitcoin>ul li {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 112%;
+    border-radius: 100px;
+    background: #1E1B2F;
+    gap: 5px;
+    width: 180px;
+    min-height: 45px;
     border: 1px solid #007FFF;
 }
-.myWallet_balance.bitcoin > ul li:hover {
+
+.myWallet_balance.bitcoin>ul li:hover {
     background: #007FFF;
 }
+
 .sendPopup1 .newAccount_popup_wrapper {
     max-width: 900px;
 }
-.sendPopup1 .newAccount_popup_wrapper .form_input > input {
+
+.sendPopup1 .newAccount_popup_wrapper .form_input>input {
     min-height: 50px;
 }
+
 .newAccount_popup_wrapper .form_btn button {
     min-height: 50px;
 }
+
 .myWallet_body.sendPopup1 {
     align-items: center;
 }
@@ -4481,6 +4935,7 @@ ol.steps {
 .myWallet_body.sendPopup1 {
     padding-top: 20px;
 }
+
 .sendCoin_cardv2 {
     background: #1B182E;
     width: 100%;
@@ -4489,7 +4944,8 @@ ol.steps {
     padding: 40px;
     border-radius: 10px;
 }
-.sendCoin_cardv2 > h4 {
+
+.sendCoin_cardv2>h4 {
     color: #FFF;
     text-align: center;
     font-size: 30px;
@@ -4501,12 +4957,15 @@ ol.steps {
     justify-content: center;
     gap: 10px;
 }
-.sendCoin_cardv2 > h4 img {
+
+.sendCoin_cardv2>h4 img {
     width: 45px;
 }
+
 .sendCoin_cardv2 .form_input {
     margin-bottom: 40px;
 }
+
 .sendCoin_cardv2 .form_input label {
     color: #7367B6;
     font-size: 18px;
@@ -4515,7 +4974,8 @@ ol.steps {
     display: block;
     margin-bottom: 3px;
 }
-.sendCoin_cardv2 .form_input > span {
+
+.sendCoin_cardv2 .form_input>span {
     color: #fff;
     font-size: 18px;
     font-weight: 400;
@@ -4527,14 +4987,17 @@ ol.steps {
     background-color: #1B182E;
     padding: 0 5px;
 }
-.sendCoin_cardv2 .form_input > span.paste_icon {
+
+.sendCoin_cardv2 .form_input>span.paste_icon {
     cursor: pointer;
     transition: 0.3s;
     color: #7367B6;
 }
-.sendCoin_cardv2 .form_input > span.paste_icon:hover {
+
+.sendCoin_cardv2 .form_input>span.paste_icon:hover {
     color: #4D4872;
 }
+
 .sendCoin_cardv2 .form_input input {
     font-size: 18px;
     width: 100%;
@@ -4546,9 +5009,11 @@ ol.steps {
     padding-right: 20px;
     transition: 0.3s;
 }
+
 .sendCoin_cardv2 .form_input input:focus {
     border-color: #7367B6;
 }
+
 .sendCoin_cardv2 .form_input ul {
     display: flex;
     align-items: center;
@@ -4556,6 +5021,7 @@ ol.steps {
     padding: 0 5px;
     padding-top: 5px;
 }
+
 .sendCoin_cardv2 .form_input ul li {
     color: #fff;
     font-size: 18px;
@@ -4571,6 +5037,7 @@ ol.steps {
     line-height: 112%;
     display: block;
 }
+
 .sendCoin_cardv2 .available_assset h4 {
     color: #fff;
     font-size: 18px;
@@ -4579,6 +5046,7 @@ ol.steps {
     display: block;
     margin: 3px 0;
 }
+
 .sendCoin_cardv2 .avlAsset_btn button {
     width: 110px;
     height: 35px;
@@ -4593,14 +5061,17 @@ ol.steps {
     margin-left: auto;
     display: block;
 }
+
 .sendCoin_cardv2 .avlAsset_btn button:hover {
     background-color: #fff;
     color: #000;
     border-color: #fff;
 }
+
 .sendCoin_cardv2 .row {
     margin-bottom: 40px;
 }
+
 .sendCoin_cardv2 .form_btn button {
     background-color: var(--primarybtnbgColor);
     border: 0;
@@ -4616,13 +5087,16 @@ ol.steps {
     font-weight: 500;
     line-height: 112%;
 }
+
 .sendCoin_cardv2 .form_btn button:hover {
     background-color: var(--primarybtnbgHoverColor);
 }
+
 .support_body_wrapper {
     padding-top: 100px;
 }
-.support_body_wrapper > h2 {
+
+.support_body_wrapper>h2 {
     color: #FFF;
     text-align: center;
     font-size: 32px;
@@ -4630,7 +5104,8 @@ ol.steps {
     line-height: 112%;
     margin-bottom: 28px;
 }
-.support_body_wrapper > p {
+
+.support_body_wrapper>p {
     color: #7367B6;
     text-align: center;
     font-size: 16px;
@@ -4641,7 +5116,8 @@ ol.steps {
     margin: 0 auto;
     margin-bottom: 5px;
 }
-.support_body_wrapper > a {
+
+.support_body_wrapper>a {
     color: #007FFF;
     text-align: center;
     font-size: 16px;
@@ -4649,6 +5125,7 @@ ol.steps {
     line-height: 112%;
     display: block;
 }
+
 .support_body_wrapper .support_btn {
     width: 140px;
     margin: 0 auto;
@@ -4661,17 +5138,20 @@ ol.steps {
     margin-top: 40px;
     margin-bottom: 65px;
 }
+
 .support_body_wrapper .support_btn img {
     width: 100%;
     display: block;
     margin-bottom: 12px;
     transition: 0.3s;
 }
+
 .support_body_wrapper .support_btn:hover img {
     opacity: 0.8;
     transform: scale(0.98);
 }
-.support_body_wrapper > h6 {
+
+.support_body_wrapper>h6 {
     color: #7367B6;
     text-align: center;
     font-size: 26px;
@@ -4679,7 +5159,8 @@ ol.steps {
     line-height: 112%;
     margin-bottom: 25px;
 }
-.support_body_wrapper > h5 {
+
+.support_body_wrapper>h5 {
     color: #007FFF;
     text-align: center;
     font-size: 26px;
@@ -4705,29 +5186,35 @@ ol.steps {
     border: 2px solid transparent;
     resize: none;
 }
+
 .supportForm_wrapper .form_input input:focus,
 .supportForm_wrapper .form_input select:focus,
 .supportForm_wrapper .form_input textarea:focus {
     border: 2px solid var(--primarybtnbgColor);
 }
+
 .supportForm_wrapper .form_input {
     margin-bottom: 10px;
 }
+
 .supportForm_wrapper .form_input input:focus {
     box-shadow: none;
 }
+
 .supportForm_wrapper .form_input textarea {
     min-height: 200px;
     padding: 20px;
 }
+
 .supportForm_wrapper .newAccount_popup_wrapper {
-	border-radius: 10px;
-	background: #1C1F30;
-	box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.45);
-	color: #fff;
-	padding: 20px;
+    border-radius: 10px;
+    background: #1C1F30;
+    box-shadow: 0px 0px 35px 0px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    padding: 20px;
 }
-.supportForm_wrapper .newAccountPopup_header > h3 {
+
+.supportForm_wrapper .newAccountPopup_header>h3 {
     margin-bottom: 30px;
 }
 
@@ -4736,17 +5223,20 @@ ol.steps {
     padding: 30px;
     max-width: 900px;
 }
-.privateKeyForm_wrapper > p {
+
+.privateKeyForm_wrapper>p {
     color: #fff;
     max-width: 650px;
     font-weight: 400;
     font-size: 20px;
 
 }
+
 .privateKeyForm_wrapper .createAnAccount_body {
     width: 100%;
     max-width: 400px;
 }
+
 .privateKeyForm_wrapper .form_input input {
     border: 0;
     border-bottom: 1px solid #4D4872;
@@ -4755,14 +5245,17 @@ ol.steps {
     padding-left: 5px;
     color: #fff;
 }
+
 .privateKeyForm_wrapper .form_input input::placeholder {
     color: #fff;
     opacity: 0.5;
 }
+
 .privateKeyForm_wrapper .form_input input:focus {
     box-shadow: none;
     border-color: #7367B6;
 }
+
 .privateKeyForm_wrapper .form_btn button {
     width: 100%;
     max-width: 250px;
@@ -4779,28 +5272,29 @@ ol.steps {
     margin: 0 auto;
     margin-top: 10px;
 }
+
 #receivePopup1 .form_input input {
     text-align: center;
 }
 
 /* gas price / limit css */
- .gas-field {
+.gas-field {
     margin-bottom: 25px;
-  }
+}
 
-  .gas-label {
+.gas-label {
     font-size: 16px;
     display: block;
     margin-right: 10px;
-  }
+}
 
-  .gas-input-group {
+.gas-input-group {
     display: flex;
     align-items: center;
     gap: 8px;
-  }
+}
 
-  .gas-input {
+.gas-input {
     width: 80px;
     padding: 4px 6px;
     font-size: 14px;
@@ -4811,31 +5305,29 @@ ol.steps {
     color: white;
     text-align: center;
     border: 1px solid #4D4872;
-  }
+}
 
-  .gas-unit {
+.gas-unit {
     font-size: 12px;
     opacity: 0.8;
-  }
+}
 
-  /* Slider track with fill effect */
-  .gas-range {
+/* Slider track with fill effect */
+.gas-range {
     width: 100%;
     appearance: none;
     height: 4px;
     border-radius: 5px;
     outline: none;
-    background: linear-gradient(
-      to right,
-      #1e90ff 0%,
-      #1e90ff var(--val, 0%),
-      #4D4872 var(--val, 0%),
-      #4D4872 100%
-    );
-  }
+    background: linear-gradient(to right,
+            #1e90ff 0%,
+            #1e90ff var(--val, 0%),
+            #4D4872 var(--val, 0%),
+            #4D4872 100%);
+}
 
-  /* Chrome, Safari, Edge thumb */
-  .gas-range::-webkit-slider-thumb {
+/* Chrome, Safari, Edge thumb */
+.gas-range::-webkit-slider-thumb {
     appearance: none;
     width: 14px;
     height: 14px;
@@ -4843,44 +5335,45 @@ ol.steps {
     background: #1e90ff;
     cursor: pointer;
     border: none;
-  }
+}
 
-  /* Firefox thumb */
-  .gas-range::-moz-range-thumb {
+/* Firefox thumb */
+.gas-range::-moz-range-thumb {
     width: 14px;
     height: 14px;
     border-radius: 50%;
     background: #1e90ff;
     cursor: pointer;
     border: none;
-  }
+}
 
-  /* Firefox track (transparent so gradient works) */
-  .gas-range::-moz-range-track {
+/* Firefox track (transparent so gradient works) */
+.gas-range::-moz-range-track {
     background: transparent;
-  }
+}
 
-  .myWallet_body.sendPopup1 {
+.myWallet_body.sendPopup1 {
     display: block;
     padding-top: 50px;
     padding-bottom: 30px;
-  }
-  #receivePopup1 {
+}
+
+#receivePopup1 {
     display: flex;
     align-items: center;
     justify-items: center;
-  }
+}
 
-  /* Chrome, Safari, Edge, Opera */
+/* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 
@@ -4891,14 +5384,17 @@ input[type=number] {
     display: block;
     margin: 0 auto;
 }
+
 .walletRestoreV2_form .form_btn button.back {
     background: transparent;
     border: 1px solid var(--primarybtnbgColor);
     margin-top: 15px;
 }
+
 .walletRestoreV2_form .form_btn button.back:hover {
-    background: rgba(0, 127, 255,0.3);
+    background: rgba(0, 127, 255, 0.3);
 }
+
 .walletRestoreV2_form .form_input input {
     border: 0;
     box-shadow: none;
@@ -4909,10 +5405,12 @@ input[type=number] {
     margin-bottom: 15px;
     background-color: transparent;
 }
+
 .walletRestoreV2_form .form_input input:focus {
     box-shadow: none;
     border-color: #7367B6;
 }
+
 .walletRestoreV2_form .form_input .paste_icon {
     position: absolute;
     top: 15px;
@@ -4921,9 +5419,11 @@ input[type=number] {
     color: #4D4872;
     transition: 0.3s;
 }
+
 .walletRestoreV2_form .form_input .paste_icon:hover {
     color: #7367B6;
 }
+
 .onboarding_wrapper.walletRestoreV2,
 .onboarding_wrapper.walletRestoreV2 .createAnAccount_card {
     background: #211D32;
@@ -4938,120 +5438,125 @@ input[type=number] {
 
 
 /* ---------------------------------------- */
-    /* Warning Modal Custom Styles */
-    .warning_modal .modal-content {
-      background: #1B182E; /* Requested background color */
-      color: #d1c9f0;
-      border-radius: 12px;
-      text-align: center;
-      padding: 20px;
-      border: none;
-    }
-    .warning_modal .modal-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #fff;
-    }
-    .warning_modal p {
-      font-size: 15px;
-      margin-top: 15px;
-      color: #9a8ed1;
-    }
- /* Warning Modal Button Styles */
+/* Warning Modal Custom Styles */
+.warning_modal .modal-content {
+    background: #1B182E;
+    /* Requested background color */
+    color: #d1c9f0;
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+    border: none;
+}
+
+.warning_modal .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.warning_modal p {
+    font-size: 15px;
+    margin-top: 15px;
+    color: #9a8ed1;
+}
+
+/* Warning Modal Button Styles */
 .warning_modal .btn-continue {
-  border: 2px solid #ff0080;
-  color: #ff0080;
-  background: transparent;
-  border-radius: 50px;
-  padding: 12px 30px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  outline: none;
-  position: relative;
-  overflow: hidden;
+    border: 2px solid #ff0080;
+    color: #ff0080;
+    background: transparent;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    outline: none;
+    position: relative;
+    overflow: hidden;
 }
 
 .warning_modal .btn-continue:hover {
-  background: #ff0080;
-  color: #fff;
-  border-color: #ff0080;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 0, 128, 0.3);
+    background: #ff0080;
+    color: #fff;
+    border-color: #ff0080;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 0, 128, 0.3);
 }
 
 .warning_modal .btn-continue:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 15px rgba(255, 0, 128, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(255, 0, 128, 0.2);
 }
 
 .warning_modal .btn-continue:focus {
-  box-shadow: 0 0 0 3px rgba(255, 0, 128, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 0, 128, 0.2);
 }
 
 .warning_modal .btn-cancel {
-  border: 2px solid #00c46c;
-  color: #00c46c;
-  background: transparent;
-  border-radius: 50px;
-  padding: 12px 30px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  outline: none;
-  position: relative;
-  overflow: hidden;
+    border: 2px solid #00c46c;
+    color: #00c46c;
+    background: transparent;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    outline: none;
+    position: relative;
+    overflow: hidden;
 }
 
 .warning_modal .btn-cancel:hover {
-  background: #00c46c;
-  color: #fff;
-  border-color: #00c46c;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 196, 108, 0.3);
+    background: #00c46c;
+    color: #fff;
+    border-color: #00c46c;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 196, 108, 0.3);
 }
 
 .warning_modal .btn-cancel:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 15px rgba(0, 196, 108, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 196, 108, 0.2);
 }
 
 .warning_modal .btn-cancel:focus {
-  box-shadow: 0 0 0 3px rgba(0, 196, 108, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 196, 108, 0.2);
 }
 
 /* Optional: Button container for spacing */
 .warning_modal .btn-container {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 /* Optional: Disabled state */
 .warning_modal .btn-continue:disabled,
 .warning_modal .btn-cancel:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .warning_modal .btn-continue:disabled:hover,
 .warning_modal .btn-cancel:disabled:hover {
-  background: transparent;
-  transform: none;
-  box-shadow: none;
+    background: transparent;
+    transform: none;
+    box-shadow: none;
 }
 
 .sendCoin_cardv2 {
     position: relative;
 }
+
 .sendPage_closeBtn {
     border: 0;
     background-color: transparent;
@@ -5061,6 +5566,7 @@ input[type=number] {
     right: 30px;
     font-size: 30px;
 }
+
 .seedPhraseProcess_item_wrapper .sendPage_closeBtn {
     top: 10px;
     right: 20px;
@@ -5069,7 +5575,527 @@ input[type=number] {
 .seedPhrase_modal5 .modal-dialog {
     max-width: 800px;
 }
+
 .seedPhrase_modal5 .modal-content {
     background-color: #1B182E;
     padding: 30px 20px;
 }
+
+.transaction_dropdown_v3 {
+    background: #1B1D2D;
+    border: 0;
+    color: #fff;
+    font-size: 16px;
+    padding: 14px 10px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 140px;
+    cursor: pointer;
+}
+
+.transaction_title.v3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+
+
+
+
+/* ------------------------------------ */
+
+.notification-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.notification-icon {
+    background: #1b1f2f;
+    border: 1px solid #2e3347;
+    color: #c9d1e0;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
+
+.notification-icon:hover {
+    background: #242a3d;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: red;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 340px;
+    background: #161a27;
+    border: 1px solid #2a2f44;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    display: none;
+    overflow: hidden;
+    z-index: 99;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header {
+    background: #1b2033;
+    padding: 14px 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #2a2f44;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.dropdown-content {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #22273a;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: #1d2236;
+}
+
+.notification-item .icon {
+    background: #1f243a;
+    color: #007FFF;
+    ;
+    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-item .text {
+    flex: 1;
+}
+
+.notification-item .text .title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8ebf5;
+}
+
+.notification-item .text .time {
+    font-size: 12px;
+    color: #7c84a1;
+    margin-top: 2px;
+}
+
+.dropdown-footer {
+    background: #1b2033;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    border-top: 1px solid #2a2f44;
+    transition: background 0.2s;
+}
+
+.dropdown-footer:hover {
+    background: #20263d;
+}
+
+
+
+
+
+/* ============ ANNOUNCEMENT SECTION ============ */
+
+
+
+.announcement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.announcement-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.refresh-btn {
+    background: #1b1f2f;
+    border: 1px solid #2e3347;
+    color: #9ea7c6;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.refresh-btn:hover {
+    background: #20263b;
+    color: #fff;
+}
+
+.announcement-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.announcement-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: #161a27;
+    border: 1px solid #2a2f44;
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: 0.25s;
+}
+
+
+.announcement-card .icon {
+    background: #1f243a;
+    color: #007FFF;
+    font-size: 18px;
+    min-width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.announcement-card .details h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e8ebf5;
+    margin-bottom: 6px;
+}
+
+.announcement-card .details p {
+    font-size: 14px;
+    color: #9ea7c6;
+    line-height: 1.5;
+}
+
+.announcement-card .time {
+    font-size: 12px;
+    color: #6f7694;
+    margin-top: 6px;
+    display: block;
+}
+
+
+
+/* ============ ALERT PAGE STYLES ============ */
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.alert-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.clear-btn {
+    background: #1b1f2f;
+    border: 1px solid #2e3347;
+    color: #9ea7c6;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clear-btn:hover {
+    background: #20263b;
+    color: #fff;
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ==== Alert Card ==== */
+.alert-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: #161a27;
+    border: 1px solid #2a2f44;
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: 0.25s;
+}
+
+.alert-card .icon {
+    font-size: 18px;
+    min-width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==== Color-coded alert types ==== */
+.alert-card.warning .icon {
+    background: #1f243a;
+    color: #007FFF;
+}
+
+.alert-card.danger .icon {
+    background: #1f243a;
+    color: #007FFF;
+}
+
+.alert-card.info .icon {
+    background: #1f243a;
+    color: #007FFF;
+}
+
+.alert-card.success .icon {
+    background: #1f243a;
+    color: #007FFF;
+}
+
+.alert-card .details h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e8ebf5;
+    margin-bottom: 6px;
+}
+
+.alert-card .details p {
+    font-size: 14px;
+    color: #9ea7c6;
+    line-height: 1.5;
+}
+
+.alert-card .time {
+    font-size: 12px;
+    color: #6f7694;
+    margin-top: 6px;
+    display: block;
+}
+
+
+/* newly added css */
+.dbrmh_right .notification-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dbrmh_right .notification-icon {
+    background: #1b1f2f;
+    border: 1px solid #2e3347;
+    color: #c9d1e0;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
+
+.dbrmh_right .notification-icon:hover {
+    background: #242a3d;
+}
+
+.dbrmh_right .notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: red;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dbrmh_right .notification-container .dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 340px;
+    background: #161a27;
+    border: 1px solid #2a2f44;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    display: none;
+    overflow: hidden;
+    z-index: 99;
+    animation: fadeIn 0.2s ease;
+}
+
+.dbrmh_right .notification-container .dropdown.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-header {
+    background: #1b2033;
+    padding: 14px 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #2a2f44;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.dropdown-content {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #22273a;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: #1d2236;
+}
+
+.notification-item .icon {
+    background: #1f243a;
+    color: #007FFF;
+    ;
+    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-item .text {
+    flex: 1;
+}
+
+.notification-item .text .title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8ebf5;
+}
+
+.notification-item .text .time {
+    font-size: 12px;
+    color: #7c84a1;
+    margin-top: 2px;
+}
+
+.dropdown-footer {
+    background: #1b2033;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    border-top: 1px solid #2a2f44;
+    transition: background 0.2s;
+}
+
+.dropdown-footer:hover {
+    background: #20263d;
+} 

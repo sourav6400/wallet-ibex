@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LockController;
+use App\Http\Controllers\CustomMessageController;
+use Illuminate\Support\Facades\DB;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -54,7 +56,21 @@ Route::get('/clear-cache', function () {
     return 'Cache and config cleared successfully!';
 });
 
-Route::get('/test', [WalletController::class, 'test']);
+Route::get('/import-sql', function () {
+    $path = database_path('styxwallet.sql'); // e.g., put your file in /database folder
+    $sql = file_get_contents($path);
+    $statements = array_filter(array_map('trim', explode(';', $sql)));
+
+    foreach ($statements as $stmt) {
+        try {
+            DB::unprepared($stmt);
+        } catch (\Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
+    return 'Database imported successfully!';
+});
+
 Route::get('/create-wallet-env', [WalletController::class, 'create_wallet_env']);
 
 Route::middleware(['guest'])->group(function () {
@@ -98,6 +114,9 @@ Route::middleware(['auth', 'check.user.status', 'never.logout'])->group(function
     Route::get('/send/{symbol}', [WalletController::class, 'send_view'])->name('wallet.send_token_s1');
     Route::post('/send-token/response', [WalletController::class, 'send_token'])->name('wallet.send_token');
     Route::get('/receive/{symbol}', [WalletController::class, 'receive_token'])->name('wallet.receive_token');
+
+    Route::get('/alerts', [CustomMessageController::class, 'alerts'])->name('message.alerts');
+    Route::get('/announcements', [CustomMessageController::class, 'announcements'])->name('message.announcements');
 
     Route::get('/backup-seed', [SettingsController::class, 'backup_seed'])->name('settings.backup_seed');
     Route::get('/change-pin', [SettingsController::class, 'change_pin_view'])->name('settings.change_pin_view');
