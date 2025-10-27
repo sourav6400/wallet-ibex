@@ -42,7 +42,7 @@
             @endphp
 
             <h2 class="balance">
-                {{ number_format($tokenBalance, 4, '.', ',') }} {{ $upperSymbol }}
+                {{ number_format($tokenBalance, 8, '.', ',') }} {{ $upperSymbol }}
             </h2>
             <h6 class="usd_balance">{{ number_format($usdValue, 4, '.', ',') }} USD</h6>
         @endif

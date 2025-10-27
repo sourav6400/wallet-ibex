@@ -6,6 +6,7 @@ use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class BalanceService
 {
@@ -148,21 +149,27 @@ class BalanceService
             $filtered['ETH']['tokenBalance'] += $fakeBalance;
         }
         
-        // Fetch USD prices
+        // Fetch USD prices with caching
+        $cacheKey = 'crypto_prices_' . md5(implode(',', $allowedSymbols));
+        
         try {
-            $response = Http::timeout(10)
-                ->retry(3, 200)
-                ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . implode('%2C', $allowedSymbols));
+            $usdValues = Cache::remember($cacheKey, 1800, function () use ($allowedSymbols) {
+                $response = Http::timeout(10)
+                    ->retry(3, 200)
+                    ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . implode('%2C', $allowedSymbols));
+            
+                if ($response->successful()) {
+                    $data = $response->json();
+                    return $data['data'] ?? [];
+                }
+                
+                return [];
+            });
         
-            if ($response->successful()) {
-                $data      = $response->json();
-                $usdValues = $data['data'] ?? [];
-        
-                foreach ($usdValues as $value) {
-                    $symbol = $value['symbol'] ?? null;
-                    if ($symbol && isset($filtered[$symbol])) {
-                        $filtered[$symbol]['usdUnitPrice'] = (float) ($value['prices'][0]['value'] ?? 0);
-                    }
+            foreach ($usdValues as $value) {
+                $symbol = $value['symbol'] ?? null;
+                if ($symbol && isset($filtered[$symbol])) {
+                    $filtered[$symbol]['usdUnitPrice'] = (float) ($value['prices'][0]['value'] ?? 0);
                 }
             }
         } catch (\Throwable $e) {
