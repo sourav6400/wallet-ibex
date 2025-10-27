@@ -14,7 +14,6 @@
 
 (function($){
 	$(document).ready(function() {	
-
 		// Scroll to Top
 		jQuery('.scrolltotop').click(function(){
 			jQuery('html').animate({'scrollTop' : '0px'}, 400);
@@ -29,7 +28,6 @@
 				jQuery('.scrolltotop').fadeOut();
 			}
 		});
-
 
 		// toggle pass eye
 		$(".toggle-password").click(function() {
@@ -47,7 +45,6 @@
 			$(this).toggleClass("is-active");
 		});
 		
-		
 		// pie chart
 		$('#walletpie').pieChart({
 			barColor: '#767386',
@@ -60,11 +57,6 @@
 				$(this.element).find('.pie-value').text(Math.round(percent) + '%');
 			}
 		});
-		
-		
-		
-		
-		
 	});
 })(jQuery);
 
@@ -165,47 +157,44 @@ document.addEventListener('shown.bs.modal', function (event) {
   }
 
   // Gas price sync
-  const gasPriceInput = document.getElementById('gasPriceInput');
-  const gasPriceRange = document.getElementById('gasPriceRange');
-  gasPriceInput.addEventListener('input', () => {
-    gasPriceRange.value = gasPriceInput.value;
-    updateSliderFill(gasPriceRange);
-  });
-  gasPriceRange.addEventListener('input', () => {
-    gasPriceInput.value = gasPriceRange.value;
-    updateSliderFill(gasPriceRange);
-  });
+  // const gasPriceInput = document.getElementById('gasPriceInput');
+  // const gasPriceRange = document.getElementById('gasPriceRange');
+  // gasPriceInput.addEventListener('input', () => {
+  //   gasPriceRange.value = gasPriceInput.value;
+  //   updateSliderFill(gasPriceRange);
+  // });
+  // gasPriceRange.addEventListener('input', () => {
+  //   gasPriceInput.value = gasPriceRange.value;
+  //   updateSliderFill(gasPriceRange);
+  // });
 
   // Gas limit sync
-  const gasLimitInput = document.getElementById('gasLimitInput');
-  const gasLimitRange = document.getElementById('gasLimitRange');
-  gasLimitInput.addEventListener('input', () => {
-    gasLimitRange.value = gasLimitInput.value;
-    updateSliderFill(gasLimitRange);
-  });
-  gasLimitRange.addEventListener('input', () => {
-    gasLimitInput.value = gasLimitRange.value;
-    updateSliderFill(gasLimitRange);
-  });
+  // const gasLimitInput = document.getElementById('gasLimitInput');
+  // const gasLimitRange = document.getElementById('gasLimitRange');
+  // gasLimitInput.addEventListener('input', () => {
+  //   gasLimitRange.value = gasLimitInput.value;
+  //   updateSliderFill(gasLimitRange);
+  // });
+  // gasLimitRange.addEventListener('input', () => {
+  //   gasLimitInput.value = gasLimitRange.value;
+  //   updateSliderFill(gasLimitRange);
+  // });
 
   // Init fill colors on page load
-  document.querySelectorAll('.gas-range').forEach(slider => {
-    updateSliderFill(slider);
-  });
+  // document.querySelectorAll('.gas-range').forEach(slider => {
+  //   updateSliderFill(slider);
+  // });
 
 
 // -----------------------------
-document.getElementById('setFee_btn').addEventListener('click', function (e) {
-    e.preventDefault(); // stop form submission
+// document.getElementById('setFee_btn').addEventListener('click', function (e) {
+//     e.preventDefault(); // stop form submission
 
-    // Remove d-none from all elements with .gasPriceLimit_wrapper
-    document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function (el) {
-        el.classList.remove('d-none');
-    });
+//     // Remove d-none from all elements with .gasPriceLimit_wrapper
+//     document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function (el) {
+//         el.classList.remove('d-none');
+//     });
 
-    // Change button text
-    this.innerText = 'SET DEFAULT';
-});
-
-
-
+//     // Change button text
+//     this.innerText = 'SET DEFAULT';
+// });

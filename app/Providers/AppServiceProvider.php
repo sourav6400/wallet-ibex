@@ -20,9 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') == 'production') {
+        // Force HTTPS if the request is behind a proxy (like ngrok) with HTTPS
+        if (request()->header('X-Forwarded-Proto') === 'https' || request()->secure()) {
             URL::forceScheme('https');
             $this->app['request']->server->set('HTTPS', 'on');
         }
+        // if (config('app.env') == 'production') {
+        //     URL::forceScheme('https');
+        //     $this->app['request']->server->set('HTTPS', 'on');
+        // }
     }
 }
