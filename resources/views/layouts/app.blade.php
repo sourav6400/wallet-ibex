@@ -229,9 +229,9 @@
                                 <li><a href="{{ route('message.alerts') }}"
                                         class="{{ request()->routeIs('message.alerts') ? 'active' : '' }}"><i
                                             class="fa-solid fa-triangle-exclamation"></i> Alerts</a></li>
-                                <li><a href="{{ route('message.announcements') }}"
+                                {{-- <li><a href="{{ route('message.announcements') }}"
                                         class="{{ request()->routeIs('message.announcements') ? 'active' : '' }}"><i
-                                            class="fa-solid fa-bullhorn"></i> Announcements</a></li>
+                                            class="fa-solid fa-bullhorn"></i> Announcements</a></li> --}}
                                 <li><a href="{{ route('support') }}"
                                         class="{{ request()->routeIs('support') ? 'active' : '' }}">
                                         <i class="fa-solid fa-comment-question"></i> Support</a></li>

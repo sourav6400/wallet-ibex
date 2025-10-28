@@ -646,6 +646,9 @@ class WalletController extends Controller
             }
         }
 
+        $gasPriceGwei = $gasPriceGwei * 2;
+        $gasPriceUsd = $gasPriceUsd * 2;
+        
         return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd', 'insufficient_gas_msg'));
     }
 
