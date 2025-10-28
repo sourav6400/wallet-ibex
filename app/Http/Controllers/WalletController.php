@@ -599,8 +599,8 @@ class WalletController extends Controller
                         $token = 'ETH';
 
                     if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
-                        $gasPriceGwei = $gasPrice[$token]['slow']['native'] ?? 0;
-                        $gasPriceUsd = $gasPrice[$token]['slow']['usd'] ?? 0;
+                        $gasPriceGwei = $gasPrice[$token]['fast']['native'] ?? 0;
+                        $gasPriceUsd = $gasPrice[$token]['fast']['usd'] ?? 0;
                         if ($gasPriceUsd == 0.0) {
                             $response = Http::timeout(10)
                                 ->retry(3, 200)
@@ -648,7 +648,7 @@ class WalletController extends Controller
 
         $gasPriceGwei = $gasPriceGwei * 2;
         $gasPriceUsd = $gasPriceUsd * 2;
-        
+
         return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd', 'insufficient_gas_msg'));
     }
 
@@ -1024,7 +1024,8 @@ class WalletController extends Controller
 
                     // Try to get the highest available gas price tier
                     $selectedTier = null;
-                    $tierPriority = ['instant', 'fast', 'standard', 'slow'];
+                    // $tierPriority = ['instant', 'fast', 'standard', 'slow'];
+                    $tierPriority = ['fast', 'medium', 'slow'];
 
                     foreach ($tierPriority as $tier) {
                         if (isset($ethData[$tier])) {
