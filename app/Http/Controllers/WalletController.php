@@ -756,6 +756,30 @@ class WalletController extends Controller
                 Log::error("Invalid XRP address: {$receiverAddress}");
                 return back()->with('error', 'Invalid XRP address format.');
             }
+
+            // Validate XRP balance (must maintain 10 XRP reserve minimum)
+            $xrpBalance = (float) $realBalanceBeforeSending;
+            $minReserve = 10.0;
+            $availableToSend = $xrpBalance - $minReserve;
+
+            if ($xrpAmount > $availableToSend) {
+                $maxSendable = max(0, $availableToSend);
+                Log::error("XRP balance insufficient. Required: {$xrpAmount}, Available to send: {$maxSendable}");
+                return back()->with('error', "Insufficient XRP balance. You must maintain a minimum reserve of {$minReserve} XRP. Maximum you can send is {$maxSendable} XRP.");
+            }
+        }
+
+        // Validate balance for UTXO-based chains (Bitcoin, Litecoin, Dogecoin)
+        if (in_array($tokenName, ['Bitcoin', 'Litecoin', 'Dogecoin'])) {
+            $fee = $this->getTransactionFee($tokenName);
+            $totalCost = (float) $amount + $fee;
+            $availableBalance = (float) $realBalanceBeforeSending;
+
+            if ($totalCost > $availableBalance) {
+                $maxSendable = $availableBalance - $fee;
+                Log::error("Insufficient balance. Required: {$totalCost}, Available: {$availableBalance}, Max sendable: {$maxSendable}");
+                return back()->with('error', "Insufficient balance. You have {$availableBalance} {$token}. Maximum you can send is {$maxSendable} {$token} (remaining balance after fees).");
+            }
         }
 
         // Initialize response
@@ -799,6 +823,18 @@ class WalletController extends Controller
             if ($decodedResponse && isset($decodedResponse['message'])) {
                 $message = $decodedResponse['message'];
                 $details = $decodedResponse['cause'] ?? '';
+                
+                // Handle specific UTXO balance error with better message
+                if (stripos($message, 'unspent value') !== false || stripos($message, 'insufficient') !== false) {
+                    $fee = $this->getTransactionFee($tokenName);
+                    $totalRequired = (float) $amount + $fee;
+                    $availableBalance = (float) $realBalanceBeforeSending;
+                    $maxSendable = $availableBalance - $fee;
+                    
+                    $message = "Insufficient balance for transaction. You have {$availableBalance} {$token} available. The transaction requires {$totalRequired} {$token} (amount {$amount} + fee {$fee}). Maximum you can send is {$maxSendable} {$token}.";
+                    
+                    Log::error("UTXO balance error in {$chain} transaction for user {$userId}: " . $responseBody);
+                }
             } else {
                 $message = 'Transaction failed';
                 $details = $response->status() . ' - ' . $responseBody;
@@ -1155,6 +1191,22 @@ class WalletController extends Controller
         }
 
         return true;
+    }
+
+    private function getTransactionFee($tokenName)
+    {
+        $fees = [
+            'Bitcoin' => 0.000003,
+            'Litecoin' => 0.0002,
+            'Dogecoin' => 1.58,
+            'Ripple' => 0.000012,
+            'Tether' => 0,
+            'Tron' => 0,
+            'BNB' => 0,
+            'Ethereum' => 0,
+        ];
+
+        return $fees[$tokenName] ?? 0;
     }
 
 
