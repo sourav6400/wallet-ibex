@@ -571,13 +571,18 @@ class WalletController extends Controller
             elseif ($symbol == 'doge')
                 $gasPriceGwei = 1.58;
 
+            // $response = Http::timeout(10)
+            //     ->retry(3, 200)
+            //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
+
             $response = Http::timeout(10)
                 ->retry(3, 200)
-                ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
+                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
 
             if ($response->successful()) {
                 $data = $response->json();
-                $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                // $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                $usdUnitPrice = $data['value'] ?? 0;
                 $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
                 $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
             }
@@ -602,13 +607,18 @@ class WalletController extends Controller
                         $gasPriceGwei = $gasPrice[$token]['fast']['native'] ?? 0;
                         $gasPriceUsd = $gasPrice[$token]['fast']['usd'] ?? 0;
                         if ($gasPriceUsd == 0.0) {
+                            // $response = Http::timeout(10)
+                            //     ->retry(3, 200)
+                            //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
+
                             $response = Http::timeout(10)
                                 ->retry(3, 200)
-                                ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
+                                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . strtoupper($token) . '&basePair=USD');
 
                             if ($response->successful()) {
                                 $data = $response->json();
-                                $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                                // $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
+                                $usdUnitPrice = $data['value'] ?? 0;
                                 $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
                                 $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
                             }
@@ -823,16 +833,16 @@ class WalletController extends Controller
             if ($decodedResponse && isset($decodedResponse['message'])) {
                 $message = $decodedResponse['message'];
                 $details = $decodedResponse['cause'] ?? '';
-                
+
                 // Handle specific UTXO balance error with better message
                 if (stripos($message, 'unspent value') !== false || stripos($message, 'insufficient') !== false) {
                     $fee = $this->getTransactionFee($tokenName);
                     $totalRequired = (float) $amount + $fee;
                     $availableBalance = (float) $realBalanceBeforeSending;
                     $maxSendable = $availableBalance - $fee;
-                    
+
                     $message = "Insufficient balance for transaction. You have {$availableBalance} {$token} available. The transaction requires {$totalRequired} {$token} (amount {$amount} + fee {$fee}). Maximum you can send is {$maxSendable} {$token}.";
-                    
+
                     Log::error("UTXO balance error in {$chain} transaction for user {$userId}: " . $responseBody);
                 }
             } else {

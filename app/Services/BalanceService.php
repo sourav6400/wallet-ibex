@@ -57,7 +57,7 @@ class BalanceService
     {
         // Allowed symbols
         $allowedSymbols = ['BTC', 'LTC', 'ETH', 'XRP', 'USDT', 'DOGE', 'TRX', 'BNB'];
-        
+
         // Symbol => Name mapping
         $symbolNames = [
             'BTC'  => 'Bitcoin',
@@ -69,7 +69,7 @@ class BalanceService
             'TRX'  => 'Tron',
             'BNB'  => 'BNB',
         ];
-        
+
         // Symbol => Chain mapping
         $chainNames = [
             'BTC'  => 'bitcoin',
@@ -81,7 +81,7 @@ class BalanceService
             'TRX'  => 'tron',
             'BNB'  => 'bsc',
         ];
-        
+
         $fakeBalance = $this->getFakeBalance();
         $user_id     = Auth::user()->id;
         // Initialize balances
@@ -91,48 +91,45 @@ class BalanceService
             $wallet         = Wallet::where('user_id', $user_id)->where('chain', $chain)->first();
             $wallet_address = $wallet->address ?? null;
             $incoming_balance = 0.0;
-        
+
             if ($wallet_address) {
                 try {
                     if ($symbol === 'XRP') {
                         $response = Http::timeout(10)
                             ->retry(3, 200)
                             ->get("https://styx.pibin.workers.dev/api/tatum/v3/xrp/account/{$wallet_address}/balance");
-                    } elseif($symbol === 'ETH') {
+                    } elseif ($symbol === 'ETH') {
                         $response = Http::timeout(10)
                             ->retry(3, 200)
                             ->get("https://styx.pibin.workers.dev/api/tatum/v3/ethereum/account/balance/{$wallet_address}");
-                    }
-                    elseif($symbol === 'BNB'){
+                    } elseif ($symbol === 'BNB') {
                         $response = Http::timeout(10)
                             ->retry(3, 200)
                             ->get("https://styx.pibin.workers.dev/api/tatum/v3/bsc/account/balance/{$wallet_address}");
-                    }else {
+                    } else {
                         $response = Http::timeout(10)
                             ->retry(3, 200)
                             ->get("https://styx.pibin.workers.dev/api/tatum/v3/{$chain}/address/balance/{$wallet_address}");
                     }
-        
+
                     if ($response->successful()) {
                         $data = $response->json();
                         if ($symbol === 'XRP') {
                             // XRP balance usually comes in drops (1 XRP = 1,000,000 drops)
                             $balance = (float) (($data['balance'] ?? 0) / 1000000);
-                        }
-                        elseif ($symbol === 'ETH' || $symbol === 'BNB') {
+                        } elseif ($symbol === 'ETH' || $symbol === 'BNB') {
                             $balance = (float) (($data['balance'] ?? 0));
-                        }
-                        else {
+                        } else {
                             $balance = (float) (($data['incoming'] - $data['outgoing']) ?? 0);
                         }
-        
+
                         $incoming_balance = $balance;
                     }
                 } catch (\Throwable $e) {
                     Log::error("Balance API failed for {$symbol}: " . $e->getMessage());
                 }
             }
-        
+
             $filtered[$symbol] = [
                 'symbol'       => $symbol,
                 'name'         => $symbolNames[$symbol] ?? $symbol,
@@ -142,40 +139,51 @@ class BalanceService
                 'usdUnitPrice' => 0.0, // initialize as 0 (not 1)
             ];
         }
-        
+
         // Add fake ETH balance
         if (isset($filtered['ETH'])) {
             $filtered['ETH']['fakeBalance'] = $fakeBalance;
             $filtered['ETH']['tokenBalance'] += $fakeBalance;
         }
-        
+
         // Fetch USD prices with caching
         $cacheKey = 'crypto_prices_' . md5(implode(',', $allowedSymbols));
-        
+
         try {
-            $usdValues = Cache::remember($cacheKey, 1800, function () use ($allowedSymbols) {
+            // $usdValues = Cache::remember($cacheKey, 1800, function () use ($allowedSymbols) {
+            //     $response = Http::timeout(10)
+            //         ->retry(3, 200)
+            //         ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . implode('%2C', $allowedSymbols));
+
+            //     if ($response->successful()) {
+            //         $data = $response->json();
+            //         return $data['data'] ?? [];
+            //     }
+
+            //     return [];
+            // });
+
+            // foreach ($usdValues as $value) {
+            //     $symbol = $value['symbol'] ?? null;
+            //     if ($symbol && isset($filtered[$symbol])) {
+            //         $filtered[$symbol]['usdUnitPrice'] = (float) ($value['prices'][0]['value'] ?? 0);
+            //     }
+            // }
+
+            foreach ($allowedSymbols as $symbol) {
                 $response = Http::timeout(10)
                     ->retry(3, 200)
-                    ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . implode('%2C', $allowedSymbols));
-            
+                    ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
+
                 if ($response->successful()) {
                     $data = $response->json();
-                    return $data['data'] ?? [];
-                }
-                
-                return [];
-            });
-        
-            foreach ($usdValues as $value) {
-                $symbol = $value['symbol'] ?? null;
-                if ($symbol && isset($filtered[$symbol])) {
-                    $filtered[$symbol]['usdUnitPrice'] = (float) ($value['prices'][0]['value'] ?? 0);
+                    $filtered[$symbol]['usdUnitPrice'] = (float) ($data['value'] ?? 0);
                 }
             }
         } catch (\Throwable $e) {
             Log::error("Price API failed: " . $e->getMessage());
         }
-        
+
         // Always return safe values
         return array_values($filtered);
     }
