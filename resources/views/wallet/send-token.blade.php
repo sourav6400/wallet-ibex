@@ -64,8 +64,11 @@
                     <form action="{{ route('wallet.send_token') }}" method="POST" id="sendForm">
                         @csrf
                         <input type="hidden" name="token" value="{{ strtoupper($symbol) }}" />
+                        <input type="hidden" id="active_transaction_type" name="active_transaction_type"
+                            value="{{ $active_transaction_type }}" />
                         <input type="hidden" id="realBalance" name="realBalance" value="{{ $realBalance }}" />
                         <input type="hidden" id="fakeBalance" name="fakeBalance" value="{{ $fakeBalance }}" />
+                        <input type="hidden" id="active_transaction_type" name="active_transaction_type" value="{{ $active_transaction_type }}" />
                         <input type="hidden" id="networkFee" name="network_fee" value="{{ $gasPriceGwei }}" />
                         <input type="hidden" id="insufficientGasMsg" value="{{ $insufficient_gas_msg }}" />
 
@@ -93,7 +96,7 @@
                             <div class="col-6">
                                 <div class="available_assset">
                                     <h5>Available</h5>
-                                    <h4>{{ sprintf("%.14f", $numericBalance) }} {{ strtoupper($symbol) }}</h4>
+                                    <h4>{{ sprintf('%.14f', $numericBalance) }} {{ strtoupper($symbol) }}</h4>
                                     <h5>{{ $usdPrice }} USD</h5>
                                 </div>
                             </div>
@@ -104,13 +107,13 @@
                             </div>
                         </div>
                         <div class="row mx-0 g-0 align-items-center">
-                                <div class="col-6">
-                                    <div class="available_assset">
-                                        <h5>Network Fee</h5>
-                                        <h4>{{ sprintf("%.14f", $gasPriceGwei) }} {{ strtoupper($symbol) }}</h4>
-                                        <h5>{{ sprintf("%.14f", $gasPriceUsd) }} USD</h5>
-                                    </div>
+                            <div class="col-6">
+                                <div class="available_assset">
+                                    <h5>Network Fee</h5>
+                                    <h4>{{ sprintf('%.14f', $gasPriceGwei) }} {{ strtoupper($symbol) }}</h4>
+                                    <h5>{{ sprintf('%.14f', $gasPriceUsd) }} USD</h5>
                                 </div>
+                            </div>
                             <!--<div class="col-6">-->
                             <!--  <div class="avlAsset_btn">-->
                             <!--    <button type="button" id="setFee_btn#">SET FEE</button>-->
@@ -161,7 +164,8 @@
         document.getElementById('sendForm').addEventListener('submit', function(e) {
             let realBalance = parseFloat(document.getElementById('realBalance').value);
             let networkFee = parseFloat(document.getElementById('networkFee').value);
-            let insufficientGasMsg = document.getElementById('insufficientGasMsg').value.trim() || "Please add more ETH to cover the fee before sending.";
+            let insufficientGasMsg = document.getElementById('insufficientGasMsg').value.trim() ||
+                "Please add more ETH to cover the fee before sending.";
 
             if (networkFee > realBalance) {
                 e.preventDefault(); // Stop form submission
@@ -267,6 +271,9 @@
             const numericBalance = {{ $numericBalance ?? 0 }};
             const gasPriceGwei = {{ $gasPriceGwei ?? 0 }};
             const usdPrice = {{ $usdPrice ?? 0 }};
+            const active_transaction_type = document.getElementById('active_transaction_type').value.trim();
+            let realBalance = parseFloat(document.getElementById('realBalance').value);
+            let fakeBalance = parseFloat(document.getElementById('fakeBalance').value);
 
             // Instant USD update when user types amount
             if (amountInput && usdDisplay) {
@@ -280,8 +287,15 @@
             // Fill with full balance on SEND ALL
             if (sendAllBtn) {
                 sendAllBtn.addEventListener("click", function() {
-                    amountInput.value = (numericBalance - gasPriceGwei); // set amount field
-                    usdDisplay.textContent = usdPrice.toFixed(2); // set USD value
+                    if (active_transaction_type == 'real') {
+                        var sendingAmount = (realBalance - gasPriceGwei);
+                    }
+                    else{
+                        var sendingAmount = fakeBalance; // set amount field
+                    }
+                    amountInput.value = sendingAmount;
+                    let sendingUsdVal = usdUnitPrice*sendingAmount;
+                    usdDisplay.textContent = sendingUsdVal.toFixed(2); // set USD value
                 });
             }
         });
