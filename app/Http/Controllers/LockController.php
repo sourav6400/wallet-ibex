@@ -12,9 +12,7 @@ class LockController extends Controller
     public function show()
     {
         abort_unless(Auth::check(), 403);
-        $user = Auth::user();
-        // dd($user);
-        return view('lock'); // Blade file
+        return view('lock');
     }
 
     public function lock(Request $request)

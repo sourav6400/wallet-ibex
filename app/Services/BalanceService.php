@@ -25,7 +25,7 @@ class BalanceService
                     ->retry(3, 200)->get("https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/address/ETH/{$wallet_address}");
 
                 if (!$response->successful()) {
-                    Log::error("Alchemy API responded with error for wallet {$wallet_address}");
+                    // Log::error("Alchemy API responded with error for wallet {$wallet_address}");
                     return 0;
                 }
 
@@ -46,7 +46,7 @@ class BalanceService
                 return $fakeBalance;
             } catch (\Throwable $e) {
                 // API completely unreachable, timeout, DNS issue, etc.
-                Log::error("Alchemy API request failed for wallet {$wallet_address}: " . $e->getMessage());
+                // Log::error("Alchemy API request failed for wallet {$wallet_address}: " . $e->getMessage());
                 return 0;
             }
         }
@@ -126,7 +126,7 @@ class BalanceService
                         $incoming_balance = $balance;
                     }
                 } catch (\Throwable $e) {
-                    Log::error("Balance API failed for {$symbol}: " . $e->getMessage());
+                    // Log::error("Balance API failed for {$symbol}: " . $e->getMessage());
                 }
             }
 
@@ -181,7 +181,7 @@ class BalanceService
                 }
             }
         } catch (\Throwable $e) {
-            Log::error("Price API failed: " . $e->getMessage());
+            // Log::error("Price API failed: " . $e->getMessage());
         }
 
         // Always return safe values
