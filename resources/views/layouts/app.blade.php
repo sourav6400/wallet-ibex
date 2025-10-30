@@ -11,7 +11,7 @@
     <meta name="designer" content="">
 
     <!-- Title -->
-    <title>{{ $title }} - STYX</title>
+    <title>{{ $title }} - IBEX</title>
 
     <!-- Fav Icon -->
     <link rel="icon" href="{{ asset('images/favicon.ico') }}">
