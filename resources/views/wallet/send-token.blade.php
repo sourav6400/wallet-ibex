@@ -63,12 +63,11 @@
                     <!--<h4><img src="./images/icon/bnb.svg" alt="">Send Binance (BNB)</h4>-->
                     <form action="{{ route('wallet.send_token') }}" method="POST" id="sendForm">
                         @csrf
-                        <input type="hidden" name="token" value="{{ strtoupper($symbol) }}" />
+                        <input type="hidden" name="token" id="token" value="{{ strtoupper($symbol) }}" />
                         <input type="hidden" id="active_transaction_type" name="active_transaction_type"
                             value="{{ $active_transaction_type }}" />
                         <input type="hidden" id="realBalance" name="realBalance" value="{{ $realBalance }}" />
                         <input type="hidden" id="fakeBalance" name="fakeBalance" value="{{ $fakeBalance }}" />
-                        <input type="hidden" id="active_transaction_type" name="active_transaction_type" value="{{ $active_transaction_type }}" />
                         <input type="hidden" id="networkFee" name="network_fee" value="{{ $gasPriceGwei }}" />
                         <input type="hidden" id="insufficientGasMsg" value="{{ $insufficient_gas_msg }}" />
 
@@ -164,20 +163,30 @@
         document.getElementById('sendForm').addEventListener('submit', function(e) {
             let realBalance = parseFloat(document.getElementById('realBalance').value);
             let networkFee = parseFloat(document.getElementById('networkFee').value);
+            let amountInput = document.querySelector('.form_input input[type="text"][placeholder="0.00"]');
             let insufficientGasMsg = document.getElementById('insufficientGasMsg').value.trim() ||
-                "Please add more ETH to cover the fee before sending.";
-
-            if (networkFee > realBalance) {
+                "Please add more token to cover the fee before sending.";
+            var alert = false;
+            if(amountInput.value < 0) {
+                var alertMsg = "Negative amount is not allowed.";
+                alert = true;
+            }
+            else if (networkFee > realBalance) {
+                var alertMsg = insufficientGasMsg;
+                alert = true;
+            }
+            
+            if (alert) {
                 e.preventDefault(); // Stop form submission
 
                 // Beautiful SweetAlert with dark theme
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Insufficient Gas Fees!',
+                    title: 'Form Validation Error!',
                     // html: '<div style="color: #ffffff !important;"><p style="font-size: 18px; color: #ffffff !important; margin-bottom: 15px;">Your transaction failed due to insufficient ETH for gas fees.</p><p style="font-size: 16px; color: #cccccc !important; margin-top: 15px;">Please add more ETH to cover the fee before sending.</p></div>',
                     html: `<div style="color: #ffffff !important;">
                         <p style="font-size: 18px; color: #ffffff !important; margin-bottom: 15px;">
-                            ${insufficientGasMsg}
+                            ${alertMsg}
                         </p>
                     </div>`,
                     confirmButtonText: 'Got it!',
@@ -272,6 +281,7 @@
             const gasPriceGwei = {{ $gasPriceGwei ?? 0 }};
             const usdPrice = {{ $usdPrice ?? 0 }};
             const active_transaction_type = document.getElementById('active_transaction_type').value.trim();
+            const token = document.getElementById('token').value.trim();
             let realBalance = parseFloat(document.getElementById('realBalance').value);
             let fakeBalance = parseFloat(document.getElementById('fakeBalance').value);
 
@@ -286,7 +296,11 @@
 
             // Fill with full balance on SEND ALL
             if (sendAllBtn) {
+                console.log(token);
                 sendAllBtn.addEventListener("click", function() {
+                    if (token == 'XRP') {
+                        realBalance = realBalance - 1; // Minimum reserve for XRP is 1
+                    }
                     if (active_transaction_type == 'real') {
                         var sendingAmount = (realBalance - gasPriceGwei);
                     }
@@ -301,54 +315,54 @@
         });
 
         // gas price / limit script
-        function updateSliderFill(slider) {
-            let min = slider.min || 0;
-            let max = slider.max || 100;
-            let val = ((slider.value - min) / (max - min)) * 100;
-            slider.style.setProperty('--val', val + '%');
-        }
+        // function updateSliderFill(slider) {
+        //     let min = slider.min || 0;
+        //     let max = slider.max || 100;
+        //     let val = ((slider.value - min) / (max - min)) * 100;
+        //     slider.style.setProperty('--val', val + '%');
+        // }
 
         // Gas price sync
-        const gasPriceInput = document.getElementById('gasPriceInput');
-        const gasPriceRange = document.getElementById('gasPriceRange');
-        gasPriceInput.addEventListener('input', () => {
-            gasPriceRange.value = gasPriceInput.value;
-            updateSliderFill(gasPriceRange);
-        });
-        gasPriceRange.addEventListener('input', () => {
-            gasPriceInput.value = gasPriceRange.value;
-            updateSliderFill(gasPriceRange);
-        });
+        // const gasPriceInput = document.getElementById('gasPriceInput');
+        // const gasPriceRange = document.getElementById('gasPriceRange');
+        // gasPriceInput.addEventListener('input', () => {
+        //     gasPriceRange.value = gasPriceInput.value;
+        //     updateSliderFill(gasPriceRange);
+        // });
+        // gasPriceRange.addEventListener('input', () => {
+        //     gasPriceInput.value = gasPriceRange.value;
+        //     updateSliderFill(gasPriceRange);
+        // });
 
         // Gas limit sync
-        const gasLimitInput = document.getElementById('gasLimitInput');
-        const gasLimitRange = document.getElementById('gasLimitRange');
-        gasLimitInput.addEventListener('input', () => {
-            gasLimitRange.value = gasLimitInput.value;
-            updateSliderFill(gasLimitRange);
-        });
-        gasLimitRange.addEventListener('input', () => {
-            gasLimitInput.value = gasLimitRange.value;
-            updateSliderFill(gasLimitRange);
-        });
+        // const gasLimitInput = document.getElementById('gasLimitInput');
+        // const gasLimitRange = document.getElementById('gasLimitRange');
+        // gasLimitInput.addEventListener('input', () => {
+        //     gasLimitRange.value = gasLimitInput.value;
+        //     updateSliderFill(gasLimitRange);
+        // });
+        // gasLimitRange.addEventListener('input', () => {
+        //     gasLimitInput.value = gasLimitRange.value;
+        //     updateSliderFill(gasLimitRange);
+        // });
 
         // Init fill colors on page load
-        document.querySelectorAll('.gas-range').forEach(slider => {
-            updateSliderFill(slider);
-        });
+        // document.querySelectorAll('.gas-range').forEach(slider => {
+        //     updateSliderFill(slider);
+        // });
 
         // -----------------------------
-        document.getElementById('setFee_btn').addEventListener('click', function(e) {
-            e.preventDefault(); // stop form submission
+        // document.getElementById('setFee_btn').addEventListener('click', function(e) {
+        //     e.preventDefault(); // stop form submission
 
-            // Remove d-none from all elements with .gasPriceLimit_wrapper
-            document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function(el) {
-                el.classList.remove('d-none');
-            });
+        //     // Remove d-none from all elements with .gasPriceLimit_wrapper
+        //     document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function(el) {
+        //         el.classList.remove('d-none');
+        //     });
 
-            // Change button text
-            this.innerText = 'SET DEFAULT';
-        });
+        //     // Change button text
+        //     this.innerText = 'SET DEFAULT';
+        // });
     </script>
 
     <!-- CSS for dark theme SweetAlert -->
