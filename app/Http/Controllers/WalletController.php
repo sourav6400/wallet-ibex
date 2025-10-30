@@ -469,7 +469,7 @@ class WalletController extends Controller
 
                             $response = Http::timeout(10)
                                 ->retry(3, 200)
-                                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . strtoupper($token) . '&basePair=USD');
+                                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . $token . '&basePair=USD');
 
                             if ($response->successful()) {
                                 $data = $response->json();
@@ -636,7 +636,7 @@ class WalletController extends Controller
 
             // Validate XRP balance (must maintain 10 XRP reserve minimum)
             $xrpBalance = (float) $realBalanceBeforeSending;
-            $minReserve = 0.000015;
+            $minReserve = 1;
             $availableToSend = $xrpBalance - $minReserve;
 
             if ($xrpAmount > $availableToSend) {
@@ -677,7 +677,8 @@ class WalletController extends Controller
             'receiverAddress' => $receiverAddress,
             'active_transaction_type' => $active_transaction_type,
             'contractAddress' => $contractAddress,
-            'amount' => sprintf("%.10f", $amount),
+            // 'amount' => sprintf("%.10f", $amount),
+            'amount' => $tokenName == 'Ripple' ? (float) $amount : rtrim(sprintf("%.8f", $amount), '0'),
             'destinationTag' => $destinationTag
         ]);
 
@@ -814,13 +815,11 @@ class WalletController extends Controller
             },
 
             'Ripple' => function () use ($http, $params) {
-                // Convert XRP amount to drops (1 XRP = 1,000,000 drops)
-                // $amountInDrops = (float) $params['amount'] * 1000000;
+                $amountInXRP = number_format((float) $params['amount'], 6, '.', '');
                 $requestData = [
                     "fromAccount" => $params['senderAddress'],
                     "to" => $params['receiverAddress'],
-                    // "amount" => (string) $amountInDrops,
-                    "amount" => $params['amount'],
+                    "amount" => $amountInXRP,
                     "fromSecret" => $params['privateKey'],
                 ];
 
