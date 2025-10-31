@@ -18,7 +18,7 @@ class NeverLogout
     {
         if (Auth::check()) {
             // Refresh session or any logic
-            session()->put('last_active', now());
+            session()->put('last_active_at', now()->timestamp);
         }
         return $next($request);
     }

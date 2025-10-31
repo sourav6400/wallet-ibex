@@ -45,7 +45,7 @@
                     @csrf
                     <div class="form_input position-relative pt-4 mb-5">
                         <input name="pin" maxlength="6" pattern="\d{6}" class="mb-0" type="password"
-                            id="password" value="" placeholder="PIN" onkeyup="isGood(this.value)" required>
+                            id="password" value="" placeholder="PIN" required>
                         <i class="toggle-password fa fa-fw fa-eye-slash"></i>
                     </div>
                     @error('pin')
@@ -87,8 +87,8 @@
                 </p>
 
                 <div class="d-flex justify-content-center gap-3 mt-3">
-                    <button type="button" class="btn-continue" onclick="location.href='{{ route('wallet.forward_to_restore_wallet') }}'">CONTINUE</button>
-                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">CANCEL</button>
+                    <a class="btn-continue" href="{{ route('wallet.forward_to_restore_wallet') }}">CONTINUE</a>
+                    <a class="btn-cancel" href="#" data-bs-dismiss="modal">CANCEL</a>
                 </div>
 
             </div>
@@ -107,7 +107,7 @@
                 </p>
 
                 <div class="d-flex justify-content-center gap-3 mt-3">
-                    <button type="button" class="btn-continue" onclick="location.href='{{ route('wallet.forward_to_create_wallet') }}'">CONTINUE</button>
+                    <a class="btn-continue" href="{{ route('wallet.forward_to_create_wallet') }}">CONTINUE</a>
                     <button type="button" class="btn-cancel" data-bs-dismiss="modal">CANCEL</button>
                 </div>
 

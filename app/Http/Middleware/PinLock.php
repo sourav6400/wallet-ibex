@@ -20,19 +20,25 @@ class PinLock
             return $next($request);
         }
 
+        // Allow access to lock/unlock routes and forward routes
+        if ($request->routeIs('lock.show') || 
+            $request->routeIs('lock.unlock') || 
+            $request->routeIs('lock.store') ||
+            $request->routeIs('wallet.forward_to_restore_wallet') ||
+            $request->routeIs('wallet.forward_to_create_wallet')) {
+            return $next($request);
+        }
+
         // $timeout = 300; // seconds, or higher for production
-        $timeout = 525600;
+        $timeout = 300;
         $lastActive = session('last_active_at', now()->timestamp);
         $now = now()->timestamp;
 
         // If session is locked or last activity exceeded timeout
         if (($now - $lastActive) > $timeout || session('locked', false) === true) {
-            // session(['locked' => true]);
-            // return redirect()->route('lock.show');
-
             session([
                 'locked' => true,
-                'url.intended' => $request->fullUrl(), // <-- store last visited page
+                'url.intended' => $request->fullUrl(),
             ]);
             return redirect()->route('lock.show');
         }

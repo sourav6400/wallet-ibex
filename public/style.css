@@ -1323,7 +1323,7 @@ aside .sideLogo a img {
     align-items: center;
     justify-content: flex-end;
     padding-right: 50px;
-    gap: 60px;
+    gap: 15px;
     height: 100%;
 }
 
@@ -1399,6 +1399,7 @@ aside .sideLogo a img {
     justify-content: center;
     cursor: pointer;
     transition: 0.2s;
+    margin-left: 30px;
 }
 
 .logout-btn-header:hover {
@@ -6098,4 +6099,4 @@ input[type=number] {
 
 .dropdown-footer:hover {
     background: #20263d;
-} 
+}
