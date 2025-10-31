@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => env('SESSION_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,8 +32,8 @@ return [
     |
     */
 
-    'lifetime' => (int) env('SESSION_LIFETIME', 525600), // 1 year in minutes
-    'cookie_lifetime' => 525600, // Optional, Laravel doesn't use this directly
+    'lifetime' => (int) env('SESSION_LIFETIME', 43200), // 1 year in minutes
+    'cookie_lifetime' => 43200, // Optional, Laravel doesn't use this directly
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
     /*
