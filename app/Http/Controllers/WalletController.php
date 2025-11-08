@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Cache;
 
 class WalletController extends Controller
 {
+    private const TATUM_HEADERS = [
+        'accept' => 'application/json',
+        'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
+    ];
     public function create_wallet_env()
     {
         $chainNames = [
@@ -35,8 +39,9 @@ class WalletController extends Controller
             if (!$env) {
                 try {
                     $response = Http::timeout(10) // max 10s wait
+                        ->withHeaders(self::TATUM_HEADERS)
                         ->retry(3, 200)           // retry 3 times with 200ms gap
-                        ->get("https://styx.pibin.workers.dev/api/tatum/v3/{$chain}/wallet");
+                        ->get("https://api.tatum.io/v3/{$chain}/wallet");
 
                     if ($response->successful()) {
                         $data = $response->json();
@@ -327,8 +332,10 @@ class WalletController extends Controller
         if ($wallet === null) {
             try {
                 if ($chain === 'xrp') {
-                    $response = Http::timeout(10)->retry(3, 200)
-                        ->get("https://styx.pibin.workers.dev/api/tatum/v3/xrp/account");
+                    $response = Http::timeout(10)
+                        ->withHeaders(self::TATUM_HEADERS)
+                        ->retry(3, 200)
+                        ->get("https://api.tatum.io/v3/xrp/account");
 
                     if ($response->successful()) {
                         $data = $response->json();
@@ -347,8 +354,10 @@ class WalletController extends Controller
                     }
 
                     $xpub = $env->xpub;
-                    $response = Http::timeout(10)->retry(3, 200)
-                        ->get("https://styx.pibin.workers.dev/api/tatum/v3/{$chain}/address/{$xpub}/{$user_id}");
+                    $response = Http::timeout(10)
+                        ->withHeaders(self::TATUM_HEADERS)
+                        ->retry(3, 200)
+                        ->get("https://api.tatum.io/v3/{$chain}/address/{$xpub}/{$user_id}");
 
                     if ($response->successful()) {
                         $data = $response->json();
@@ -359,9 +368,11 @@ class WalletController extends Controller
                     }
 
                     $mnemonic = $env->mnemonic;
-                    $response = Http::timeout(10)->retry(3, 200)
+                    $response = Http::timeout(10)
+                        ->withHeaders(self::TATUM_HEADERS)
+                        ->retry(3, 200)
                         ->withHeaders(['Content-Type' => 'application/json'])
-                        ->post("https://styx.pibin.workers.dev/api/tatum/v3/{$chain}/wallet/priv", [
+                        ->post("https://api.tatum.io/v3/{$chain}/wallet/priv", [
                             "index" => $user_id,
                             "mnemonic" => $mnemonic
                         ]);
@@ -433,8 +444,9 @@ class WalletController extends Controller
             //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
 
             $response = Http::timeout(10)
+                ->withHeaders(self::TATUM_HEADERS)
                 ->retry(3, 200)
-                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
+                ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -468,8 +480,9 @@ class WalletController extends Controller
                             //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
 
                             $response = Http::timeout(10)
+                                ->withHeaders(self::TATUM_HEADERS)
                                 ->retry(3, 200)
-                                ->get('https://styx.pibin.workers.dev/api/tatum/v4/data/rate/symbol?symbol=' . $token . '&basePair=USD');
+                                ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . $token . '&basePair=USD');
 
                             if ($response->successful()) {
                                 $data = $response->json();
@@ -665,10 +678,11 @@ class WalletController extends Controller
         $details = '';
 
         // Create HTTP client
-        $http = Http::timeout(10)->withHeaders([
-            'accept' => 'application/json',
-            'content-type' => 'application/json',
-        ]);
+        $http = Http::timeout(10)
+            ->withHeaders(self::TATUM_HEADERS)
+            ->withHeaders([
+                'content-type' => 'application/json',
+            ]);
 
         // Make transaction request
         $response = $this->makeTransactionRequest($http, $tokenName, [
@@ -763,7 +777,7 @@ class WalletController extends Controller
     {
         $endpoints = [
             'Bitcoin' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction", [
+                return $http->post("https://api.tatum.io/v3/bitcoin/transaction", [
                     "fromAddress" => [["address" => $params['senderAddress'], "privateKey" => $params['privateKey']]],
                     "to" => [["address" => $params['receiverAddress'], "value" => (float) $params['amount']]],
                     "fee" => "0.000003",
@@ -772,7 +786,7 @@ class WalletController extends Controller
             },
 
             'Litecoin' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction", [
+                return $http->post("https://api.tatum.io/v3/litecoin/transaction", [
                     "fromAddress" => [["address" => $params['senderAddress'], "privateKey" => $params['privateKey']]],
                     "to" => [["address" => $params['receiverAddress'], "value" => (float) $params['amount']]],
                     "fee" => "0.0002",
@@ -781,7 +795,7 @@ class WalletController extends Controller
             },
 
             'Dogecoin' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction", [
+                return $http->post("https://api.tatum.io/v3/dogecoin/transaction", [
                     "fromAddress" => [["address" => $params['senderAddress'], "privateKey" => $params['privateKey']]],
                     "to" => [["address" => $params['receiverAddress'], "value" => (float) $params['amount']]],
                     "fee" => "1.58",
@@ -790,7 +804,7 @@ class WalletController extends Controller
             },
 
             'BNB' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/bsc/transaction", [
+                return $http->post("https://api.tatum.io/v3/bsc/transaction", [
                     "fromPrivateKey" => $params['privateKey'],
                     "to" => $params['receiverAddress'],
                     "amount" => $params['amount'],
@@ -799,7 +813,7 @@ class WalletController extends Controller
             },
 
             'Tether' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/tron/transaction", [
+                return $http->post("https://api.tatum.io/v3/tron/transaction", [
                     "fromPrivateKey" => $params['privateKey'],
                     "to" => $params['receiverAddress'],
                     "amount" => $params['amount'],
@@ -807,7 +821,7 @@ class WalletController extends Controller
             },
 
             'Tron' => function () use ($http, $params) {
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/tron/transaction", [
+                return $http->post("https://api.tatum.io/v3/tron/transaction", [
                     "fromPrivateKey" => $params['privateKey'],
                     "to" => $params['receiverAddress'],
                     "amount" => $params['amount'],
@@ -839,7 +853,7 @@ class WalletController extends Controller
                 //     'request_data' => $requestData
                 // ]);
 
-                return $http->post("https://styx.pibin.workers.dev/api/tatum/v3/xrp/transaction", $requestData);
+                return $http->post("https://api.tatum.io/v3/xrp/transaction", $requestData);
             },
 
             'Ethereum' => function () use ($http, $params) {
@@ -853,7 +867,7 @@ class WalletController extends Controller
                         "fromPrivateKey" => $params['privateKey'],
                         "amount" => $params['amount'],
                     ];
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/ethereum/transaction";
+                    $url = "https://api.tatum.io/v3/ethereum/transaction";
                 } else {
                     $requestData = [
                         "chain" => "ETH",
@@ -863,7 +877,7 @@ class WalletController extends Controller
                         "digits" => 18,
                         "fromPrivateKey" => $params['privateKey'],
                     ];
-                    $url = "https://styx.pibin.workers.dev/api/tatum/v3/blockchain/token/transaction";
+                    $url = "https://api.tatum.io/v3/blockchain/token/transaction";
                 }
 
                 // Add gas parameters if available
@@ -1029,8 +1043,9 @@ class WalletController extends Controller
     {
         try {
             $response = Http::timeout(10)
+                ->withHeaders(self::TATUM_HEADERS)
                 ->retry(3, 200)
-                ->get("https://styx.pibin.workers.dev/api/tatum/v3/ethereum/account/balance/{$address}");
+                ->get("https://api.tatum.io/v3/ethereum/account/balance/{$address}");
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -1151,20 +1166,21 @@ class WalletController extends Controller
                 $chain = $key;
 
             if ($chain == 'bitcoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/bitcoin/transaction/address/" . $address . "?pageSize=5";
+                $url = "https://api.tatum.io/v3/bitcoin/transaction/address/" . $address . "?pageSize=5";
             elseif ($chain == 'ethereum')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
+                $url = "https://api.tatum.io/v4/data/transaction/history?chain=ethereum-mainnet&addresses=" . $address . "&sort=DESC";
             elseif ($chain == 'litecoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
+                $url = "https://api.tatum.io/v3/litecoin/transaction/address/" . $address . "?pageSize=5";
             elseif ($chain == 'xrp')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
+                $url = "https://api.tatum.io/v4/data/transaction/history?chain=xrp-mainnet&addresses=" . $address . "&sort=DESC";
             elseif ($chain == 'dogecoin')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v3/dogecoin/transaction/address/" . $address . "?pageSize=5";
+                $url = "https://api.tatum.io/v3/dogecoin/transaction/address/" . $address . "?pageSize=5";
             elseif ($chain == 'bsc')
-                $url = "https://styx.pibin.workers.dev/api/tatum/v4/data/transaction/history?chain=bsc-mainnet&addresses=" . $address . "&sort=DESC";
+                $url = "https://api.tatum.io/v4/data/transaction/history?chain=bsc-mainnet&addresses=" . $address . "&sort=DESC";
 
             try {
                 $response = Http::timeout(10) // wait max 10 seconds
+                    ->withHeaders(self::TATUM_HEADERS)
                     ->retry(3, 200)           // retry 3 times, wait 200ms between
                     ->get($url);
                 if ($response->successful()) {
