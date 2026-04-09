@@ -28,8 +28,7 @@
                                 @endif
                             </h3>
                             <img class="vector" src="{{ asset('images/vector/vector8.png') }}" alt="">
-                            <span>Sucessfully sent {{ $amount }} {{ $token }}</span>
-                            <span>Transaction ID: {{ $message }}</span>
+                            <span>{{ $message }}</span>
                         </div>
                     </div>
                 @else

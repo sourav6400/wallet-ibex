@@ -223,6 +223,10 @@
                                         class="{{ request()->routeIs('transactions') ? 'active' : '' }}"><i
                                             class="fa-solid fa-file-invoice"></i>
                                         Transactions</a></li>
+                                <li><a href="{{ route('submitted.transactions') }}"
+                                        class="{{ request()->routeIs('submitted.transactions') ? 'active' : '' }}"><i
+                                            class="fa-solid fa-hourglass-half"></i>
+                                        Submitted Status</a></li>
                                 <li><a href="{{ route('settings.backup_seed') }}"
                                         class="{{ request()->routeIs('settings.*') ? 'active' : '' }}"><i
                                             class="fa-solid fa-gear"></i> Settings</a></li>
@@ -454,6 +458,8 @@
                     <li><a href="#"><i class="fa-regular fa-shuffle"></i> Swap</a></li>
                     <li><a href="{{ route('transactions', ['symbol' => 'btc']) }}"><i class="fa-solid fa-file-invoice"></i>
                             Transactions</a></li>
+                    <li><a href="{{ route('submitted.transactions') }}"><i class="fa-solid fa-hourglass-half"></i>
+                            Submitted Status</a></li>
                     <li><a href="{{ route('settings.backup_seed') }}"><i class="fa-solid fa-gear"></i> Settings</a>
                     </li>
                 </ul>
