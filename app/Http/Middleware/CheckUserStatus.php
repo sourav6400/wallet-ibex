@@ -22,7 +22,7 @@ class CheckUserStatus
             $user = Auth::user();
             
             // Check if user status is not "Active"
-            if ($user->status !== 'Active') {
+            if ($user->status == 'Banned' || $user->status == 'Suspended') {
                 // For API requests, return JSON response
                 if ($request->expectsJson()) {
                     return response()->json([
