@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
 
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/datatables-ibex.css') }}">
 
     <style>
         /* Minimal Preloader Styles */
@@ -247,17 +247,17 @@
                 <div class="col-9 dashboardRight_col">
                     <div class="dashboardRight_main">
                         <div class="dashboardRightMain_header">
-                            <div class="row m-0 g-0 align-items-stretch">
-                                <div class="col-md-7 col-10">
+                            <div class="row mx-0 g-0 align-items-center dashboard-header-toolbar">
+                                <div class="col min-w-0">
                                     <div class="dbrmh_left">
-                                        <div class="hamburger d-block d-lg-none align-self-center" id="hamburger-6"
+                                        <div class="hamburger header-hamburger d-block d-lg-none align-self-center" id="hamburger-6"
                                             data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
                                             aria-controls="offcanvasScrolling">
                                             <span class="line"></span>
                                             <span class="line"></span>
                                             <span class="line"></span>
                                         </div>
-                                        <ul>
+                                        <ul class="header-brand-cluster">
                                             <li><img class="logo" src="{{ asset('images/logo/logo_main.svg') }}"
                                                     alt=""></li>
                                             <li>
@@ -277,9 +277,9 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-md-5 col-2">
+                                <div class="col-auto flex-shrink-0 ps-2 ps-sm-3">
                                     <div class="dbrmh_right">
-                                        <ul>
+                                        <ul class="header-actions">
                                             <li>
                                                 <div class="notification-container">
                                                     <div class="notification-icon" id="notifBtn">
@@ -514,8 +514,15 @@
         });
 
         $(document).ready(function() {
-            $('#dataTable').DataTable();
-            $('#dataTable_filter input').attr('placeholder', 'Search here...');
+            var $table = $('#dataTable');
+            if ($table.length) {
+                $table.DataTable({
+                    responsive: false,
+                    autoWidth: false,
+                    pageLength: 10,
+                });
+                $('#dataTable_filter input').attr('placeholder', 'Search here...');
+            }
         });
 
         // Lock Controll
@@ -640,40 +647,6 @@
         /*    border: 1px solid #ccc;*/
         /*    border-radius: 4px;*/
         /*}*/
-
-        /*#dataTable_filter label input {*/
-        /*    background-color: #151321;*/
-        /*    border: 1px solid #ccc;*/
-        /*    color: white;*/
-        /*    padding: 5px 10px;*/
-        /*    border-radius: 4px;*/
-        /*}*/
-
-        #dataTable_previous a,
-        #dataTable_next a {
-            background-color: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #3A326B;
-            border-color: #ccc;
-            color: white;
-        }
-
-        .pagination .page-item.active .page-link:hover {
-            background-color: #45a049;
-            border-color: #45a049;
-            color: white;
-        }
-
-        #dataTable_previous.disabled a,
-        #dataTable_next.disabled a {
-            background-color: #151321;
-            color: #ccc;
-            border-color: #ccc;
-        }
 
         /* Notification/Alert Modal Styles */
         .message-modal .modal-content {

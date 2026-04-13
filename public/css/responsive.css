@@ -374,31 +374,46 @@ Xtra Small Screen - Small Mobile
         width: 100%;
     }
 
-    .dashboardRightMain_header .dbrmh_left ul {
-        display: flex;
-        align-items: center;
-        gap: 3px;
-        padding: 5px 15px;
+    .dashboardRightMain_header .dbrmh_left ul.header-brand-cluster {
+        gap: 8px;
+        padding: 8px 12px;
+        max-width: min(100%, 200px);
     }
 
     .dashboardRightMain_header .dbrmh_left ul li img.logo {
-        width: 35px;
+        width: 32px;
     }
 
     .dashboardRightMain_header .dbrmh_left ul li h6.name {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .dashboardRightMain_header .dbrmh_left ul li h5.balance {
-        font-size: 14px;
+        font-size: 15px;
+    }
+
+    .dashboardRightMain_header .header-hamburger {
+        padding: 8px 10px;
+    }
+
+    .dashboardRightMain_header .dbrmh_right > ul.header-actions {
+        gap: 8px;
+        padding-right: 4px;
+    }
+
+    .dbrmh_right .notification-icon,
+    .logout-btn-header {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
     }
 
     .hamburger .line {
-        width: 40px;
-        height: 5px;
+        width: 36px;
+        height: 4px;
         background-color: #ecf0f1;
         display: block;
-        margin: 8px auto;
+        margin: 6px auto;
     }
 
     .sideMenu_content ul li a {
@@ -659,14 +674,6 @@ Xtra Small Screen - Small Mobile
         padding-right: 12px !important;
     }
 
-    .myWallet_sidebar {
-        display: none;
-    }
-
-    .myWallet_body {
-        width: 100%;
-    }
-
     .sendPopup1 .newAccount_popup_wrapper {
         padding: 35px 18px;
     }
@@ -778,4 +785,95 @@ Xtra Small Screen - Small Mobile
         order: 1;
     }
 
+}
+
+/*
+====================================
+My Wallet (stack + asset strip) — tablet & mobile
+====================================
+*/
+@media screen and (max-width: 991px) {
+
+    .myWallet_wrapper {
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .myWallet_wrapper > .myWallet_sidebar {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .myWallet_sidebar {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        flex-shrink: 0;
+        padding-bottom: 0;
+    }
+
+    .myWallet_sidebar .myWallet_sidebar {
+        border-bottom: 0;
+    }
+
+    .myWallet_sidebar_item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        padding: 10px 12px 14px;
+    }
+
+    .myWallet_sidebar_item > a {
+        flex: 0 0 auto;
+    }
+
+    .myWallet_sidebar_item ul {
+        min-width: 148px;
+        margin: 0;
+        padding: 12px 14px;
+        border-radius: 12px;
+    }
+
+    .myWallet_body {
+        width: 100%;
+        align-items: stretch;
+        justify-content: flex-start;
+    }
+
+    .sendCoin_cardv2 {
+        padding: 28px 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sendCoin_cardv2 > h4 {
+        font-size: 22px;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .sendCoin_cardv2 {
+        padding: 20px 14px;
+        border-radius: 12px;
+    }
+
+    .sendCoin_cardv2 > h4 {
+        font-size: 20px;
+        margin-bottom: 24px;
+        gap: 8px;
+    }
+
+    .sendCoin_cardv2 .form_input {
+        margin-bottom: 28px;
+    }
 }

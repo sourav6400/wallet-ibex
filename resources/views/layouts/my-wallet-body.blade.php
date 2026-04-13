@@ -182,33 +182,6 @@
 </div>
 
 <style>
-    #dataTable {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-    }
-
-    #dataTable thead th {
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        padding: 10px;
-        border-bottom: 2px solid #dee2e6;
-        white-space: nowrap;
-    }
-
-    #dataTable tbody td {
-        padding: 8px 10px;
-        text-align: center;
-        border-bottom: 1px solid #dee2e6;
-        vertical-align: middle;
-        white-space: nowrap;
-    }
-
-    #dataTable tbody tr:hover {
-        background: #f1f3f5;
-    }
-
     .value_data h5 {
         margin: 0;
         font-size: 14px;

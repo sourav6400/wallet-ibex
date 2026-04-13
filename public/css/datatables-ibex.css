@@ -1,0 +1,259 @@
+/*
+ * IBEX wallet — DataTables styling aligned with main UI (dark theme).
+ * Narrow viewports: horizontal scroll (no column squashing / letter wrapping).
+ */
+
+/* ---- Wrapper & toolbar ---- */
+.dataTables_wrapper {
+  color: #e8ebf5;
+  padding: 0 0 12px;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+  color: #9ca3c7;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+  color: #9ca3c7;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  background-color: #1c1f30;
+  color: #fff;
+  border: 1px solid #2a273f;
+  border-radius: 8px;
+  padding: 6px 36px 6px 12px;
+  margin: 0 4px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  background-color: #1c1f30 !important;
+  color: #fff !important;
+  border: 1px solid #2a273f !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  margin-left: 8px;
+  min-width: 160px;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  outline: none;
+  border-color: #007fff !important;
+  box-shadow: 0 0 0 2px rgba(0, 127, 255, 0.2);
+}
+
+/* Bootstrap 5 integration rows */
+.dataTables_wrapper .row {
+  margin-left: 0;
+  margin-right: 0;
+  align-items: center;
+}
+
+.dataTables_wrapper .row > div {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ---- Core table ---- */
+table.dataTable {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background-color: #1b1d2d;
+  width: 100% !important;
+  min-width: 900px;
+  table-layout: auto;
+}
+
+table.dataTable.no-footer {
+  border-bottom: none !important;
+}
+
+table.dataTable thead > tr > th {
+  background: #1e1b2f !important;
+  color: #fff !important;
+  border-bottom: 2px solid #2a273f !important;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 10px !important;
+  vertical-align: middle !important;
+  text-align: center;
+  white-space: nowrap;
+}
+
+table.dataTable tbody > tr > td {
+  background-color: #1c1f30 !important;
+  color: #cfd4e6 !important;
+  border-bottom: 1px solid #2a273f !important;
+  padding: 10px !important;
+  vertical-align: middle !important;
+  font-size: 13px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+table.dataTable tbody tr:hover > td {
+  background-color: #252a42 !important;
+}
+
+table.dataTable tbody tr.selected > td,
+table.dataTable tbody tr > .selected {
+  background-color: #2a3150 !important;
+}
+
+/* Kill default Bootstrap / DataTables light stripes */
+table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > *,
+table.dataTable.table-striped > tbody > tr:nth-of-type(even) > * {
+  box-shadow: none !important;
+}
+
+/* Sorting icons */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+  color: #fff !important;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc:after {
+  opacity: 0.45;
+}
+
+/* Cell content helpers (transaction rows) */
+table.dataTable .value_data h5 {
+  margin: 0;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+table.dataTable .copy-alert {
+  color: #34d399;
+}
+
+/* ---- Pagination ---- */
+.dataTables_wrapper .dataTables_paginate {
+  padding-top: 8px;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination {
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-link {
+  background-color: #1c1f30;
+  color: #e8ebf5;
+  border: 1px solid #2a273f;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-link:hover {
+  background-color: #252a42;
+  color: #fff;
+  border-color: #3a4568;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+  background: linear-gradient(135deg, #2447f9, #8a52fe);
+  border-color: transparent;
+  color: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item.active .page-link:hover {
+  color: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link,
+#dataTable_previous.disabled .page-link,
+#dataTable_next.disabled .page-link {
+  background-color: #151321 !important;
+  color: #6b7280 !important;
+  border-color: #2a273f !important;
+  opacity: 0.85;
+}
+
+#dataTable_previous:not(.disabled) .page-link,
+#dataTable_next:not(.disabled) .page-link {
+  background-color: #1c1f30;
+  color: #e8ebf5;
+  border-color: #2a273f;
+}
+
+#dataTable_previous:not(.disabled) .page-link:hover,
+#dataTable_next:not(.disabled) .page-link:hover {
+  background-color: #252a42;
+  color: #fff;
+}
+
+/*
+ * Wide tables: style.css already sets `.coinAsset_table { overflow: auto }` and
+ * `.coinAsset_table table { min-width: 900px }`. Keep DataTables on the same model.
+ */
+.coinAsset_table .dataTables_wrapper,
+.transaction_body_wrapper .dataTables_wrapper {
+  max-width: 100%;
+}
+
+.coinAsset_table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---- Small screens ---- */
+@media screen and (max-width: 767px) {
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter {
+    float: none !important;
+    text-align: left !important;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .dataTables_wrapper .dataTables_filter input {
+    margin-left: 0 !important;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .dataTables_wrapper .dataTables_info {
+    float: none !important;
+    padding-top: 12px;
+    text-align: center;
+  }
+
+  .dataTables_wrapper .dataTables_paginate {
+    float: none !important;
+    text-align: center !important;
+    padding-top: 12px;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .pagination {
+    justify-content: center;
+  }
+
+  table.dataTable thead > tr > th,
+  table.dataTable tbody > tr > td {
+    font-size: 12px;
+    padding: 8px 10px !important;
+  }
+}

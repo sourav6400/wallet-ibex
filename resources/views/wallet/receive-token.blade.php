@@ -50,7 +50,7 @@
                             @php
                                 $qrCode = QrCode::size(200)->generate($wallet_address);
                             @endphp
-                            <div class="qrCode" style="margin-left: 20rem;">{{ $qrCode }}</div>
+                            <div class="qrCode">{{ $qrCode }}</div>
                             {{-- <img class="qrCode" src="{{ asset('images/vector/vector9.png') }}" alt=""> --}}
                         </div>
                         <div class="row g-2 m-0">

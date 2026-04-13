@@ -1216,6 +1216,10 @@ aside .sideLogo a img {
     color: #007FFF;
 }
 
+.dashboard-header-toolbar {
+    min-height: 73px;
+}
+
 .dashboardRightMain_header .dbrmh_left ul li img.logo {
     width: 40px;
     display: block;
@@ -1228,9 +1232,9 @@ aside .sideLogo a img {
     line-height: 112%;
     margin-bottom: 2px;
     white-space: nowrap;
-    width: 90px;
+    max-width: 120px;
     overflow: hidden;
-    text-overflow: "..";
+    text-overflow: ellipsis;
 }
 
 .dashboardRightMain_header .dbrmh_left ul li h5.balance {
@@ -1238,26 +1242,47 @@ aside .sideLogo a img {
     font-size: 16px;
     font-weight: 600;
     line-height: 112%;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
 }
 
-.dashboardRightMain_header .dbrmh_left ul {
+.dashboardRightMain_header .dbrmh_left ul.header-brand-cluster {
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 10px 25px;
-    padding-right: 45px;
+    gap: 10px;
+    padding: 10px 18px;
     background: #24284A;
-    width: fit-content;
+    width: auto;
+    min-width: 0;
+    max-width: min(100%, 240px);
     height: 100%;
-    width: 200px;
+    border-radius: 12px;
+    flex: 1 1 auto;
 }
 
 .dashboardRightMain_header .dbrmh_left {
     display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.header-hamburger {
+    flex-shrink: 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: #161a28;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.header-hamburger .line {
+    margin: 5px auto;
 }
 
 .dashboardRightMain_header {
     background-color: #1B1D2D;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .dbrmh_left button.drmh_addBtn {
@@ -1327,6 +1352,11 @@ aside .sideLogo a img {
     height: 100%;
 }
 
+.dbrmh_right>ul.header-actions {
+    gap: 10px;
+    padding-right: 16px;
+}
+
 .dbrmh_right,
 .dbrmh_right>ul>li,
 .dbrmh_right>ul>li>div {
@@ -1387,19 +1417,21 @@ aside .sideLogo a img {
 }
 
 .logout-btn-header {
-    background: transparent;
+    background: #1b1f2f;
     border: 1px solid #2e3347;
     color: #c9d1e0;
-    font-size: 16px;
-    border-radius: 8px;
-    width: 46px;
-    height: 46px;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: 0.2s;
-    margin-left: 30px;
+    margin-left: 0;
+    padding: 0;
+    flex-shrink: 0;
 }
 
 .logout-btn-header:hover {
@@ -2366,12 +2398,23 @@ body.myWallet_page .newAccountPopup_header>h6 {
 }
 
 
-#receivePopup1 img.qrCode {
+#receivePopup1 .newAccountPopup_header .qrCode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    max-width: 166px;
+    max-width: 220px;
+    margin: 1rem auto 0;
+    box-sizing: border-box;
+}
+
+#receivePopup1 img.qrCode,
+#receivePopup1 .newAccountPopup_header .qrCode svg {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
     display: block;
     margin: 0 auto;
-
 }
 
 #receivePopup1 .form_input input {
@@ -5618,10 +5661,10 @@ input[type=number] {
     background: #1b1f2f;
     border: 1px solid #2e3347;
     color: #c9d1e0;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 50%;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5966,10 +6009,10 @@ input[type=number] {
     background: #1b1f2f;
     border: 1px solid #2e3347;
     color: #c9d1e0;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 50%;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
