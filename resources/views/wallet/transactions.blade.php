@@ -54,6 +54,21 @@
                                 @if(in_array($upperSymbol, ['ETH', 'BNB']))
                                     {{-- ETH/BNB Transactions (same structure) --}}
                                     @foreach($transfers as $value)
+                                        @if(isset($value['isLocal']) && $value['isLocal'] === true)
+                                            @php $sl++; @endphp
+                                            @include('partials.transaction_row', [
+                                                'sl' => $sl,
+                                                'hash' => $value['hash'],
+                                                'blockNumber' => $value['blockNumber'],
+                                                'from' => $value['from'],
+                                                'to' => $value['to'],
+                                                'type' => $value['displayType'],
+                                                'amount' => abs($value['amount']),
+                                                'timestamp' => $value['timestamp'],
+                                                'symbol' => $upperSymbol
+                                            ])
+                                            @continue
+                                        @endif
                                         @php
                                             $walletAddress = $value['wallet_address'];
                                             $subtype = $value['transactionSubtype'];
@@ -90,6 +105,21 @@
                                 @elseif(in_array($upperSymbol, ['BTC', 'LTC', 'DOGE']))
                                     {{-- BTC/LTC/DOGE Transactions --}}
                                     @foreach($transfers as $value)
+                                        @if(isset($value['isLocal']) && $value['isLocal'] === true)
+                                            @php $sl++; @endphp
+                                            @include('partials.transaction_row', [
+                                                'sl' => $sl,
+                                                'hash' => $value['hash'],
+                                                'blockNumber' => $value['blockNumber'],
+                                                'from' => $value['from'],
+                                                'to' => $value['to'],
+                                                'type' => $value['displayType'],
+                                                'amount' => abs($value['amount']),
+                                                'timestamp' => $value['timestamp'],
+                                                'symbol' => $upperSymbol
+                                            ])
+                                            @continue
+                                        @endif
                                         @php
                                             $sl++;
                                             $walletAddress = $value['wallet_address'];

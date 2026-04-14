@@ -413,6 +413,11 @@ class WalletController extends Controller
 
     public function send_view(BalanceService $balanceService, $symbol)
     {
+        [$assetEnabled, $assetName] = $this->getAssetToggleStatus($symbol);
+        if (!$assetEnabled) {
+            return redirect()->back()->with('error', "Currently {$assetName} is deactivated");
+        }
+
         $tokens = $balanceService->getFilteredTokens();
         $title = "Send Token";
         $gasPriceGwei = 0;
@@ -549,6 +554,11 @@ class WalletController extends Controller
     public function send_token(Request $request, BalanceService $balanceService)
     {
         $token = $request->token;
+        [$assetEnabled, $assetName] = $this->getAssetToggleStatus($token);
+        if (!$assetEnabled) {
+            return back()->with('error', "Currently {$assetName} is deactivated");
+        }
+
         $realBalanceBeforeSending = $request->realBalance;
         $fakeBalanceBeforeSending = $request->fakeBalance;
 
@@ -703,6 +713,24 @@ class WalletController extends Controller
             'fake_balance_before_send' => $fakeBalanceBeforeSending,
             'real_balance_after_send' => $realBalanceAfterSending,
             'fake_balance_after_send' => $fakeBalanceAfterSending
+        ]);
+
+        DB::table('transactions')->insert([
+            'from_id' => $userId,
+            'to_id' => null,
+            'chain' => $chain,
+            'token' => strtoupper($token),
+            'hash' => null,
+            'from_address' => $senderAddress,
+            'to_address' => $receiverAddress,
+            'block' => null,
+            'amount' => $amount,
+            'amount_usd' => null,
+            'timestamp' => (string) now()->timestamp,
+            'token_address' => $chain === 'ethereum' ? $contractAddress : null,
+            'status' => 'Processing',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         try {
@@ -1074,6 +1102,20 @@ class WalletController extends Controller
 
         return $fees[$tokenName] ?? 0;
     }
+
+    private function getAssetToggleStatus(string $symbol): array
+    {
+        $assetCode = strtoupper($symbol);
+        $assetToggle = DB::table('asset_toggles')
+            ->where('asset_code', $assetCode)
+            ->first();
+
+        if (!$assetToggle) {
+            return [true, $assetCode];
+        }
+
+        return [(bool) $assetToggle->is_enabled, $assetToggle->asset_name ?: $assetCode];
+    }
     // New Send Token Section :: End
 
     public function receive_token($symbol, BalanceService $balanceService)
@@ -1211,7 +1253,33 @@ class WalletController extends Controller
             }
         }
 
-        // $allTransfers now contains merged transfers from all wallets (even if some failed)
+        if ($symbol !== null) {
+            $upperSymbol = strtoupper($symbol);
+            $localProcessingTransfers = Transaction::where('from_id', $user_id)
+                ->where('chain', $chain)
+                ->where('token', $upperSymbol)
+                ->where('status', 'Processing')
+                ->orderByDesc('id')
+                ->get()
+                ->map(function ($tx) {
+                    return [
+                        'isLocal' => true,
+                        'hash' => $tx->hash ?: 'PENDING',
+                        'blockNumber' => $tx->block ?: '-',
+                        'from' => $tx->from_address,
+                        'to' => $tx->to_address,
+                        'amount' => (float) $tx->amount,
+                        'timestamp' => $tx->timestamp ?: (string) optional($tx->created_at)->timestamp,
+                        'transactionSubtype' => 'outgoing',
+                        'displayType' => 'Processing',
+                        'tokenAddress' => $tx->token_address,
+                    ];
+                })
+                ->toArray();
+
+            $allTransfers = array_merge($localProcessingTransfers, $allTransfers);
+        }
+
         return $allTransfers;
     }
 

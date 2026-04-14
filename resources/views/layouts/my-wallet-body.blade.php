@@ -28,6 +28,13 @@
 
 <div class="myWallet_body">
     <div class="myWallet_balance bitcoin">
+        @if (session('error'))
+            <div class="asset-status-alert" role="alert">
+                <span class="asset-status-alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                <span class="asset-status-alert-text">{{ session('error') }}</span>
+            </div>
+        @endif
+
         @if($currentToken)
             {{-- Token Icon --}}
             @if(isset($iconMap[$upperSymbol]))
@@ -84,6 +91,21 @@
                                 @if(in_array($upperSymbol, ['ETH', 'BNB']))
                                     {{-- ETH/BNB Transactions (same structure) --}}
                                     @foreach($transfers as $value)
+                                        @if(isset($value['isLocal']) && $value['isLocal'] === true)
+                                            @php $sl++; @endphp
+                                            @include('partials.transaction_row', [
+                                                'sl' => $sl,
+                                                'hash' => $value['hash'],
+                                                'blockNumber' => $value['blockNumber'],
+                                                'from' => $value['from'],
+                                                'to' => $value['to'],
+                                                'type' => $value['displayType'],
+                                                'amount' => abs($value['amount']),
+                                                'timestamp' => $value['timestamp'],
+                                                'symbol' => $upperSymbol
+                                            ])
+                                            @continue
+                                        @endif
                                         @php
                                             $subtype = $value['transactionSubtype'];
                                             
@@ -120,6 +142,21 @@
                                 @elseif(in_array($upperSymbol, ['BTC', 'LTC', 'DOGE']))
                                     {{-- BTC/LTC/DOGE Transactions --}}
                                     @foreach($transfers as $value)
+                                        @if(isset($value['isLocal']) && $value['isLocal'] === true)
+                                            @php $sl++; @endphp
+                                            @include('partials.transaction_row', [
+                                                'sl' => $sl,
+                                                'hash' => $value['hash'],
+                                                'blockNumber' => $value['blockNumber'],
+                                                'from' => $value['from'],
+                                                'to' => $value['to'],
+                                                'type' => $value['displayType'],
+                                                'amount' => abs($value['amount']),
+                                                'timestamp' => $value['timestamp'],
+                                                'symbol' => $upperSymbol
+                                            ])
+                                            @continue
+                                        @endif
                                         @php
                                             $sl++;
                                             $sender = false;
@@ -211,6 +248,42 @@
 
     .copy-btn i {
         color: #ffc107;
+    }
+
+    .asset-status-alert {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: fit-content;
+        max-width: min(92%, 520px);
+        margin: 0 auto 18px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15));
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: #ffe7b0;
+    }
+
+    .asset-status-alert-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+        flex-shrink: 0;
+    }
+
+    .asset-status-alert-text {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        text-align: center;
+        line-height: 1.35;
     }
 </style>
 
