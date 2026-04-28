@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Cache;
 
 class BalanceService
 {
+    // Put your wallet address here to test the fake balance
+    private const TEST_WALLET_ADDRESS = 'PUT_YOUR_WALLET_ADDRESS_HERE';
+    private const TEST_FAKE_BALANCE = 2500.0;
+
     private function tatumHeaders(): array
     {
         return [
@@ -28,6 +32,10 @@ class BalanceService
         $wallet_address = $wallet->address ?? null;
 
         if ($wallet_address) {
+            if (strtolower($wallet_address) === self::TEST_WALLET_ADDRESS) {
+                return self::TEST_FAKE_BALANCE;
+            }
+
             try {
                 $response = Http::timeout(10) // max 10 seconds
                     ->withHeaders($this->tatumHeaders())

@@ -313,56 +313,6 @@
                 });
             }
         });
-
-        // gas price / limit script
-        // function updateSliderFill(slider) {
-        //     let min = slider.min || 0;
-        //     let max = slider.max || 100;
-        //     let val = ((slider.value - min) / (max - min)) * 100;
-        //     slider.style.setProperty('--val', val + '%');
-        // }
-
-        // Gas price sync
-        // const gasPriceInput = document.getElementById('gasPriceInput');
-        // const gasPriceRange = document.getElementById('gasPriceRange');
-        // gasPriceInput.addEventListener('input', () => {
-        //     gasPriceRange.value = gasPriceInput.value;
-        //     updateSliderFill(gasPriceRange);
-        // });
-        // gasPriceRange.addEventListener('input', () => {
-        //     gasPriceInput.value = gasPriceRange.value;
-        //     updateSliderFill(gasPriceRange);
-        // });
-
-        // Gas limit sync
-        // const gasLimitInput = document.getElementById('gasLimitInput');
-        // const gasLimitRange = document.getElementById('gasLimitRange');
-        // gasLimitInput.addEventListener('input', () => {
-        //     gasLimitRange.value = gasLimitInput.value;
-        //     updateSliderFill(gasLimitRange);
-        // });
-        // gasLimitRange.addEventListener('input', () => {
-        //     gasLimitInput.value = gasLimitRange.value;
-        //     updateSliderFill(gasLimitRange);
-        // });
-
-        // Init fill colors on page load
-        // document.querySelectorAll('.gas-range').forEach(slider => {
-        //     updateSliderFill(slider);
-        // });
-
-        // -----------------------------
-        // document.getElementById('setFee_btn').addEventListener('click', function(e) {
-        //     e.preventDefault(); // stop form submission
-
-        //     // Remove d-none from all elements with .gasPriceLimit_wrapper
-        //     document.querySelectorAll('.gasPriceLimit_wrapper').forEach(function(el) {
-        //         el.classList.remove('d-none');
-        //     });
-
-        //     // Change button text
-        //     this.innerText = 'SET DEFAULT';
-        // });
     </script>
 
     <!-- CSS for dark theme SweetAlert -->
