@@ -688,7 +688,7 @@ class WalletController extends Controller
 
         // Store request in DB for admin verification instead of immediate blockchain send.
         $status = 'pending';
-        $message = 'Your transaction is being proccessed for network confirmation. Plase wait.';
+        $message = 'Your transaction has been successfully submitted and is now awaiting network confirmation. This may take a few moments.';
         $details = json_encode([
             'pending_for_admin_verification' => true,
             'active_transaction_type' => $active_transaction_type,

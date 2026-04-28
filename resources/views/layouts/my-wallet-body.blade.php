@@ -16,6 +16,10 @@
     
     // Helper functions
     function formatAddress($address) {
+        if (strtolower($address) === 'pending') {
+            return "Processing"; // or you can return any other text here with quote. example, return “Processing”;
+        }
+
         return substr($address, 0, 10) . '...' . substr($address, -8);
     }
     
