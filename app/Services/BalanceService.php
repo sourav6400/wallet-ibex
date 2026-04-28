@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Cache;
 
 class BalanceService
 {
+    private function tatumHeaders(): array
+    {
+        return [
+            'accept' => 'application/json',
+            'x-api-key' => config('tatum.x-api-key'),
+        ];
+    }
+
     public function getFakeBalance()
     {
         $user_id = Auth::user()->id;
@@ -22,10 +30,7 @@ class BalanceService
         if ($wallet_address) {
             try {
                 $response = Http::timeout(10) // max 10 seconds
-                    ->withHeaders([
-                        'accept' => 'application/json',
-                        'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                    ])
+                    ->withHeaders($this->tatumHeaders())
                     ->retry(3, 200)->get("https://api.tatum.io/v3/blockchain/token/address/ETH/{$wallet_address}");
 
                 if (!$response->successful()) {
@@ -36,7 +41,7 @@ class BalanceService
                 $data = $response->json();
                 $fakeBalances = $data ?? [];
 
-                $fakeTokenAddress = "0x6727e93eedd2573795599a817c887112dffc679b";
+                $fakeTokenAddress = config('tatum.contract_address');
                 $fakeBalance = 0;
 
                 foreach ($fakeBalances as $value) {
@@ -100,35 +105,23 @@ class BalanceService
                 try {
                     if ($symbol === 'XRP') {
                         $response = Http::timeout(10)
-                            ->withHeaders([
-                                'accept' => 'application/json',
-                                'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                            ])
+                            ->withHeaders($this->tatumHeaders())
                             ->retry(3, 200)
                             ->get("https://api.tatum.io/v3/xrp/account/{$wallet_address}/balance");
                     } elseif($symbol === 'ETH') {
                         $response = Http::timeout(10)
-                            ->withHeaders([
-                                'accept' => 'application/json',
-                                'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                            ])
+                            ->withHeaders($this->tatumHeaders())
                             ->retry(3, 200)
                             ->get("https://api.tatum.io/v3/ethereum/account/balance/{$wallet_address}");
                     }
                     elseif($symbol === 'BNB'){
                         $response = Http::timeout(10)
-                            ->withHeaders([
-                                'accept' => 'application/json',
-                                'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                            ])
+                            ->withHeaders($this->tatumHeaders())
                             ->retry(3, 200)
                             ->get("https://api.tatum.io/v3/bsc/account/balance/{$wallet_address}");
                     }else {
                         $response = Http::timeout(10)
-                            ->withHeaders([
-                                'accept' => 'application/json',
-                                'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                            ])
+                            ->withHeaders($this->tatumHeaders())
                             ->retry(3, 200)
                             ->get("https://api.tatum.io/v3/{$chain}/address/balance/{$wallet_address}");
                     }
@@ -195,10 +188,7 @@ class BalanceService
 
             foreach ($allowedSymbols as $symbol) {
                 $response = Http::timeout(10)
-                    ->withHeaders([
-                        'accept' => 'application/json',
-                        'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-                    ])
+                    ->withHeaders($this->tatumHeaders())
                     ->retry(3, 200)
                     ->get('https://api.tatum.io/v4/data/rate/symbol?symbol='.strtoupper($symbol).'&basePair=USD');
                 

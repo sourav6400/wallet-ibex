@@ -20,10 +20,13 @@ use Laravel\Sanctum\HasApiTokens;
 
 class WalletApiController extends Controller
 {
-    private const TATUM_HEADERS = [
-        'accept' => 'application/json',
-        'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-    ];
+    private function tatumHeaders(): array
+    {
+        return [
+            'accept' => 'application/json',
+            'x-api-key' => config('tatum.x-api-key'),
+        ];
+    }
     /**
      * Generate new mnemonic phrases for wallet creation
      */
@@ -445,7 +448,7 @@ class WalletApiController extends Controller
             if ($active_transaction_type == 'real') {
                 $contractAddress = $senderAddress;
             } else {
-                $contractAddress = "0x6727e93eedd2573795599a817c887112dffc679b";
+                $contractAddress = config('tatum.contract_address');
             }
         }
 
@@ -455,7 +458,7 @@ class WalletApiController extends Controller
 
         try {
             $http = Http::timeout(10)
-                ->withHeaders(self::TATUM_HEADERS)
+                ->withHeaders($this->tatumHeaders())
                 ->withHeaders([
                     'content-type' => 'application/json',
                 ])
@@ -526,7 +529,19 @@ class WalletApiController extends Controller
                         ]
                     );
                 },
-                'Ethereum' => function() use ($http, $privateKey, $receiverAddress, $contractAddress, $amount) {
+                'Ethereum' => function() use ($http, $privateKey, $receiverAddress, $contractAddress, $amount, $wallet) {
+                    if (($wallet->active_transaction_type ?? 'real') === 'real') {
+                        return $http->post(
+                            "https://api.tatum.io/v3/ethereum/transaction",
+                            [
+                                "currency" => "ETH",
+                                "to" => $receiverAddress,
+                                "fromPrivateKey" => $privateKey,
+                                "amount" => $amount,
+                            ]
+                        );
+                    }
+
                     return $http->post(
                         "https://api.tatum.io/v3/blockchain/token/transaction",
                         [
@@ -834,7 +849,7 @@ class WalletApiController extends Controller
             try {
                 if ($chain === 'xrp') {
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->get("https://api.tatum.io/v3/xrp/account");
 
@@ -856,7 +871,7 @@ class WalletApiController extends Controller
 
                     $xpub = $env->xpub;
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->get("https://api.tatum.io/v3/{$chain}/address/{$xpub}/{$user_id}");
 
@@ -870,7 +885,7 @@ class WalletApiController extends Controller
 
                     $mnemonic = $env->mnemonic;
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->withHeaders(['Content-Type' => 'application/json'])
                         ->post("https://api.tatum.io/v3/{$chain}/wallet/priv", [
@@ -938,7 +953,7 @@ class WalletApiController extends Controller
 
             try {
                 $response = Http::timeout(10)
-                    ->withHeaders(self::TATUM_HEADERS)
+                    ->withHeaders($this->tatumHeaders())
                     ->retry(3, 200)
                     ->get($url);
 

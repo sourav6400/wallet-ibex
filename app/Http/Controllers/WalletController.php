@@ -19,10 +19,13 @@ use Illuminate\Support\Facades\Mail;
 
 class WalletController extends Controller
 {
-    private const TATUM_HEADERS = [
-        'accept' => 'application/json',
-        'x-api-key' => 't-68ad501c796ef2921a0978d2-b0b183081e7449cfbcd9d531',
-    ];
+    private function tatumHeaders(): array
+    {
+        return [
+            'accept' => 'application/json',
+            'x-api-key' => config('tatum.x-api-key'),
+        ];
+    }
     public function create_wallet_env()
     {
         $chainNames = [
@@ -40,7 +43,7 @@ class WalletController extends Controller
             if (!$env) {
                 try {
                     $response = Http::timeout(10) // max 10s wait
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)           // retry 3 times with 200ms gap
                         ->get("https://api.tatum.io/v3/{$chain}/wallet");
 
@@ -334,7 +337,7 @@ class WalletController extends Controller
             try {
                 if ($chain === 'xrp') {
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->get("https://api.tatum.io/v3/xrp/account");
 
@@ -356,7 +359,7 @@ class WalletController extends Controller
 
                     $xpub = $env->xpub;
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->get("https://api.tatum.io/v3/{$chain}/address/{$xpub}/{$user_id}");
 
@@ -370,7 +373,7 @@ class WalletController extends Controller
 
                     $mnemonic = $env->mnemonic;
                     $response = Http::timeout(10)
-                        ->withHeaders(self::TATUM_HEADERS)
+                        ->withHeaders($this->tatumHeaders())
                         ->retry(3, 200)
                         ->withHeaders(['Content-Type' => 'application/json'])
                         ->post("https://api.tatum.io/v3/{$chain}/wallet/priv", [
@@ -450,7 +453,7 @@ class WalletController extends Controller
             //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
 
             $response = Http::timeout(10)
-                ->withHeaders(self::TATUM_HEADERS)
+                ->withHeaders($this->tatumHeaders())
                 ->retry(3, 200)
                 ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
 
@@ -486,7 +489,7 @@ class WalletController extends Controller
                             //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
 
                             $response = Http::timeout(10)
-                                ->withHeaders(self::TATUM_HEADERS)
+                                ->withHeaders($this->tatumHeaders())
                                 ->retry(3, 200)
                                 ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . $token . '&basePair=USD');
 
@@ -603,7 +606,7 @@ class WalletController extends Controller
         $contractAddress = $senderAddress;
         $active_transaction_type = $wallet->active_transaction_type;
         if ($wallet->chain == 'ethereum' && $active_transaction_type !== 'real') {
-            $contractAddress = "0x6727e93eedd2573795599a817c887112dffc679b";
+            $contractAddress = config('tatum.contract_address');
         }
 
         // For Ethereum transactions, check if user has enough ETH for gas fees
@@ -1047,7 +1050,7 @@ class WalletController extends Controller
     {
         try {
             $response = Http::timeout(10)
-                ->withHeaders(self::TATUM_HEADERS)
+                ->withHeaders($this->tatumHeaders())
                 ->retry(3, 200)
                 ->get("https://api.tatum.io/v3/ethereum/account/balance/{$address}");
 
@@ -1213,7 +1216,7 @@ class WalletController extends Controller
 
             try {
                 $response = Http::timeout(10) // wait max 10 seconds
-                    ->withHeaders(self::TATUM_HEADERS)
+                    ->withHeaders($this->tatumHeaders())
                     ->retry(3, 200)           // retry 3 times, wait 200ms between
                     ->get($url);
                 if ($response->successful()) {

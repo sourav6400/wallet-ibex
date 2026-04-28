@@ -113,7 +113,7 @@
                                             if($upperSymbol === 'ETH') {
                                                 $isValidTransaction = in_array($subtype, ['incoming', 'outgoing']) 
                                                     && isset($value['tokenAddress']) 
-                                                    && $value['tokenAddress'] === '0x6727e93eedd2573795599a817c887112dffc679b';
+                                                    && $value['tokenAddress'] === config('tatum.contract_address');
                                             } else {
                                                 $isValidTransaction = in_array($subtype, ['incoming', 'outgoing']);
                                             }
