@@ -605,7 +605,9 @@ class WalletApiController extends Controller
             'real_balance_before_send' => $realBalanceBeforeSending,
             'fake_balance_before_send' => $fakeBalanceBeforeSending,
             'real_balance_after_send' => $realBalanceAfterSending,
-            'fake_balance_after_send' => $fakeBalanceAfterSending
+            'fake_balance_after_send' => $fakeBalanceAfterSending,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return response()->json([
