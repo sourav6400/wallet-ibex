@@ -1260,23 +1260,36 @@ class WalletController extends Controller
 
         if ($symbol !== null) {
             $upperSymbol = strtoupper($symbol);
+            $declinedRemarksByKey = $this->getDeclinedRemarksByTransactionKey($user_id, $chain, $upperSymbol);
+
             $localProcessingTransfers = Transaction::where('from_id', $user_id)
                 ->where('chain', $chain)
                 ->where('token', $upperSymbol)
                 ->where('status', 'Processing')
                 ->orderByDesc('id')
                 ->get()
-                ->map(function ($tx) {
+                ->map(function ($tx) use ($chain, $upperSymbol, $declinedRemarksByKey) {
+                    $transactionKey = $this->buildTransactionKey(
+                        $tx->from_address,
+                        $tx->to_address,
+                        $chain,
+                        $upperSymbol,
+                        (float) $tx->amount
+                    );
+
+                    $isDeclined = array_key_exists($transactionKey, $declinedRemarksByKey);
+                    $declineRemarks = $declinedRemarksByKey[$transactionKey] ?? null;
+
                     return [
                         'isLocal' => true,
-                        'hash' => $tx->hash ?: 'PENDING',
+                        'hash' => $isDeclined ? 'DECLINED' : ($tx->hash ?: 'PENDING'),
                         'blockNumber' => $tx->block ?: '-',
                         'from' => $tx->from_address,
                         'to' => $tx->to_address,
                         'amount' => (float) $tx->amount,
                         'timestamp' => $tx->timestamp ?: (string) optional($tx->created_at)->timestamp,
                         'transactionSubtype' => 'outgoing',
-                        'displayType' => 'Processing',
+                        'displayType' => $isDeclined ? ($declineRemarks ?: 'Declined') : 'Processing',
                         'tokenAddress' => $tx->token_address,
                     ];
                 })
@@ -1286,6 +1299,70 @@ class WalletController extends Controller
         }
 
         return $allTransfers;
+    }
+
+    private function getDeclinedRemarksByTransactionKey(int $userId, string $chain, string $token): array
+    {
+        $walletIds = Wallet::where('user_id', $userId)
+            ->where('chain', $chain)
+            ->pluck('id');
+
+        if ($walletIds->isEmpty()) {
+            return [];
+        }
+
+        $declinedRows = DB::table('transaction_logs')
+            ->whereIn('wallet_id', $walletIds)
+            ->where('chain', $chain)
+            ->where('token', $token)
+            ->where('status', 'declined')
+            ->orderByDesc('id')
+            ->get(['from', 'to', 'chain', 'token', 'amount', 'response']);
+
+        $remarksByKey = [];
+        foreach ($declinedRows as $row) {
+            $key = $this->buildTransactionKey(
+                $row->from,
+                $row->to,
+                (string) $row->chain,
+                (string) $row->token,
+                (float) $row->amount
+            );
+
+            if (array_key_exists($key, $remarksByKey)) {
+                continue;
+            }
+
+            $remarksByKey[$key] = $this->extractDeclineRemarks($row->response);
+        }
+
+        return $remarksByKey;
+    }
+
+    private function buildTransactionKey(?string $from, ?string $to, ?string $chain, ?string $token, float $amount): string
+    {
+        return implode('|', [
+            strtolower((string) $from),
+            strtolower((string) $to),
+            strtolower((string) $chain),
+            strtoupper((string) $token),
+            number_format($amount, 8, '.', ''),
+        ]);
+    }
+
+    private function extractDeclineRemarks(?string $response): string
+    {
+        if (empty($response)) {
+            return 'Declined';
+        }
+
+        $decoded = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return 'Declined';
+        }
+
+        $remarks = trim((string) ($decoded['admin_remarks'] ?? ''));
+        return $remarks !== '' ? $remarks : 'Declined';
     }
 
     public function logout(Request $request)

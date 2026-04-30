@@ -3,6 +3,9 @@
     $fromShort = formatAddress($from);
     $toShort = formatAddress($to);
     $dateTime = formatTimestamp($timestamp);
+    $normalizedHash = strtolower((string) $hash);
+    $isHashCopyable = !in_array($normalizedHash, ['pending', 'processing', 'declined'], true);
+    $hashLabel = $normalizedHash === 'declined' ? 'Declined' : $hashShort;
 @endphp
 
 <tr>
@@ -10,11 +13,13 @@
     <td>
         <div class="value_data">
             <div class="flex-center">
-                <h5>{{ $hashShort }}</h5>
-                <button onclick="copyToClipboard('{{ $hash }}', this)" class="copy-btn" title="Copy full address">
-                    <i class="fas fa-copy"></i>
-                </button>
-                <span class="copy-alert">Copied!</span>
+                <h5>{{ $hashLabel }}</h5>
+                @if($isHashCopyable)
+                    <button onclick="copyToClipboard('{{ $hash }}', this)" class="copy-btn" title="Copy full address">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <span class="copy-alert">Copied!</span>
+                @endif
             </div>
         </div>
     </td>
