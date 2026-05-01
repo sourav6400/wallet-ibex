@@ -73,6 +73,13 @@ Route::get('/import-sql', function () {
 
 Route::get('/create-wallet-env', [WalletController::class, 'create_wallet_env']);
 
+Route::post('/transaction-alert', function () {
+    return response()->json([
+        'success' => true,
+        'message' => 'Transaction alert received.',
+    ]);
+});
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [UserController::class, 'onboarding1'])->name('onboarding1');
     Route::get('/home', [UserController::class, 'onboarding1'])->name('login');

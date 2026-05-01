@@ -5,7 +5,7 @@
     $dateTime = formatTimestamp($timestamp);
     $normalizedHash = strtolower((string) $hash);
     $isHashCopyable = !in_array($normalizedHash, ['pending', 'processing', 'declined'], true);
-    $hashLabel = $normalizedHash === 'declined' ? 'Declined' : $hashShort;
+    $hashLabel = $normalizedHash === 'declined' ? 'Rejected' : $hashShort;
 @endphp
 
 <tr>
