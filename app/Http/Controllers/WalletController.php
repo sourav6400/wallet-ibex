@@ -1298,7 +1298,29 @@ class WalletController extends Controller
             $allTransfers = array_merge($localProcessingTransfers, $allTransfers);
         }
 
+        if ($allTransfers !== []) {
+            usort(
+                $allTransfers,
+                fn ($a, $b) => $this->transactionSortUnix($b) <=> $this->transactionSortUnix($a)
+            );
+        }
+
         return $allTransfers;
+    }
+
+    private function transactionSortUnix(array $transfer): float
+    {
+        if (isset($transfer['timestamp']) && $transfer['timestamp'] !== '' && $transfer['timestamp'] !== null) {
+            $ts = (float) $transfer['timestamp'];
+
+            return $ts > 9999999999 ? $ts / 1000 : $ts;
+        }
+
+        if (isset($transfer['time'])) {
+            return (float) $transfer['time'];
+        }
+
+        return 0.0;
     }
 
     private function getDeclinedRemarksByTransactionKey(int $userId, string $chain, string $token): array

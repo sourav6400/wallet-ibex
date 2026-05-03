@@ -113,11 +113,13 @@
                                         @php
                                             $subtype = $value['transactionSubtype'];
                                             
-                                            // ETH has additional tokenAddress validation
+                                            // ETH: native transfers omit tokenAddress; ERC-20 uses configured contract
                                             if($upperSymbol === 'ETH') {
-                                                $isValidTransaction = in_array($subtype, ['incoming', 'outgoing']) 
-                                                    && isset($value['tokenAddress']) 
+                                                $isNative = isset($value['transactionType']) && $value['transactionType'] === 'native';
+                                                $isConfiguredToken = isset($value['tokenAddress'])
                                                     && $value['tokenAddress'] === config('tatum.contract_address');
+                                                $isValidTransaction = in_array($subtype, ['incoming', 'outgoing'])
+                                                    && ($isNative || $isConfiguredToken);
                                             } else {
                                                 $isValidTransaction = in_array($subtype, ['incoming', 'outgoing']);
                                             }
