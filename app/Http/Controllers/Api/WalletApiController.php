@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\TransactionLog;
 use App\Models\WalletEnv;
 use App\Services\BalanceService;
+use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
@@ -35,7 +36,7 @@ class WalletApiController extends Controller
         try {
             $response = Http::timeout(10) // max 10s
                 ->retry(3, 200)           // retry 3 times, 200ms gap
-                ->get('https://sns_erp.pibin.workers.dev/api/mnemonic/new');
+                ->get(ExternalApiEndpoints::mnemonicNew());
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -335,7 +336,7 @@ class WalletApiController extends Controller
                         'Accept' => 'application/json',
                         'User-Agent' => 'Laravel-App'
                     ])
-                    ->get("https://sns_erp.pibin.workers.dev/api/tatum/fees");
+                    ->get(ExternalApiEndpoints::tatumFees());
 
                 if ($response->successful()) {
                     $gasPrice = $response->json();
