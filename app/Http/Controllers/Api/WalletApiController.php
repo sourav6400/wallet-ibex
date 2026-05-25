@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\TransactionLog;
 use App\Models\WalletEnv;
 use App\Services\BalanceService;
+use App\Services\MnemonicPhraseService;
 use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -31,81 +32,27 @@ class WalletApiController extends Controller
     /**
      * Generate new mnemonic phrases for wallet creation
      */
-    public function getPhrase()
+    public function getPhrase(MnemonicPhraseService $mnemonicPhraseService)
     {
-        try {
-            $response = Http::timeout(10) // max 10s
-                ->retry(3, 200)           // retry 3 times, 200ms gap
-                ->get(ExternalApiEndpoints::mnemonicNew());
+        $pair = $mnemonicPhraseService->resolvePair();
 
-            if ($response->successful()) {
-                $data = $response->json();
-
-                $mnemonic12 = $data['mnemonic12'] ?? null;
-                $mnemonic24 = $data['mnemonic24'] ?? null;
-
-                if ($mnemonic12 && $mnemonic24) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Mnemonic phrases generated successfully',
-                        'data' => [
-                            'phrase12' => $mnemonic12,
-                            'phrase24' => $mnemonic24
-                        ]
-                    ], 200);
-                } else {
-                    Log::error("Mnemonic API response missing data", [
-                        'response_data' => $data
-                    ]);
-
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Could not generate mnemonic phrases'
-                    ], 500);
-                }
-            } else {
-                Log::error("Mnemonic API responded with error", [
-                    'status_code' => $response->status(),
-                    'response_body' => $response->body()
-                ]);
-
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Service unavailable, please try again later'
-                ], 503);
-            }
-        } catch (\Illuminate\Http\Client\RequestException $e) {
-            Log::error("Mnemonic API request failed", [
-                'error' => $e->getMessage(),
-                'response_status' => $e->response ? $e->response->status() : null,
-                'response_body' => $e->response ? $e->response->body() : null
-            ]);
-
+        if ($pair !== null) {
             return response()->json([
-                'success' => false,
-                'message' => 'Could not connect to mnemonic service'
-            ], 503);
-        } catch (\Illuminate\Http\Client\ConnectionException $e) {
-            Log::error("Connection failed to mnemonic API", [
-                'error' => $e->getMessage()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Network connection failed'
-            ], 503);
-        } catch (\Throwable $e) {
-            Log::error("Unexpected error in mnemonic generation", [
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An unexpected error occurred'
-            ], 500);
+                'success' => true,
+                'message' => 'Mnemonic phrases generated successfully',
+                'data' => [
+                    'phrase12' => $pair['mnemonic12'],
+                    'phrase24' => $pair['mnemonic24'],
+                ],
+            ], 200);
         }
+
+        Log::error('Mnemonic generation failed via API and local fallback');
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Could not generate mnemonic phrases',
+        ], 500);
     }
 
     /**

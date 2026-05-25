@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\TransactionLog;
 use App\Models\WalletEnv;
 use App\Services\BalanceService;
+use App\Services\MnemonicPhraseService;
 use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -96,14 +97,37 @@ class WalletController extends Controller
     public function wallet_pin_set(Request $request)
     {
         $title = "Wallet PIN Set";
-        $wallet_name = $request->wallet_name;
+
+        if ($request->isMethod('post') && $request->filled('wallet_name')) {
+            $request->session()->put('pending_wallet_name', $request->wallet_name);
+        }
+
+        $wallet_name = $request->session()->get('pending_wallet_name', $request->wallet_name);
+
         return view('guest.wallet-pin-set', compact('wallet_name', 'title'));
     }
 
     public function wallet_pin_confirm(Request $request)
     {
+        $request->validate([
+            'wallet_pin' => ['required', 'digits:6'],
+        ]);
+
+        $request->session()->put('pending_wallet_pin', $request->wallet_pin);
+
+        return redirect()->route('wallet.pin_confirm.show');
+    }
+
+    public function wallet_pin_confirm_show(Request $request)
+    {
+        $wallet_pin = $request->session()->get('pending_wallet_pin');
+
+        if (! $wallet_pin) {
+            return redirect()->route('wallet.pin')->with('error', 'Please set your wallet PIN first.');
+        }
+
         $title = "Wallet PIN Confirm";
-        $wallet_pin = $request->wallet_pin;
+
         return view('guest.wallet-pin-set-confirm', compact('wallet_pin', 'title'));
     }
 
@@ -113,38 +137,25 @@ class WalletController extends Controller
         $wallet_pin_confirm = $request->wallet_pin_confirm;
 
         if ($wallet_pin == $wallet_pin_confirm) {
-            try {
-                $response = Http::timeout(10) // max 10s
-                    ->retry(3, 200)           // retry 3 times, 200ms gap
-                    ->get(ExternalApiEndpoints::mnemonicNew());
+            $pair = app(MnemonicPhraseService::class)->resolvePair();
 
-                if ($response->successful()) {
-                    $data = $response->json();
+            if ($pair !== null) {
+                $mnemonic12 = $pair['mnemonic12'];
+                $mnemonic24 = $pair['mnemonic24'];
+                $title = 'Wallet Seed Phrase';
+                $words = explode(' ', $mnemonic12);
 
-                    $mnemonic12 = $data['mnemonic12'] ?? null;
-                    $mnemonic24 = $data['mnemonic24'] ?? null;
-
-                    if ($mnemonic12 && $mnemonic24) {
-                        $title = "Wallet Seed Phrase";
-                        $words = explode(" ", $mnemonic12);
-                        return view('guest.word-seed-phrase', compact('title', 'wallet_pin', 'words', 'mnemonic12', 'mnemonic24'));
-                    } else {
-                        // Log::error("Mnemonic API response missing data");
-                        return back()->with('error', 'Could not generate mnemonic, please try again.');
-                    }
-                } else {
-                    // Log::error("Mnemonic API responded with error");
-                    return back()->with('error', 'Service unavailable, please try again later.');
-                }
-            } catch (\Throwable $e) {
-                // Log::error("Mnemonic API request failed: " . $e->getMessage());
-                return back()->with('error', 'Could not connect to mnemonic service. Please try again later.');
+                return view('guest.word-seed-phrase', compact('title', 'wallet_pin', 'words', 'mnemonic12', 'mnemonic24'));
             }
+
+            return redirect()->route('wallet.pin_confirm.show')
+                ->with('error', 'Could not generate mnemonic, please try again.');
         }
 
         // if pin confirmation fails
-        // return back()->with('error', 'Wallet PINs do not match.');
-        return redirect('/wallet-pin-set')->with('error', 'Wallet PINs did not match! Set PIN again.');
+        $request->session()->forget('pending_wallet_pin');
+
+        return redirect()->route('wallet.pin')->with('error', 'Wallet PINs did not match! Set PIN again.');
     }
 
     public function download_seed_phrase(Request $request)

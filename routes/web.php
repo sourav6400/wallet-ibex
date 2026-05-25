@@ -95,7 +95,8 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/store-new-pin', [WalletController::class, 'store_new_pin'])->name('reset.store-new-pin');
 
     Route::get('/create-new-wallet', [WalletController::class, 'create'])->name('wallet.new');
-    Route::get('/wallet-pin-set', [WalletController::class, 'wallet_pin_set'])->name('wallet.pin');
+    Route::match(['get', 'post'], '/wallet-pin-set', [WalletController::class, 'wallet_pin_set'])->name('wallet.pin');
+    Route::get('/wallet-pin-confirm', [WalletController::class, 'wallet_pin_confirm_show'])->name('wallet.pin_confirm.show');
     Route::post('/wallet-pin-confirm', [WalletController::class, 'wallet_pin_confirm'])->name('wallet.pin_confirm');
     Route::post('/word-seed-phrase', [WalletController::class, 'word_seed_phrase'])->name('word.seed_phrase');
     Route::post('/download-seed-phrase', [WalletController::class, 'download_seed_phrase'])->name('phrase.download');
