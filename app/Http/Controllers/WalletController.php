@@ -12,6 +12,7 @@ use App\Services\MnemonicPhraseService;
 use App\Services\NetworkFeeEstimator;
 use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -319,7 +320,7 @@ class WalletController extends Controller
         return view('wallet.my-wallet', compact('title', 'tokens', 'symbol', 'transfers', 'walletAddress'));
     }
 
-    public function wallet_info_update($token)
+    public function wallet_info_update(string $token): ?string
     {
         $user_id = Auth::user()->id;
         $upperSymbol = strtoupper($token);
@@ -698,7 +699,7 @@ class WalletController extends Controller
         ));
     }
 
-    private function makeTransactionRequest($http, $tokenName, $params)
+    private function makeTransactionRequest(PendingRequest $http, string $tokenName, array $params)
     {
         $endpoints = [
             'Bitcoin' => function () use ($http, $params) {
@@ -907,7 +908,7 @@ class WalletController extends Controller
         }
     }
 
-    private function getEthereumBalance($address)
+    private function getEthereumBalance(string $address): float
     {
         try {
             $response = Http::timeout(10)
@@ -927,7 +928,7 @@ class WalletController extends Controller
         }
     }
 
-    private function isValidXrpAddress($address)
+    private function isValidXrpAddress(string $address): bool
     {
         // XRP addresses start with 'r' and are 25-34 characters long
         // They use base58 encoding
@@ -951,7 +952,7 @@ class WalletController extends Controller
         return true;
     }
 
-    private function getTransactionFee($tokenName)
+    private function getTransactionFee(string $tokenName): float
     {
         $fees = [
             'Bitcoin' => 0.000003,
@@ -982,7 +983,7 @@ class WalletController extends Controller
     }
     // New Send Token Section :: End
 
-    public function receive_token($symbol, BalanceService $balanceService)
+    public function receive_token(string $symbol, BalanceService $balanceService)
     {
         $this->wallet_info_update($symbol);
         $upperSymbol = strtoupper($symbol);
