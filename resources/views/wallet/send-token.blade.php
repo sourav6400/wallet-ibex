@@ -108,8 +108,8 @@
                         <div class="row mx-0 g-0 align-items-center">
                             <div class="col-6">
                                 <div class="available_assset">
-                                    <h5>Network Fee</h5>
-                                    <h4>{{ sprintf('%.14f', $gasPriceGwei) }} {{ strtoupper($symbol) }}</h4>
+                                    <h5>Estimated network fee</h5>
+                                    <h4>{{ sprintf('%.14f', $gasPriceGwei) }} {{ $feeDisplaySymbol ?? strtoupper($symbol) }}</h4>
                                     <h5>{{ sprintf('%.14f', $gasPriceUsd) }} USD</h5>
                                 </div>
                             </div>

@@ -9,6 +9,7 @@ use App\Models\TransactionLog;
 use App\Models\WalletEnv;
 use App\Services\BalanceService;
 use App\Services\MnemonicPhraseService;
+use App\Services\NetworkFeeEstimator;
 use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -435,8 +436,6 @@ class WalletController extends Controller
 
         $tokens = $balanceService->getFilteredTokens();
         $title = "Send Token";
-        $gasPriceGwei = 0;
-        $gasPriceUsd = 0;
         $insufficient_gas_msg = null;
 
         if ($symbol == 'eth') {
@@ -450,105 +449,10 @@ class WalletController extends Controller
             }
         }
 
-        if ($symbol == 'bnb' || $symbol == 'trx' || $symbol == 'doge' || $symbol == 'xrp') {
-            if ($symbol == 'bnb')
-                $gasPriceGwei = 0.00001;
-            elseif ($symbol == 'trx')
-                $gasPriceGwei = 1.00;
-            elseif ($symbol == 'doge')
-                $gasPriceGwei = 1.58;
-            elseif ($symbol == 'xrp')
-                $gasPriceGwei = 0.000015;
-
-            // $response = Http::timeout(10)
-            //     ->retry(3, 200)
-            //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . strtoupper($symbol));
-
-            $response = Http::timeout(10)
-                ->withHeaders($this->tatumHeaders())
-                ->retry(3, 200)
-                ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . strtoupper($symbol) . '&basePair=USD');
-
-            if ($response->successful()) {
-                $data = $response->json();
-                // $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
-                $usdUnitPrice = $data['value'] ?? 0;
-                $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
-            }
-        } else {
-            try {
-                $response = Http::timeout(15)
-                    ->retry(5, 500)
-                    ->withHeaders([
-                        'Accept' => 'application/json',
-                        'User-Agent' => 'Laravel-App'
-                    ])
-                    ->get(ExternalApiEndpoints::tatumFees());
-
-                if ($response->successful()) {
-                    $gasPrice = $response->json();
-                    $token = strtoupper($symbol);
-
-                    if ($token == 'USDT')
-                        $token = 'ETH';
-
-                    if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
-                        $gasPriceGwei = $gasPrice[$token]['fast']['native'] ?? 0;
-                        $gasPriceUsd = $gasPrice[$token]['fast']['usd'] ?? 0;
-                        if ($gasPriceUsd == 0.0) {
-                            // $response = Http::timeout(10)
-                            //     ->retry(3, 200)
-                            //     ->get('https://sns_erp.pibin.workers.dev/api/alchemy/prices/symbols?symbols=' . $token);
-
-                            $response = Http::timeout(10)
-                                ->withHeaders($this->tatumHeaders())
-                                ->retry(3, 200)
-                                ->get('https://api.tatum.io/v4/data/rate/symbol?symbol=' . $token . '&basePair=USD');
-
-                            if ($response->successful()) {
-                                $data = $response->json();
-                                // $usdUnitPrice = $data['data'][0]['prices'][0]['value'] ?? 0;
-                                $usdUnitPrice = $data['value'] ?? 0;
-                                $gasPriceUsd = $gasPriceGwei * $usdUnitPrice;
-                            }
-                        }
-                    } else {
-                        // Log::warning("Token {$token} not found in API response", [
-                        //     'available_tokens' => array_keys($gasPrice ?? [])
-                        // ]);
-                    }
-                } else {
-                    // Log::error("Tatum fees API responded with error for token {$symbol}", [
-                    //     'status_code' => $response->status(),
-                    //     'response_body' => $response->body()
-                    // ]);
-                }
-            } catch (\Illuminate\Http\Client\RequestException $e) {
-                $errorData = [
-                    'error' => $e->getMessage()
-                ];
-
-                if ($e->response) {
-                    $errorData['response_status'] = $e->response->status();
-                    $errorData['response_body'] = $e->response->body();
-                }
-
-                // Log::error("Tatum fees API request failed for token {$symbol}", $errorData);
-            } catch (\Illuminate\Http\Client\ConnectionException $e) {
-                // Log::error("Connection failed to Tatum fees API for token {$symbol}", [
-                //     'error' => $e->getMessage()
-                // ]);
-            } catch (\Throwable $e) {
-                // Log::error("Unexpected error when fetching Tatum fees for token {$symbol}", [
-                //     'error' => $e->getMessage()
-                // ]);
-            }
-        }
-
-        $gasPriceGwei = $gasPriceGwei * 1.5;
-        // $gasPriceGwei = sprintf('%.20f', $gasPriceGwei);
-        $gasPriceUsd = $gasPriceUsd * 1.5;
-        // $gasPriceUsd = sprintf('%.20f', $gasPriceUsd);
+        $feeEstimate = app(NetworkFeeEstimator::class)->estimateForSendScreen($symbol);
+        $gasPriceGwei = $feeEstimate['fee_native'];
+        $gasPriceUsd = $feeEstimate['fee_usd'];
+        $feeDisplaySymbol = $feeEstimate['fee_symbol'];
 
         $user_id = Auth::user()->id;
         if (strtoupper($symbol) == 'ETH') {
@@ -562,7 +466,7 @@ class WalletController extends Controller
             $active_transaction_type = 'real';
         }
 
-        return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd', 'insufficient_gas_msg', 'active_transaction_type'));
+        return view('wallet.send-token', compact('title', 'tokens', 'symbol', 'gasPriceGwei', 'gasPriceUsd', 'feeDisplaySymbol', 'insufficient_gas_msg', 'active_transaction_type'));
     }
 
     // New Send Token Section :: Start
@@ -953,64 +857,7 @@ class WalletController extends Controller
 
     private function getGasPricesFromTatum()
     {
-        try {
-            $response = Http::timeout(15)
-                ->retry(3, 500)
-                ->withHeaders([
-                    'Accept' => 'application/json',
-                    'User-Agent' => 'Laravel-App'
-                ])
-                ->get(ExternalApiEndpoints::tatumFees());
-
-            if ($response->successful()) {
-                $gasPrice = $response->json();
-
-                if (isset($gasPrice['ETH'])) {
-                    $ethData = $gasPrice['ETH'];
-
-                    // Try to get the highest available gas price tier
-                    $selectedTier = null;
-                    // $tierPriority = ['instant', 'fast', 'standard', 'slow'];
-                    $tierPriority = ['fast', 'medium', 'slow'];
-
-                    foreach ($tierPriority as $tier) {
-                        if (isset($ethData[$tier])) {
-                            $selectedTier = $ethData[$tier];
-                            break;
-                        }
-                    }
-
-                    if ($selectedTier) {
-                        // Convert Gwei to Wei (multiply by 10^9)
-                        $gasPriceGwei = $selectedTier['native'] ?? 50;
-                        $gasPriceWei = $gasPriceGwei * 1000000000;
-
-                        // Use very aggressive pricing to ensure transaction success
-                        $maxFeePerGasWei = $gasPriceWei * 3.0; // 300% of base price
-                        $maxPriorityFeePerGasWei = $gasPriceWei * 0.8; // 80% of base price
-
-                        // Log::info("Ethereum gas pricing from Tatum", [
-                        //     'tier_used' => array_search($selectedTier, $ethData),
-                        //     'gas_price_gwei' => $gasPriceGwei,
-                        //     'max_fee_per_gas_gwei' => $maxFeePerGasWei / 1000000000,
-                        //     'max_priority_fee_gwei' => $maxPriorityFeePerGasWei / 1000000000
-                        // ]);
-
-                        return [
-                            'gasPrice' => (string) $gasPriceWei,
-                            'gasLimit' => '200000', // Higher gas limit for safety
-                            'maxFeePerGas' => (string) $maxFeePerGasWei,
-                            'maxPriorityFeePerGas' => (string) $maxPriorityFeePerGasWei,
-                        ];
-                    }
-                }
-            }
-
-            return null;
-        } catch (\Throwable $e) {
-            // Log::error("Failed to fetch Ethereum gas prices from Tatum: " . $e->getMessage());
-            return null;
-        }
+        return app(NetworkFeeEstimator::class)->estimateEthereumBroadcastGas();
     }
 
     private function getGasPricesFromAlternative()

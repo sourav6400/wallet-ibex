@@ -15,9 +15,4 @@ class ExternalApiEndpoints
     {
         return self::BASE_URL . '/alchemy/prices/symbols?symbols=' . $symbols;
     }
-
-    public static function tatumFees(): string
-    {
-        return self::BASE_URL . '/tatum/fees';
-    }
 }

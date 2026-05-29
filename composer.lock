@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3de8e071c5046f0f7de1c43e30441db3",
+    "content-hash": "36c655b3d850422c49238c89cbdef68d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1198,6 +1198,34 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "ibex/core",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../packages/ibex-core",
+                "reference": "d6b57a0f9529f6ef5b878b6e98656e467dd30e55"
+            },
+            "require": {
+                "illuminate/http": "^12.0",
+                "illuminate/support": "^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ibex\\Core\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Shared IBEX domain services",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "laravel/framework",
@@ -8670,7 +8698,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "ibex/core": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

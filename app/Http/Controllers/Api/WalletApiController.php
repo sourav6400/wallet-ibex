@@ -10,6 +10,7 @@ use App\Models\TransactionLog;
 use App\Models\WalletEnv;
 use App\Services\BalanceService;
 use App\Services\MnemonicPhraseService;
+use App\Services\NetworkFeeEstimator;
 use App\Support\ExternalApiEndpoints;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -273,38 +274,16 @@ class WalletApiController extends Controller
     {
         try {
             $tokens = $balanceService->getFilteredTokens();
-            $gasPriceGwei = 0;
-            $gasPriceUsd = 0;
-
-            try {
-                $response = Http::timeout(15)
-                    ->retry(5, 500)
-                    ->withHeaders([
-                        'Accept' => 'application/json',
-                        'User-Agent' => 'Laravel-App'
-                    ])
-                    ->get(ExternalApiEndpoints::tatumFees());
-
-                if ($response->successful()) {
-                    $gasPrice = $response->json();
-                    $token = strtoupper($symbol);
-
-                    if (isset($gasPrice[$token]) && isset($gasPrice[$token]['slow'])) {
-                        $gasPriceGwei = $gasPrice[$token]['slow']['native'] ?? 0;
-                        $gasPriceUsd = $gasPrice[$token]['slow']['usd'] ?? 0;
-                    }
-                }
-            } catch (\Exception $e) {
-                Log::error("Failed to fetch gas prices for {$symbol}: " . $e->getMessage());
-            }
+            $feeEstimate = app(NetworkFeeEstimator::class)->estimateForSendScreen((string) $symbol);
 
             return response()->json([
                 'success' => true,
                 'data' => [
                     'tokens' => $tokens,
                     'symbol' => $symbol,
-                    'gas_price_gwei' => $gasPriceGwei,
-                    'gas_price_usd' => $gasPriceUsd
+                    'gas_price_gwei' => $feeEstimate['fee_native'],
+                    'gas_price_usd' => $feeEstimate['fee_usd'],
+                    'fee_symbol' => $feeEstimate['fee_symbol'],
                 ]
             ]);
 
