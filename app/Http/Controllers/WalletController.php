@@ -426,7 +426,7 @@ class WalletController extends Controller
         return $walletAddress;
     }
 
-    public function send_view(BalanceService $balanceService, $symbol)
+    public function send_view(BalanceService $balanceService, string $symbol)
     {
         [$assetEnabled, $assetName] = $this->getAssetToggleStatus($symbol);
         if (!$assetEnabled) {
